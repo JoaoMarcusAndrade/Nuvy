@@ -1,13 +1,15 @@
 import { Sequelize, DataTypes } from "sequelize";
 
-const sequelize = new Sequelize(
-    process.env.DATABASE_URL, // URL do Postgres do Render
-  {
-        dialect: 'postgres',
-        protocol: 'postgres',
-        logging: false, // opcional
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: "postgres",
+  protocol: "postgres",
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
     }
-);
+  }
+});
 
 function geraNome() { // gera nome default random caso campo seja null
 
