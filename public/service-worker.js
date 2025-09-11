@@ -18,7 +18,7 @@ self.addEventListener('install', event => {
 // Activate
 self.addEventListener('activate', event => {
     event.waitUntil(
-        caches.keys().then(cacheNames => 
+        caches.keys().then(cacheNames =>
             Promise.all(
                 cacheNames.map(cacheName => {
                     if (cacheName !== CACHE_NAME) {
@@ -33,26 +33,24 @@ self.addEventListener('activate', event => {
 
 // Fetch
 self.addEventListener('fetch', event => {
+    // Só intercepta requisições GET
+    if (event.request.method !== 'GET') return;
+
     event.respondWith(
         fetch(event.request)
             .then(response => {
-                // Se não for HTTP/HTTPS ou resposta inválida, apenas retorna
+                // Se resposta inválida, retorna ela mesmo
                 if (!response || response.status !== 200 || response.type !== 'basic') {
                     return response;
                 }
 
-                // Clona a resposta para cache
                 const responseToCache = response.clone();
 
-                // Só cacheia requisições HTTP/HTTPS
-                if (event.request.url.startsWith('http')) {
-                    caches.open(CACHE_NAME)
-                        .then(cache => {
-                            cache.put(event.request, responseToCache);
-                        });
-                }
+                caches.open(CACHE_NAME)
+                    .then(cache => {
+                        cache.put(event.request, responseToCache);
+                    });
 
-                // Sempre retorna a resposta original
                 return response;
             })
             .catch(() => {
