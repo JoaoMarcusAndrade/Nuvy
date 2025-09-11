@@ -33,26 +33,29 @@ self.addEventListener('activate', event => {
 
 // Fetch
 self.addEventListener('fetch', event => {
-    // Só intercepta requisições GET
-    if (event.request.method !== 'GET') return;
-
     event.respondWith(
         fetch(event.request)
             .then(response => {
-                // Se resposta inválida, retorna ela mesmo
+                // Se a resposta for inválida, apenas retorna
                 if (!response || response.status !== 200 || response.type !== 'basic') {
                     return response;
                 }
 
                 const responseToCache = response.clone();
 
-                caches.open(CACHE_NAME)
-                    .then(cache => cache.put(event.request, responseToCache));
+                // Somente cacheia requisições GET e HTTP/HTTPS
+                if (event.request.method === 'GET' && event.request.url.startsWith('http')) {
+                    caches.open(CACHE_NAME)
+                        .then(cache => {
+                            cache.put(event.request, responseToCache);
+                        });
+                }
 
+                // Sempre retorna a resposta original
                 return response;
             })
             .catch(() => {
-                // Se falhar no fetch, retorna cache ou página offline
+                // Se o fetch falhar, retorna o cache ou a página offline
                 return caches.match(event.request)
                     .then(cachedResponse => cachedResponse || caches.match(OFFLINE_URL));
             })
