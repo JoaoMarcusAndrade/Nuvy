@@ -1,0 +1,218 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: "Comic Sans MS", sans-serif;
+  background-color: #6a40d6;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+  background: #fff;
+  color: #6a40d6;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  height: 40px;
+  margin-right: 20px;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navbar-left a {
+  color: #6a40d6;
+  font-weight: bold;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.login-icon {
+  width: 55px;
+  margin-right: 40px;
+}
+
+
+
+.educativo h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  margin-left: 90px;
+}
+
+.carrossel {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 0 90px;
+  padding-bottom: 10px;
+}
+
+.carrossel::-webkit-scrollbar {
+  height: 8px;
+}
+.carrossel::-webkit-scrollbar-thumb {
+  background: #fff;
+  border-radius: 10px;
+}
+
+.card {
+  flex: 0 0 auto; /* impede de achatar */
+  width: 120px;
+  height: 110px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+/* Área do jogo */
+.jogo {
+  padding: 0 90px 30px 90px;
+}
+
+.jogo h2 {
+  font-size: 20px;
+  margin: 15px 0;
+}
+
+.jogo-box {
+  background: #fff;
+  color: #6a40d6;
+  border-radius: 18px;
+  padding: 100px;
+  text-align: center;
+}
+
+.game-icon {
+  width: 130px;
+  margin-bottom: 20px;
+}
+
+.jogo-box p {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Footer */
+footer {
+  background: #fff;
+  color: #6a40d6;
+  text-align: center;
+  padding: 12px;
+  font-weight: bold;
+  margin-top: auto; /* fixa no fim */
+}
+
+/* ========================= */
+/* RESPONSIVIDADE */
+/* ========================= */
+@media (max-width: 768px) {
+  /* Esconde ajuda e contato */
+  .link-ajuda, .link-contato {
+    display: none;
+  }
+
+  /* Login vai para a esquerda */
+  .navbar {
+    justify-content: flex-between;
+  }
+
+  .navbar-left {
+    gap: 10px;
+  }
+
+  .login-icon {
+    margin-right: 10px;
+    order: -1; /* coloca o login antes da logo */
+  }
+
+  /* Títulos centralizados */
+  .educativo h2, .jogo h2 {
+    margin-left: 0;
+    text-align: center;
+  }
+
+  /* Carrossel ocupa tela toda sem achatar */
+  .carrossel {
+    margin: 0 15px;
+    gap: 15px;
+  }
+
+  /* Área do jogo ocupa largura total */
+  .jogo {
+    padding: 0 15px 20px 15px;
+  }
+
+  .jogo-box {
+    padding: p 20px;
+  }
+
+  .game-icon {
+    width: 80px;
+  }
+
+  .jogo-box p {
+    font-size: 16px;
+  }
+
+  /* Footer menor */
+  footer {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .jogo-box {
+    padding: px 10px;
+  }
+
+  .game-icon {
+    width: 60px;
+  }
+
+  .jogo-box p {
+    font-size: 14px;
+  }
+
+  footer {
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,274 @@
+/* Importar fonte Baloo 2 para o estilo do modal */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
+
+/* Estilos gerais do corpo da página */
+body {
+  margin: 0;
+  font-family: "Comic Sans MS", sans-serif;
+  background-color: #6a40d6;
+  color: white;
+  overflow-y: hidden;
+}
+
+/* Cabeçalho e links do menu */
+header {
+  display: flex;
+  justify-content: flex-start;
+  padding: 20px;
+  margin-left: 60px;
+  gap: 30px;
+  font-weight: bold;
+}
+
+header a {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 20px;
+  font-family: "Comic Sans MS", sans-serif;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+header a:hover {
+  opacity: 0.7;
+}
+
+/* Container principal da página */
+.container {
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  gap: 60px;
+}
+
+/* Imagem da nuvem */
+.cloud {
+  width: 450px;
+  height: 265px;
+}
+
+/* Caixa de texto principal */
+.text-box {
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;  
+  align-items: flex-start; 
+}
+
+/* Seção inicial (home) */
+#home {
+  display: flex;
+}
+
+.NuvyH1 {
+  font-family: 'Bagel Fat One', cursive; 
+  font-size: 120px;
+  margin: 0;
+  pointer-events: none;
+}
+
+.NuvyP {
+  font-size: 26px;
+  margin: 0;
+  margin-bottom: 30px; 
+  pointer-events: none;
+}
+
+/* Botão principal */
+.btn {
+  align-self: center;  
+  padding: 8px 40px;
+  background: white;
+  color: #6a40d6;
+  border-radius: 30px;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: #ddd;
+}
+
+/* Seções do SPA (Single Page Application) */
+.section {
+  display: none;
+  padding: 40px;
+}
+
+.active {
+  display: block;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+  /* Ajusta o cabeçalho no mobile */
+  header {
+    justify-content: center;  
+    margin-left: 0;
+    gap: 20px;
+  }
+
+  header a {
+    font-size: 18px;
+  }
+
+  /* Empilha elementos na home */
+  #home {
+    flex-direction: column;   
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+  }
+
+  .cloud {
+    width: 300px;
+    height: auto;
+  }
+
+  .text-box {
+    align-items: center;  
+  }
+
+  #home h1 {
+    font-size: 70px;
+  }
+
+  #home p {
+    font-size: 20px;
+  }
+
+  .btn {
+    font-size: 20px;
+    padding: 8px 30px;
+  }
+}
+
+/* ===== Estilos Customizados do Modal ===== */
+
+/* Estilo customizado do modal */
+.custom-modal {
+  background-color: #f7f2f6; /* lilás claro */
+  border-radius: 20px;
+  padding: 30px 25px 25px;
+  width: 900px;
+  color: #6a40d6; /* roxo escuro */
+  font-family: 'Baloo 2', cursive;
+  box-shadow: 0 0 15px rgba(106, 64, 214, 0.3);
+}
+
+/* Header do modal */
+.custom-modal-header {
+  border-bottom: none;
+  padding: 0 0 15px 0;
+  justify-content: center;
+  position: relative;
+}
+
+/* Título Logar */
+.custom-modal-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #8861e7;
+  margin: 0 auto;
+}
+
+/* Botão fechar grande e roxo */
+.custom-btn-close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  font-size: 32px;
+  color: #6a40d6;
+  cursor: pointer;
+  opacity: 1;
+  padding: 0;
+}
+
+/* Usar X personalizado para fechar */
+.custom-btn-close::before,
+.custom-btn-close::after {
+  content: '×';
+  font-size: 32px;
+  color: #6a40d6;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Inputs do modal */
+.modal-body input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border: 2.5px solid #6a40d6;
+  border-radius: 12px;
+  font-size: 16px;
+  color: #6a40d6;
+  font-family: 'Baloo 2', cursive;
+  outline: none;
+  background-color: #f7f2f6;
+  transition: border-color 0.3s;
+}
+
+.modal-body input::placeholder {
+  color: #a992d6;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.modal-body input:focus {
+  border-color: #8861e7;
+  background-color: white;
+}
+
+/* Botão Entrar */
+.btn-login {
+  width: 200px;
+  margin: 0 auto 20px auto;
+  display: block;
+  padding: 12px 0;
+  background-color: #6a40d6;
+  border-radius: 15px;
+  border: none;
+  color: white;
+  font-family: 'Baloo 2', cursive;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-login:hover {
+  background-color: #8861e7;
+}
+
+/* Texto de cadastro */
+.signup-text {
+  text-align: center;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  color: #6a40d6;
+  font-size: 16px;
+}
+
+.signup-text a {
+  color: #2f1b6b;
+  font-weight: 900;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+.signup-text a:hover {
+  color: #8861e7;
+}
+
