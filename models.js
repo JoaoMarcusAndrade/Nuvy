@@ -1,105 +1,109 @@
 import { Sequelize, DataTypes } from "sequelize";
 
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './data.db'//doc banco na raiz
-})
+const sequelize = new Sequelize(
+    process.env.DATABASE_URL, // URL do Postgres do Render
+  {
+        dialect: 'postgres',
+        protocol: 'postgres',
+        logging: false, // opcional
+    }
+);
 
 function geraNome() { // gera nome default random caso campo seja null
 
     var randomStr = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (var i = 0; i < 12; i++){
+    for (var i = 0; i < 12; i++) {
         var indice = Math.floor(Math.random() * characters.length);
         randomStr += characters[indice]
     }
     return randomStr //var de nome
 }
-                                        /*TABELAS*/
+/*TABELAS*/
 // RESPONSAVEIS
-export const Responsaveis = sequelize.define('Responsaveis',{
-    ID_responsaveis:{
+export const Responsaveis = sequelize.define('Responsaveis', {
+    ID_responsaveis: {
         primaryKey: true,
         autoIncrement: true,
         type: DataTypes.INTEGER,
         allowNull: false,
         unique: true
     },
-    password_resp:{
+    password_resp: {
         type: DataTypes.STRING(30),
         allowNull: false,
     },
-    email_resp:{
+    email_resp: {
         type: DataTypes.STRING(254),
         allowNull: false,
         unique: true,
         validate: {
             isEmail: true, // valida formato de e-mail
-            len : [6,254]
+            len: [6, 254]
         }
     },
-    name_resp:{
+    name_resp: {
         type: DataTypes.STRING(30),
         allowNull: false,
-        defaultValue : () => geraNome()
+        defaultValue: () => geraNome()
     }
 })
 
 // CONTROLE
-export const Controle = sequelize.define('Controle',{
-    limitado:{
+export const Controle = sequelize.define('Controle', {
+    limitado: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
-    tempoTela:{
+    tempoTela: {
         type: DataTypes.INTEGER,
         defaultValue: 0
     }
 })
 
 // USUARIOS
-export const Usuarios = sequelize.define('Usuarios',{
-    ID_usuarios:{
+export const Usuarios = sequelize.define('Usuarios', {
+    ID_usuarios: {
         primaryKey: true,
         autoIncrement: true,
         type: DataTypes.INTEGER,
         allowNull: false,
         unique: true
     },
-    password_user:{
+    password_user: {
         type: DataTypes.STRING(30),
         allowNull: false,
     },
-    email_user:{
+    email_user: {
         type: DataTypes.STRING(254),
         allowNull: false,
         unique: true,
         validate: {
             isEmail: true, // valida formato de e-mail
-            len : [6,254]
+            len: [6, 254]
         }
     },
-    name_user:{
+    name_user: {
         type: DataTypes.STRING(30),
         allowNull: false,
-        defaultValue : () => geraNome()
+        defaultValue: () => geraNome()
     },
-    XP_user:{
+    XP_user: {
         type: DataTypes.INTEGER,
         defaultValue: 0
     },
-    responsavel_vinculado:{
+    responsavel_vinculado: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
     idade: {
-    type: DataTypes.INTEGER,
-    allowNull: false
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
 });
-                                        /*RELACIONAMENTOS*/
-Responsaveis.belongsToMany(Usuarios,{
-    through: Controle,    
+/*RELACIONAMENTOS*/
+Responsaveis.belongsToMany(Usuarios, {
+    through: Controle,
     foreignKey: 'ID_responsaveis',
     otherKey: 'ID_usuarios'
 });
