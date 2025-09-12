@@ -17,8 +17,7 @@ const spaRoutes = [
   '/login',
   '/cadastro',
   '/login/responsavel',
-  '/cadastro/responsavel',
-  '/jogos'
+  '/cadastro/responsavel'
 ];
 
 spaRoutes.forEach(route => {
@@ -46,15 +45,12 @@ router.post("/login", async (req, res) => {
 
     // Lógica de menores de 13 anos
     if (usuario.idade < 13 && !usuario.responsavel_vinculado) {
-      return res.status(403).json({
+      return res.status(403).json({ 
         msg: "Usuário menor de idade precisa cadastrar ou vincular um responsável.",
         requireResponsavel: true
       });
     }
-    res.cookie('usuarioId', usuario.id_user, {
-      httpOnly: true,
-      secure: true
-    });
+
     res.json({ msg: "Login bem-sucedido", usuario });
   } catch (err) {
     res.status(500).json({ msg: "Erro no login", erro: err.message });
@@ -74,10 +70,6 @@ router.post("/login/responsavel", async (req, res) => {
     if (!responsavel) return res.status(404).json({ msg: "Responsável não encontrado" });
     if (responsavel.password_resp !== senha) return res.status(401).json({ msg: "Senha incorreta" });
 
-    res.cookie('responsavelId', responsavel.id_resp, {
-      httpOnly: true,
-      secure: true
-    });
     res.json({ msg: "Login do responsável bem-sucedido", responsavel });
   } catch (err) {
     res.status(500).json({ msg: "Erro no login do responsável", erro: err.message });
@@ -155,11 +147,8 @@ router.post("/vincular", async (req, res) => {
   }
 });
 
-// ---------- LOGOUT USUÁRIO E RESPONSÁVEL----------
-router.post('/logout', (req, res) => {
-  res.clearCookie('usuarioId');
-  res.clearCookie('responsavelId');
-  res.json({ msg: 'Logout realizado com sucesso' });
+router.use((req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 export default router;
