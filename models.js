@@ -119,6 +119,6 @@ Usuarios.belongsToMany(Responsaveis, {
 Controle.belongsTo(Responsaveis, { foreignKey: 'ID_responsaveis' });
 Controle.belongsTo(Usuarios, { foreignKey: 'ID_usuarios' });
 
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync().then(() => {
     console.log("Tabelas criadas!");
 });
