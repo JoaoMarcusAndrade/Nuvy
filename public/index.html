@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,16 +11,19 @@
   <!-- Fonte personalizada -->
   <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap" rel="stylesheet" />
   <!-- CSS customizado -->
-  <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="manifest" href="manifest.json">
 </head>
 
-@@ -24,7 +24,7 @@
+<body>
+  <!-- Parte de cima do site com links -->
+  <header>
+    <a href="#ajuda">Ajuda</a>
+    <a href="#contato">Contato</a>
+  </header>
 
   <!-- Área principal da página inicial -->
   <div id="home" class="container section active">
-    <img src="/img/NuvyPet.png" alt="Nuvem" class="cloud" draggable="false" />
     <img src="img/NuvyPet.png" alt="Nuvem" class="cloud" draggable="false" />
     <div class="text-box">
       <h1 class="NuvyH1">Nuvy</h1>
@@ -31,6 +35,7 @@
       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
         Acessar
       </button>
+
       <!-- Modal -->
       <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -41,6 +46,7 @@
                 aria-label="Close"></button>
             </div>
             <div class="modal-body">
+
               <!-- LOGIN USUÁRIO -->
               <div id="loginView">
                 <h2 class="text-center mb-4">Login</h2>
@@ -58,7 +64,6 @@
 
               <!-- LOGIN RESPONSÁVEL -->
               <div id="loginResponsavelView" style="display: none;">
-                <h2 class="text-center mb-4">Login do Responsável</h2>
                 <h2 class="text-center mb-4">Login Responsável</h2>
                 <form id="formLoginResp">
                   <input id="inpgmailLoginResp" type="email" placeholder="E-mail do Responsável." required />
@@ -70,7 +75,6 @@
 
               <!-- CADASTRO USUÁRIO -->
               <div id="cadastroView" style="display:none;">
-                <h2 class="text-center mb-4">Cadastro de Usuário</h2>
                 <h2 class="text-center mb-4">Cadastro</h2>
                 <form id="formCadastro">
                   <input id="inpnome" type="text" maxlength="40" placeholder="Digite seu Nome" />
@@ -91,7 +95,6 @@
 
               <!-- CADASTRO RESPONSÁVEL -->
               <div id="cadastroResponsavelView" style="display: none;">
-                <h2 class="text-center mb-4">Cadastro do Responsável</h2>
                 <h2 class="text-center mb-4">Cadastro Responsável</h2>
                 <form id="formCadastroResp">
                   <input id="inpnomeResp" type="text" maxlength="40" placeholder="Nome do Responsável" />
@@ -111,6 +114,7 @@
       </div>
     </div>
   </div>
+
   <!-- Scripts -->
   <!-- PopperJS para Bootstrap -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
@@ -124,16 +128,20 @@
     const loginRespView = document.getElementById("loginResponsavelView");
     const cadastroView = document.getElementById("cadastroView");
     const cadastroRespView = document.getElementById("cadastroResponsavelView");
+
     // Botões de navegação entre login/cadastro
     const toCadastro = document.getElementById("toCadastro");
     const toLogin = document.getElementById("toLogin");
+
     // Elementos de aviso/erro
     const avisoLogin = document.getElementById("avisoLogin");
     const avisoLoginResp = document.getElementById("avisoLoginResp");
     const avisoCadastro = document.getElementById("avisoCadastro");
     const avisoCadastroResp = document.getElementById("avisoCadastroResp");
+
     // Variável para guardar ID do usuário recém cadastrado
     let usuarioRecemCadastradoID = null;
+
     /* ---------- FUNÇÕES DE VIEW ---------- */
     // Esconde todas as views do modal
     function hideAllViews() {
@@ -142,6 +150,7 @@
       cadastroView.style.display = "none";
       cadastroRespView.style.display = "none";
     }
+
     // Renderiza a view correta de acordo com o caminho
     function renderView(path) {
       hideAllViews();
@@ -158,14 +167,17 @@
           loginView.style.display = "block";
       }
     }
+
     // Renderiza a view ao carregar a página e ao navegar pelo histórico
     window.addEventListener("DOMContentLoaded", () => renderView(window.location.pathname));
     window.addEventListener("popstate", () => renderView(window.location.pathname));
+
     /* ---------- NAVEGAÇÃO ---------- */
     // Troca para tela de cadastro
     toCadastro.onclick = e => { e.preventDefault(); history.pushState({}, "", "/cadastro"); renderView("/cadastro"); };
     // Troca para tela de login
     toLogin.onclick = e => { e.preventDefault(); history.pushState({}, "", "/login"); renderView("/login"); };
+
     /* ---------- CADASTRO USUÁRIO ---------- */
     // Lógica de cadastro de usuário
     document.getElementById("formCadastro").onsubmit = async e => {
@@ -175,6 +187,7 @@
       const nome = document.getElementById("inpnome").value;
       const idade = parseInt(document.getElementById("inpidade").value);
       const confirmaSenha = document.getElementById("inpconfirmsenha").value;
+
       // Validação de senha
       if (senha.length < 8) {
         avisoCadastro.style.color = "red";
@@ -186,6 +199,7 @@
         avisoCadastro.textContent = "As senhas não coincidem!";
         return;
       }
+
       // Envia dados para o backend
       try {
         const res = await fetch("/cadastro", {
@@ -199,9 +213,11 @@
           avisoCadastro.textContent = data.msg;
           return;
         }
+
         avisoCadastro.style.color = "green";
         avisoCadastro.textContent = "Usuário cadastrado com sucesso!";
         usuarioRecemCadastradoID = data.usuario.ID_usuarios;
+
         // Se for menor de idade, pede cadastro do responsável
         if (idade < 18) {
           history.pushState({}, "", "/cadastro/responsavel");
@@ -212,6 +228,7 @@
         avisoCadastro.textContent = "Erro ao cadastrar usuário";
       }
     };
+
     /* ---------- CADASTRO RESPONSÁVEL ---------- */
     // Lógica de cadastro do responsável
     document.getElementById("formCadastroResp").onsubmit = async e => {
@@ -220,6 +237,7 @@
       const senha = document.getElementById("inpsenhaCadastroResp").value;
       const nome = document.getElementById("inpnomeResp").value;
       const confirmaSenha = document.getElementById("inpconfirmsenhaResp").value;
+
       // Validação de senha
       if (senha.length < 8) {
         avisoCadastroResp.style.color = "red";
@@ -231,6 +249,7 @@
         avisoCadastroResp.textContent = "As senhas não coincidem!";
         return;
       }
+
       // Envia dados para o backend
       try {
         const res = await fetch("/cadastro/responsavel", {
@@ -244,8 +263,10 @@
           avisoCadastroResp.textContent = data.msg;
           return;
         }
+
         avisoCadastroResp.style.color = "green";
         avisoCadastroResp.textContent = "Responsável cadastrado com sucesso!";
+
         // Cria vínculo entre usuário e responsável
         if (usuarioRecemCadastradoID) {
           await fetch("/vincular", {
@@ -261,12 +282,14 @@
         avisoCadastroResp.textContent = "Erro ao cadastrar responsável";
       }
     };
+
     /* ---------- LOGIN USUÁRIO ---------- */
     // Lógica de login do usuário
     document.getElementById("formLogin").onsubmit = async e => {
       e.preventDefault();
       const email = document.getElementById("inpgmailLogin").value;
       const senha = document.getElementById("inpsenhaLogin").value;
+
       // Envia dados para o backend
       try {
         const res = await fetch("/login", {
@@ -282,6 +305,7 @@
         } else {
           avisoLogin.style.color = "red";
           avisoLogin.textContent = data.msg;
+
           // Se o erro indicar que precisa cadastrar responsável, vai para a tela de cadastro do responsável
           if (data.requireResponsavel) {
             history.pushState({}, "", "/cadastro/responsavel");
@@ -293,12 +317,14 @@
         avisoLogin.textContent = "Erro ao conectar com servidor";
       }
     };
+
     /* ---------- LOGIN RESPONSÁVEL ---------- */
     // Lógica de login do responsável
     document.getElementById("formLoginResp").onsubmit = async e => {
       e.preventDefault();
       const email = document.getElementById("inpgmailLoginResp").value;
       const senha = document.getElementById("inpsenhaLoginResp").value;
+
       // Envia dados para o backend
       try {
         const res = await fetch("/login/responsavel", {
@@ -335,4 +361,5 @@
     }
   </script>
 </body>
+
 </html>
