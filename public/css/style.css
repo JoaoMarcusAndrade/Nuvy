@@ -112,7 +112,10 @@ header a:hover {
   display: flex;
 }
 
-/* ===== ESTILOS DA ÁREA DE JOGOS ===== */
+/* ===== ESTILOS ESPECÍFICOS DA ÁREA DE JOGOS ===== */
+#jogos-section {
+  flex-direction: column;
+}
 
 /* Navbar */
 .navbar {

@@ -257,6 +257,8 @@ function showJogosSection() {
   mainHeader.style.display = "none";
   jogosSection.classList.add("active");
   jogosSection.style.display = "flex";
+  // Forçar redimensionamento para corrigir layout
+  setTimeout(() => { window.dispatchEvent(new Event('resize')); }, 50);
   window.scrollTo(0, 0);
 }
 
