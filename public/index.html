@@ -252,17 +252,21 @@ function renderView(path) {
 
 // Mostra a seção de jogos e esconde a home
 function showJogosSection() {
+  homeSection.classList.remove("active");
   homeSection.style.display = "none";
   mainHeader.style.display = "none";
-  jogosSection.style.display = "block";
+  jogosSection.classList.add("active");
+  jogosSection.style.display = "flex";
   window.scrollTo(0, 0);
 }
 
 // Mostra a seção home e esconde a de jogos
 function showHomeSection() {
-  homeSection.style.display = "block";
-  mainHeader.style.display = "block";
+  jogosSection.classList.remove("active");
   jogosSection.style.display = "none";
+  homeSection.classList.add("active");
+  homeSection.style.display = "flex";
+  mainHeader.style.display = "block";
   window.scrollTo(0, 0);
 }
 

@@ -499,6 +499,17 @@ footer {
 }
 
 @media (max-width: 480px) {
+  /* CORREÇÃO: Garantir que apenas uma seção seja exibida por vez */
+  .section:not(.active) {
+    display: none !important;
+  }
+  
+  .section.active {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
   body {
     min-height: 100vh;
     display: flex;
@@ -512,10 +523,10 @@ footer {
   }
   
   /* Ajuste específico para a seção de jogos */
-  #jogos-section {
+  #jogos-section.active {
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 130px);
+    min-height: 100vh;
   }
   
   .jogo-box {
@@ -582,6 +593,3 @@ footer {
   flex-direction: column;
   min-height: 100vh;
 }
-
-/* REMOVIDA A REGRA PROBLEMÁTICA QUE ESTAVA ESCONDENDO TODAS AS SEÇÕES */
-/* A regra original .section { display: none; } e .active { display: flex; } já são suficientes */
