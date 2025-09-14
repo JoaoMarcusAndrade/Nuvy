@@ -106,8 +106,6 @@ header a:hover {
 /* Seções do SPA (Single Page Application) */
 .section {
   display: none;
-  flex: 1;
-  flex-direction: column;
 }
 
 .section.active {
@@ -517,6 +515,19 @@ footer {
   
   .section.active {
     display: flex;
+  }
+  
+  /* Ajustes específicos para a home em mobile */
+  #home.active {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  
+  /* Ajuste específico para a seção de jogos */
+  #jogos-section.active {
+    display: flex;
     flex-direction: column;
     min-height: 100vh;
   }
@@ -531,13 +542,6 @@ footer {
   .container {
     min-height: calc(100vh - 130px);
     padding: 15px 0;
-  }
-  
-  /* Ajuste específico para a seção de jogos */
-  #jogos-section.active {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
   }
   
   /* Ajustes para a área de jogos em mobile pequeno */
