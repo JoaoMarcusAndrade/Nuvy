@@ -136,6 +136,11 @@
               <input id="inpsenhaLoginResp" type="password" placeholder="Digite sua senha." required />
               <button type="submit" class="btn-login">Entrar</button>
             </form>
+            <p class="signup-text">
+    Não tem uma conta?
+    <a href="#" id="toCadastroResp">cadastre-se</a>
+  </p>
+  <p id="avisoLoginResp" class="text"></p>
             <p id="avisoLoginResp" class="text"></p>
           </div>
 
@@ -172,6 +177,10 @@
                 required />
               <button type="submit" class="btn-login">Cadastrar</button>
             </form>
+            <p class="signup-text">
+    Já tem uma conta?
+    <a href="#" id="toLoginResp">voltar ao login</a>
+  </p>
             <p id="avisoCadastroResp" class="text"></p>
           </div>
         </div>
@@ -186,292 +195,298 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <script>
-    /* ---------- ELEMENTOS ---------- */
-    // Elementos das views
-    const loginView = document.getElementById("loginView");
-    const loginRespView = document.getElementById("loginResponsavelView");
-    const cadastroView = document.getElementById("cadastroView");
-    const cadastroRespView = document.getElementById("cadastroResponsavelView");
-    
-    // Seções da SPA
-    const homeSection = document.getElementById("home");
-    const jogosSection = document.getElementById("jogos-section");
-    const mainHeader = document.getElementById("main-header");
+/* ---------- ELEMENTOS ---------- */
+// Elementos das views
+const loginView = document.getElementById("loginView");
+const loginRespView = document.getElementById("loginResponsavelView");
+const cadastroView = document.getElementById("cadastroView");
+const cadastroRespView = document.getElementById("cadastroResponsavelView");
 
-    // Botões de navegação entre login/cadastro
-    const toCadastro = document.getElementById("toCadastro");
-    const toLogin = document.getElementById("toLogin");
+// Seções da SPA
+const homeSection = document.getElementById("home");
+const jogosSection = document.getElementById("jogos-section");
+const mainHeader = document.getElementById("main-header");
 
-    // Elementos de aviso/erro
-    const avisoLogin = document.getElementById("avisoLogin");
-    const avisoLoginResp = document.getElementById("avisoLoginResp");
-    const avisoCadastro = document.getElementById("avisoCadastro");
-    const avisoCadastroResp = document.getElementById("avisoCadastroResp");
+// Botões de navegação entre login/cadastro
+const toCadastro = document.getElementById("toCadastro");
+const toLogin = document.getElementById("toLogin");
 
-    // Variável para guardar ID do usuário recém cadastrado
-    let usuarioRecemCadastradoID = null;
+// Botões de navegação do responsável
+const toCadastroResp = document.getElementById("toCadastroResp");
+const toLoginResp = document.getElementById("toLoginResp");
 
-    /* ---------- FUNÇÕES DE VIEW ---------- */
-    // Esconde todas as views do modal
-    function hideAllViews() {
-      loginView.style.display = "none";
-      loginRespView.style.display = "none";
-      cadastroView.style.display = "none";
-      cadastroRespView.style.display = "none";
-    }
+// Elementos de aviso/erro
+const avisoLogin = document.getElementById("avisoLogin");
+const avisoLoginResp = document.getElementById("avisoLoginResp");
+const avisoCadastro = document.getElementById("avisoCadastro");
+const avisoCadastroResp = document.getElementById("avisoCadastroResp");
 
-    // Renderiza a view correta de acordo com o caminho
-    function renderView(path) {
-      hideAllViews();
-      switch (path) {
-        case "/login":
-          loginView.style.display = "block"; break;
-        case "/login/responsavel":
-          loginRespView.style.display = "block"; break;
-        case "/cadastro":
-          cadastroView.style.display = "block"; break;
-        case "/cadastro/responsavel":
-          cadastroRespView.style.display = "block"; break;
-        default:
-          loginView.style.display = "block";
-      }
-    }
+// Variável para guardar ID do usuário recém cadastrado
+let usuarioRecemCadastradoID = null;
 
-    // Mostra a seção de jogos e esconde a home
-    function showJogosSection() {
-      homeSection.style.display = "none";
-      mainHeader.style.display = "none";
-      jogosSection.style.display = "block";
-      window.scrollTo(0, 0);
-    }
+/* ---------- FUNÇÕES DE VIEW ---------- */
+// Esconde todas as views do modal
+function hideAllViews() {
+  loginView.style.display = "none";
+  loginRespView.style.display = "none";
+  cadastroView.style.display = "none";
+  cadastroRespView.style.display = "none";
+}
 
-    // Mostra a seção home e esconde a de jogos
-    function showHomeSection() {
-      homeSection.style.display = "block";
-      mainHeader.style.display = "block";
-      jogosSection.style.display = "none";
-      window.scrollTo(0, 0);
-    }
+// Renderiza a view correta de acordo com o caminho
+function renderView(path) {
+  hideAllViews();
+  switch (path) {
+    case "/login":
+      loginView.style.display = "block"; break;
+    case "/login/responsavel":
+      loginRespView.style.display = "block"; break;
+    case "/cadastro":
+      cadastroView.style.display = "block"; break;
+    case "/cadastro/responsavel":
+      cadastroRespView.style.display = "block"; break;
+    default:
+      loginView.style.display = "block";
+  }
+}
 
-    // Fecha o modal
-    function closeModal() {
-      const modal = bootstrap.Modal.getInstance(document.getElementById('staticBackdrop'));
-      modal.hide();
-    }
+// Mostra a seção de jogos e esconde a home
+function showJogosSection() {
+  homeSection.style.display = "none";
+  mainHeader.style.display = "none";
+  jogosSection.style.display = "block";
+  window.scrollTo(0, 0);
+}
 
-    // Renderiza a view ao carregar a página e ao navegar pelo histórico
-    window.addEventListener("DOMContentLoaded", () => {
-      renderView(window.location.pathname);
+// Mostra a seção home e esconde a de jogos
+function showHomeSection() {
+  homeSection.style.display = "block";
+  mainHeader.style.display = "block";
+  jogosSection.style.display = "none";
+  window.scrollTo(0, 0);
+}
+
+// Fecha o modal
+function closeModal() {
+  const modal = bootstrap.Modal.getInstance(document.getElementById('staticBackdrop'));
+  modal.hide();
+}
+
+// Renderiza a view ao carregar a página e ao navegar pelo histórico
+window.addEventListener("DOMContentLoaded", () => {
+  renderView(window.location.pathname);
+});
+
+window.addEventListener("popstate", () => renderView(window.location.pathname));
+
+/* ---------- NAVEGAÇÃO ---------- */
+// Troca para tela de cadastro
+toCadastro.onclick = e => { e.preventDefault(); history.pushState({}, "", "/cadastro"); renderView("/cadastro"); };
+// Troca para tela de login
+toLogin.onclick = e => { e.preventDefault(); history.pushState({}, "", "/login"); renderView("/login"); };
+
+/* ---------- NAVEGAÇÃO DO RESPONSÁVEL ---------- */
+// Troca para tela de cadastro do responsável
+toCadastroResp.onclick = e => { 
+  e.preventDefault(); 
+  history.pushState({}, "", "/cadastro/responsavel"); 
+  renderView("/cadastro/responsavel"); 
+};
+
+// Troca para tela de login do responsável
+toLoginResp.onclick = e => { 
+  e.preventDefault(); 
+  history.pushState({}, "", "/login/responsavel"); 
+  renderView("/login/responsavel"); 
+};
+
+/* ---------- CADASTRO USUÁRIO ---------- */
+// Lógica de cadastro de usuário
+document.getElementById("formCadastro").onsubmit = async e => {
+  e.preventDefault();
+  const email = document.getElementById("inpgmailCadastro").value;
+  const senha = document.getElementById("inpsenhaCadastro").value;
+  const nome = document.getElementById("inpnome").value;
+  const idade = parseInt(document.getElementById("inpidade").value);
+  const confirmaSenha = document.getElementById("inpconfirmsenha").value;
+
+  // Validação de senha
+  if (senha.length < 8) {
+    avisoCadastro.style.color = "red";
+    avisoCadastro.textContent = "Senha mínima 8 caracteres";
+    return;
+  }
+  if (senha !== confirmaSenha) {
+    avisoCadastro.style.color = "red";
+    avisoCadastro.textContent = "As senhas não coincidem!";
+    return;
+  }
+
+  // Envia dados para o backend
+  try {
+    const res = await fetch("/cadastro", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, senha, nome, idade }),
     });
-    
-    window.addEventListener("popstate", () => renderView(window.location.pathname));
-
-    /* ---------- NAVEGAÇÃO ---------- */
-    // Troca para tela de cadastro
-    toCadastro.onclick = e => { e.preventDefault(); history.pushState({}, "", "/cadastro"); renderView("/cadastro"); };
-    // Troca para tela de login
-    toLogin.onclick = e => { e.preventDefault(); history.pushState({}, "", "/login"); renderView("/login"); };
-
-    /* ---------- CADASTRO USUÁRIO ---------- */
-    // Lógica de cadastro de usuário
-    document.getElementById("formCadastro").onsubmit = async e => {
-      e.preventDefault();
-      const email = document.getElementById("inpgmailCadastro").value;
-      const senha = document.getElementById("inpsenhaCadastro").value;
-      const nome = document.getElementById("inpnome").value;
-      const idade = parseInt(document.getElementById("inpidade").value);
-      const confirmaSenha = document.getElementById("inpconfirmsenha").value;
-
-      // Validação de senha
-      if (senha.length < 8) {
-        avisoCadastro.style.color = "red";
-        avisoCadastro.textContent = "Senha mínima 8 caracteres";
-        return;
-      }
-      if (senha !== confirmaSenha) {
-        avisoCadastro.style.color = "red";
-        avisoCadastro.textContent = "As senhas não coincidem!";
-        return;
-      }
-
-      // Envia dados para o backend
-      try {
-        const res = await fetch("/cadastro", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, senha, nome, idade }),
-        });
-        const data = await res.json();
-        if (!res.ok) {
-          avisoCadastro.style.color = "red";
-          avisoCadastro.textContent = data.msg;
-          return;
-        }
-
-        avisoCadastro.style.color = "green";
-        avisoCadastro.textContent = "Usuário cadastrado com sucesso!";
-        usuarioRecemCadastradoID = data.usuario.ID_usuarios;
-
-        // Se for menor de idade, pede cadastro do responsável
-        if (idade < 16) {
-          history.pushState({}, "", "/cadastro/responsavel");
-          renderView("/cadastro/responsavel");
-        } else {
-          // Se for maior de idade, fecha o modal e mostra a área de jogos
-          closeModal();
-          showJogosSection();
-        }
-      } catch (err) {
-        avisoCadastro.style.color = "red";
-        avisoCadastro.textContent = "Erro ao cadastrar usuário";
-      }
-    };
-
-    /* ---------- CADASTRO RESPONSÁVEL ---------- */
-    // Lógica de cadastro do responsável
-    document.getElementById("formCadastroResp").onsubmit = async e => {
-      e.preventDefault();
-      const email = document.getElementById("inpgmailCadastroResp").value;
-      const senha = document.getElementById("inpsenhaCadastroResp").value;
-      const nome = document.getElementById("inpnomeResp").value;
-      const confirmaSenha = document.getElementById("inpconfirmsenhaResp").value;
-
-      // Validação de senha
-      if (senha.length < 8) {
-        avisoCadastroResp.style.color = "red";
-        avisoCadastroResp.textContent = "Senha mínima 8 caracteres";
-        return;
-      }
-      if (senha !== confirmaSenha) {
-        avisoCadastroResp.style.color = "red";
-        avisoCadastroResp.textContent = "As senhas não coincidem!";
-        return;
-      }
-
-      // Envia dados para o backend
-      try {
-        const res = await fetch("/cadastro/responsavel", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, senha, nome }),
-        });
-        const data = await res.json();
-        if (!res.ok) {
-          avisoCadastroResp.style.color = "red";
-          avisoCadastroResp.textContent = data.msg;
-          return;
-        }
-
-        avisoCadastroResp.style.color = "green";
-        avisoCadastroResp.textContent = "Responsável cadastrado com sucesso!";
-
-        // Cria vínculo entre usuário e responsável
-        if (usuarioRecemCadastradoID) {
-          const vinculoRes = await fetch("/vincular", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ idUsuario: usuarioRecemCadastradoID, idResponsavel: data.responsavel.ID_responsaveis })
-          });
-          
-          if (vinculoRes.ok) {
-            avisoCadastroResp.style.color = "green";
-            avisoCadastroResp.textContent += " Vínculo criado com sucesso!";
-            
-            // Fecha o modal e mostra a área de jogos
-            setTimeout(() => {
-              closeModal();
-              showJogosSection();
-            }, 1500);
-          }
-        }
-      } catch (err) {
-        avisoCadastroResp.style.color = "red";
-        avisoCadastroResp.textContent = "Erro ao cadastrar responsável";
-      }
-    };
-
-    /* ---------- LOGIN USUÁRIO ---------- */
-    // Lógica de login do usuário
-    document.getElementById("formLogin").onsubmit = async e => {
-      e.preventDefault();
-      const email = document.getElementById("inpgmailLogin").value;
-      const senha = document.getElementById("inpsenhaLogin").value;
-
-      // Envia dados para o backend
-      try {
-        const res = await fetch("/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, senha }),
-        });
-        const data = await res.json();
-        if (res.ok) {
-          avisoLogin.style.color = "green";
-          avisoLogin.textContent = data.msg;
-          
-          // Fecha o modal e mostra a área de jogos
-          closeModal();
-          showJogosSection();
-        } else {
-          avisoLogin.style.color = "red";
-          avisoLogin.textContent = data.msg;
-
-          // Se o erro indicar que precisa cadastrar responsável, vai para a tela de cadastro do responsável
-          if (data.requireResponsavel) {
-            history.pushState({}, "", "/cadastro/responsavel");
-            renderView("/cadastro/responsavel");
-          }
-        }
-      } catch (err) {
-        avisoLogin.style.color = "red";
-        avisoLogin.textContent = "Erro ao conectar com servidor";
-      }
-    };
-
-    /* ---------- LOGIN RESPONSÁVEL ---------- */
-    // Lógica de login do responsável
-    document.getElementById("formLoginResp").onsubmit = async e => {
-      e.preventDefault();
-      const email = document.getElementById("inpgmailLoginResp").value;
-      const senha = document.getElementById("inpsenhaLoginResp").value;
-
-      // Envia dados para o backend
-      try {
-        const res = await fetch("/login/responsavel", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, senha }),
-        });
-        const data = await res.json();
-        if (res.ok) {
-          avisoLoginResp.style.color = "green";
-          avisoLoginResp.textContent = data.msg;
-          
-          // Fecha o modal e mostra a área de jogos
-          closeModal();
-          showJogosSection();
-        } else {
-          avisoLoginResp.style.color = "red";
-          avisoLoginResp.textContent = data.msg;
-        }
-      } catch (err) {
-        avisoLoginResp.style.color = "red";
-        avisoLoginResp.textContent = "Erro ao conectar com servidor";
-      }
-    };
-  </script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(registration => {
-            console.log('Service Worker registrado com sucesso:', registration.scope);
-          })
-          .catch(error => {
-            console.log('Falha ao registrar o Service Worker:', error);
-          });
-      });
+    const data = await res.json();
+    if (!res.ok) {
+      avisoCadastro.style.color = "red";
+      avisoCadastro.textContent = data.msg;
+      return;
     }
+
+    avisoCadastro.style.color = "green";
+    avisoCadastro.textContent = "Usuário cadastrado com sucesso!";
+    usuarioRecemCadastradoID = data.usuario.ID_usuarios;
+
+    // Se for menor de idade, pede cadastro do responsável
+    if (idade < 16) {
+      history.pushState({}, "", "/cadastro/responsavel");
+      renderView("/cadastro/responsavel");
+    } else {
+      // Se for maior de idade, fecha o modal e mostra a área de jogos
+      closeModal();
+      showJogosSection();
+    }
+  } catch (err) {
+    avisoCadastro.style.color = "red";
+    avisoCadastro.textContent = "Erro ao cadastrar usuário";
+  }
+};
+
+/* ---------- CADASTRO RESPONSÁVEL ---------- */
+// Lógica de cadastro do responsável
+document.getElementById("formCadastroResp").onsubmit = async e => {
+  e.preventDefault();
+  const email = document.getElementById("inpgmailCadastroResp").value;
+  const senha = document.getElementById("inpsenhaCadastroResp").value;
+  const nome = document.getElementById("inpnomeResp").value;
+  const confirmaSenha = document.getElementById("inpconfirmsenhaResp").value;
+
+  // Validação de senha
+  if (senha.length < 8) {
+    avisoCadastroResp.style.color = "red";
+    avisoCadastroResp.textContent = "Senha mínima 8 caracteres";
+    return;
+  }
+  if (senha !== confirmaSenha) {
+    avisoCadastroResp.style.color = "red";
+    avisoCadastroResp.textContent = "As senhas não coincidem!";
+    return;
+  }
+
+  // Envia dados para o backend
+  try {
+    const res = await fetch("/cadastro/responsavel", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, senha, nome }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      avisoCadastroResp.style.color = "red";
+      avisoCadastroResp.textContent = data.msg;
+      return;
+    }
+
+    avisoCadastroResp.style.color = "green";
+    avisoCadastroResp.textContent = "Responsável cadastrado com sucesso!";
+
+    // Cria vínculo entre usuário e responsável
+    if (usuarioRecemCadastradoID) {
+      const vinculoRes = await fetch("/vincular", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idUsuario: usuarioRecemCadastradoID, idResponsavel: data.responsavel.ID_responsaveis })
+      });
+      
+      if (vinculoRes.ok) {
+        avisoCadastroResp.style.color = "green";
+        avisoCadastroResp.textContent += " Vínculo criado com sucesso!";
+        
+        // Fecha o modal e mostra a área de jogos
+        setTimeout(() => {
+          closeModal();
+          showJogosSection();
+        }, 1500);
+      }
+    }
+  } catch (err) {
+    avisoCadastroResp.style.color = "red";
+    avisoCadastroResp.textContent = "Erro ao cadastrar responsável";
+  }
+};
+
+/* ---------- LOGIN USUÁRIO ---------- */
+// Lógica de login do usuário
+document.getElementById("formLogin").onsubmit = async e => {
+  e.preventDefault();
+  const email = document.getElementById("inpgmailLogin").value;
+  const senha = document.getElementById("inpsenhaLogin").value;
+
+  // Envia dados para o backend
+  try {
+    const res = await fetch("/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, senha }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      avisoLogin.style.color = "green";
+      avisoLogin.textContent = data.msg;
+      
+      // Fecha o modal e mostra a área de jogos
+      closeModal();
+      showJogosSection();
+    } else {
+      avisoLogin.style.color = "red";
+      avisoLogin.textContent = data.msg;
+
+      // Se o erro indicar que precisa cadastrar responsável, vai para a tela de cadastro do responsável
+      if (data.requireResponsavel) {
+        history.pushState({}, "", "/cadastro/responsavel");
+        renderView("/cadastro/responsavel");
+      }
+    }
+  } catch (err) {
+    avisoLogin.style.color = "red";
+    avisoLogin.textContent = "Erro ao conectar com servidor";
+  }
+};
+
+/* ---------- LOGIN RESPONSÁVEL ---------- */
+// Lógica de login do responsável
+document.getElementById("formLoginResp").onsubmit = async e => {
+  e.preventDefault();
+  const email = document.getElementById("inpgmailLoginResp").value;
+  const senha = document.getElementById("inpsenhaLoginResp").value;
+
+  // Envia dados para o backend
+  try {
+    const res = await fetch("/login/responsavel", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, senha }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      avisoLoginResp.style.color = "green";
+      avisoLoginResp.textContent = data.msg;
+      
+      // Fecha o modal e mostra a área de jogos
+      closeModal();
+      showJogosSection();
+    } else {
+      avisoLoginResp.style.color = "red";
+      avisoLoginResp.textContent = data.msg;
+    }
+  } catch (err) {
+    avisoLoginResp.style.color = "red";
+    avisoLoginResp.textContent = "Erro ao conectar com servidor";
+  }
+};
   </script>
 </body>
 
