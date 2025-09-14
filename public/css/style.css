@@ -8,6 +8,9 @@ body {
   background-color: #6a40d6;
   color: white;
   overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Cabeçalho e links do menu */
@@ -41,6 +44,7 @@ header a:hover {
   align-items: center;
   height: 80vh;
   gap: 60px;
+  flex: 1;
 }
 
 /* Imagem da nuvem */
@@ -96,6 +100,7 @@ header a:hover {
 /* Seções do SPA (Single Page Application) */
 .section {
   display: none;
+  flex: 1;
 }
 
 .active {
@@ -193,6 +198,7 @@ header a:hover {
 /* Área do jogo */
 .jogo {
   padding: 0 90px 30px 90px;
+  flex: 1;
 }
 
 .jogo h2 {
@@ -207,6 +213,7 @@ header a:hover {
   padding: 100px;
   text-align: center;
   box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
 }
 
 .game-icon {
@@ -227,6 +234,7 @@ footer {
   padding: 12px;
   font-weight: bold;
   margin-top: auto; /* fixa no fim */
+  width: 100%;
 }
 
 /* ===== Estilos Customizados do Modal ===== */
@@ -442,7 +450,9 @@ footer {
   }
 
   .jogo-box {
-    padding: 60px 20px;
+    padding: 40px 20px;
+    margin: 0 auto;
+    max-width: 90%;
   }
 
   .game-icon {
@@ -457,23 +467,63 @@ footer {
   footer {
     font-size: 14px;
     padding: 8px;
+    position: relative;
+    bottom: 0;
   }
 }
 
 @media (max-width: 480px) {
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
   .jogo-box {
-    padding: 40px 10px;
+    padding: 30px 15px;
+    margin: 0 10px 20px 10px;
+    width: auto;
   }
 
   .game-icon {
     width: 60px;
+    margin-bottom: 15px;
   }
 
   .jogo-box p {
     font-size: 14px;
+    margin: 0;
   }
 
   footer {
     font-size: 12px;
+    padding: 10px;
+    margin-top: auto;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  /* Ajusta a seção de jogos para mobile */
+  #jogos-section {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .educativo, .jogo {
+    flex: 1;
+  }
+  
+  /* Ajusta o carrossel para mobile */
+  .carrossel {
+    margin: 0 10px;
+    gap: 10px;
+    padding-bottom: 15px;
+  }
+  
+  .card {
+    width: 100px;
+    height: 90px;
   }
 }

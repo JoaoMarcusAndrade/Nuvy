@@ -340,10 +340,10 @@ document.getElementById("formCadastro").onsubmit = async e => {
     avisoCadastro.textContent = "Usuário cadastrado com sucesso!";
     usuarioRecemCadastradoID = data.usuario.ID_usuarios;
 
-    // Se for menor de idade, pede cadastro do responsável
+    // Se for menor de idade, pede LOGIN do responsável (ALTERADO)
     if (idade < 16) {
-      history.pushState({}, "", "/cadastro/responsavel");
-      renderView("/cadastro/responsavel");
+      history.pushState({}, "", "/login/responsavel");
+      renderView("/login/responsavel");
     } else {
       // Se for maior de idade, fecha o modal e mostra a área de jogos
       closeModal();
@@ -393,7 +393,7 @@ document.getElementById("formCadastroResp").onsubmit = async e => {
     avisoCadastroResp.style.color = "green";
     avisoCadastroResp.textContent = "Responsável cadastrado com sucesso!";
 
-    // Cria vínculo entre usuário e responsável
+    // Cria vínculo entre usuário and responsável
     if (usuarioRecemCadastradoID) {
       const vinculoRes = await fetch("/vincular", {
         method: "POST",
@@ -444,10 +444,10 @@ document.getElementById("formLogin").onsubmit = async e => {
       avisoLogin.style.color = "red";
       avisoLogin.textContent = data.msg;
 
-      // Se o erro indicar que precisa cadastrar responsável, vai para a tela de cadastro do responsável
+      // Se o erro indicar que precisa de responsável, vai para o login do responsável (ALTERADO)
       if (data.requireResponsavel) {
-        history.pushState({}, "", "/cadastro/responsavel");
-        renderView("/cadastro/responsavel");
+        history.pushState({}, "", "/login/responsavel");
+        renderView("/login/responsavel");
       }
     }
   } catch (err) {
