@@ -48,7 +48,7 @@ header a:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
+  height: 80vh;
   gap: 60px;
   flex: 1;
 }
@@ -106,7 +106,7 @@ header a:hover {
 /* Seções do SPA (Single Page Application) */
 .section {
   display: none;
-  width: 100%;
+  flex: 1;
 }
 
 .active {
@@ -583,7 +583,5 @@ footer {
   min-height: 100vh;
 }
 
-/* CORREÇÃO: Garantir que apenas a seção ativa seja exibida */
-.section:not(.active) {
-  display: none !important;
-}
+/* REMOVIDA A REGRA PROBLEMÁTICA QUE ESTAVA ESCONDENDO TODAS AS SEÇÕES */
+/* A regra original .section { display: none; } e .active { display: flex; } já são suficientes */
