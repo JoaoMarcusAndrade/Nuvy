@@ -106,6 +106,7 @@ header a:hover {
 /* Seções do SPA (Single Page Application) */
 .section {
   display: none;
+  flex: 1; /* Adicionado para preencher o espaço */
 }
 
 .section.active {
@@ -248,15 +249,18 @@ header a:hover {
   margin: 0;
 }
 
-/* Footer */
+/* Footer FIXO */
 footer {
   background: #fff;
   color: #6a40d6;
   text-align: center;
   padding: 12px;
   font-weight: bold;
-  margin-top: auto;
+  position: fixed; /* Alterado para fixed */
+  bottom: 0; /* Fixa na parte inferior */
+  left: 0;
   width: 100%;
+  z-index: 1000; /* Garante que fique acima de outros elementos */
 }
 
 /* ===== Estilos Customizados do Modal ===== */
@@ -570,6 +574,7 @@ footer {
   
   .jogo {
     padding: 15px 10px 20px 10px;
+    padding-bottom: 60px; /* Adiciona espaço para o footer fixo */
   }
   
   .jogo-box {
@@ -609,12 +614,4 @@ footer {
   .NuvyP {
     font-size: 18px;
   }
-}
-
-/* Adicionado para garantir que o footer fique sempre no final */
-.main-wrapper {
-  flex: 1 0 auto;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
 }
