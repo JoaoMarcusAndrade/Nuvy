@@ -109,8 +109,8 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ msg: "Senha incorreta" });
     }
 
-    // Lógica de menores de 13 anos
-    if (usuario.idade < 13 && !usuario.responsavel_vinculado) {
+    // Lógica de menores de 16 anos
+    if (usuario.idade < 16 && !usuario.responsavel_vinculado) {
       return res.status(403).json({
         msg: "Usuário menor de idade precisa cadastrar ou vincular um responsável.",
         requireResponsavel: true
@@ -166,7 +166,7 @@ router.post("/cadastro", async (req, res) => {
       password_user: senha,
       name_user: nome || undefined,
       idade: idade,
-      responsavel_vinculado: idade >= 13 // já marca true se tiver 13 ou mais
+      responsavel_vinculado: idade >= 16 // já marca true se tiver 16 ou mais
     });
 
     // Define cookie de autenticação após cadastro
@@ -220,7 +220,7 @@ router.post("/vincular", async (req, res) => {
 
     const usuario = await Usuarios.findByPk(idUsuario);
     if (!usuario) return res.status(404).json({ msg: "Usuário não encontrado" });
-    if (usuario.idade >= 13) return res.status(400).json({ msg: "Usuário tem 13 anos ou mais, não precisa de responsável" });
+    if (usuario.idade >= 16) return res.status(400).json({ msg: "Usuário tem 16 anos ou mais, não precisa de responsável" });
 
     // Cria vínculo na tabela Controle
     const vinculo = await Controle.create({

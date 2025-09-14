@@ -17,7 +17,7 @@
 </head>
 
 <body>
-  <!-- Parte de cima do site com links -->
+  <!-- Parte de cima do site com links (só aparece na home) -->
   <header id="main-header">
     <a href="#ajuda">Ajuda</a>
     <a href="#contato">Contato</a>
@@ -40,16 +40,16 @@
   </div>
 
   <!-- Área de Jogos (inicialmente oculta) -->
-  <div id="jogos" class="section" style="display: none;">
+  <div id="jogos-section" class="section" style="display: none;">
     <!-- Navbar para área de jogos -->
     <nav class="navbar">
       <div class="navbar-left">
         <img src="img/NuvyPet.png" alt="Logo Nuvy" class="logo">
         <a href="#ajuda">Ajuda</a>
         <a href="#contato">Contato</a>
+        <button id="back-to-home" class="btn btn-sm btn-outline-secondary">Voltar</button>
       </div>
       <div class="navbar-right">
-        <button id="logout-btn" class="btn btn-sm btn-outline-secondary">Sair</button>
         <img src="img/Login.png" width="55vh" alt="" style="margin-right: 30px;">
       </div>
     </nav>
@@ -59,31 +59,31 @@
       <h2>Conteúdo educativo</h2>
       <div class="carrossel">
         <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
         </div>
         <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
         </div>
         <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
         </div>
         <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
         </div>
         <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
         </div>
         <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
         </div>
         <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
         </div>
         <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
         </div>
         <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
         </div>
       </div>
       <div class="barra"></div>
@@ -197,8 +197,9 @@
     
     // Seções da SPA
     const homeSection = document.getElementById("home");
-    const jogosSection = document.getElementById("jogos");
+    const jogosSection = document.getElementById("jogos-section");
     const mainHeader = document.getElementById("main-header");
+    const backToHomeBtn = document.getElementById("back-to-home");
 
     // Botões de navegação entre login/cadastro
     const toCadastro = document.getElementById("toCadastro");
@@ -210,13 +211,8 @@
     const avisoCadastro = document.getElementById("avisoCadastro");
     const avisoCadastroResp = document.getElementById("avisoCadastroResp");
 
-    // Botão de logout
-    const logoutBtn = document.getElementById("logout-btn");
-
     // Variável para guardar ID do usuário recém cadastrado
     let usuarioRecemCadastradoID = null;
-    let usuarioLogado = null;
-    let responsavelLogado = null;
 
     /* ---------- FUNÇÕES DE VIEW ---------- */
     // Esconde todas as views do modal
@@ -276,6 +272,11 @@
     
     window.addEventListener("popstate", () => renderView(window.location.pathname));
 
+    // Botão para voltar para a home
+    if (backToHomeBtn) {
+      backToHomeBtn.addEventListener('click', showHomeSection);
+    }
+
     /* ---------- NAVEGAÇÃO ---------- */
     // Troca para tela de cadastro
     toCadastro.onclick = e => { e.preventDefault(); history.pushState({}, "", "/cadastro"); renderView("/cadastro"); };
@@ -294,34 +295,12 @@
         if (response.ok) {
           const data = await response.json();
           if (data.authenticated) {
-            usuarioLogado = data.usuario || null;
-            responsavelLogado = data.responsavel || null;
             showJogosSection();
           }
         }
       } catch (error) {
         console.error('Erro ao verificar autenticação:', error);
       }
-    }
-
-    // Logout
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', async () => {
-        try {
-          const response = await fetch('/logout', {
-            method: 'POST',
-            credentials: 'include'
-          });
-          
-          if (response.ok) {
-            usuarioLogado = null;
-            responsavelLogado = null;
-            showHomeSection();
-          }
-        } catch (error) {
-          console.error('Erro ao fazer logout:', error);
-        }
-      });
     }
 
     /* ---------- CADASTRO USUÁRIO ---------- */
@@ -364,10 +343,9 @@
         avisoCadastro.style.color = "green";
         avisoCadastro.textContent = "Usuário cadastrado com sucesso!";
         usuarioRecemCadastradoID = data.usuario.ID_usuarios;
-        usuarioLogado = data.usuario;
 
         // Se for menor de idade, pede cadastro do responsável
-        if (idade < 18) {
+        if (idade < 16) {
           history.pushState({}, "", "/cadastro/responsavel");
           renderView("/cadastro/responsavel");
         } else {
@@ -419,7 +397,6 @@
 
         avisoCadastroResp.style.color = "green";
         avisoCadastroResp.textContent = "Responsável cadastrado com sucesso!";
-        responsavelLogado = data.responsavel;
 
         // Cria vínculo entre usuário e responsável
         if (usuarioRecemCadastradoID) {
@@ -466,7 +443,6 @@
         if (res.ok) {
           avisoLogin.style.color = "green";
           avisoLogin.textContent = data.msg;
-          usuarioLogado = data.usuario;
           
           // Fecha o modal e mostra a área de jogos
           closeModal();
@@ -506,7 +482,6 @@
         if (res.ok) {
           avisoLoginResp.style.color = "green";
           avisoLoginResp.textContent = data.msg;
-          responsavelLogado = data.responsavel;
           
           // Fecha o modal e mostra a área de jogos
           closeModal();
