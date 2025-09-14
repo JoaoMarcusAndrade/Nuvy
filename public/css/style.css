@@ -107,9 +107,10 @@ header a:hover {
 .section {
   display: none;
   flex: 1;
+  flex-direction: column;
 }
 
-.active {
+.section.active {
   display: flex;
 }
 
@@ -149,8 +150,12 @@ header a:hover {
   align-items: center;
 }
 
+.educativo {
+  padding: 20px 0;
+}
+
 .educativo h2 {
-  font-size: 20px;
+  font-size: 24px;
   margin-bottom: 15px;
   margin-top: 15px;
   margin-left: 90px;
@@ -158,12 +163,12 @@ header a:hover {
 
 .carrossel {
   display: flex;
-  gap: 2px;
+  gap: 15px;
   margin-bottom: 0;
   overflow-x: auto;
   overflow-y: hidden;
   margin: 0 90px;
-  padding-bottom: 10px;
+  padding-bottom: 15px;
 }
 
 .carrossel::-webkit-scrollbar {
@@ -176,9 +181,9 @@ header a:hover {
 }
 
 .card {
-  flex: 0 0 auto; /* impede de achatar */
-  width: 120px;
-  height: 110px;
+  flex: 0 0 auto;
+  width: 160px;
+  height: 140px;
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
@@ -187,7 +192,6 @@ header a:hover {
   justify-content: center;
   cursor: pointer;
   transition: 0.3s;
-  margin: 5px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -201,14 +205,20 @@ header a:hover {
   transform: scale(1.05);
 }
 
+.barra {
+  height: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 10px 90px;
+}
+
 /* Área do jogo */
 .jogo {
-  padding: 0 90px 30px 90px;
+  padding: 20px 90px 30px 90px;
   flex: 1;
 }
 
 .jogo h2 {
-  font-size: 20px;
+  font-size: 24px;
   margin: 15px 0;
 }
 
@@ -216,10 +226,14 @@ header a:hover {
   background: #dcdcdc;
   color: #6a40d6;
   border-radius: 18px;
-  padding: 100px;
+  padding: 80px;
   text-align: center;
   box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.5);
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .game-icon {
@@ -230,6 +244,7 @@ header a:hover {
 .jogo-box p {
   font-size: 20px;
   font-weight: bold;
+  margin: 0;
 }
 
 /* Footer */
@@ -239,20 +254,19 @@ footer {
   text-align: center;
   padding: 12px;
   font-weight: bold;
-  margin-top: auto; /* fixa no fim */
+  margin-top: auto;
   width: 100%;
-  flex-shrink: 0; /* impede que o footer encolha */
 }
 
 /* ===== Estilos Customizados do Modal ===== */
 
 /* Estilo customizado do modal */
 .custom-modal {
-  background-color: #f7f2f6; /* lilás claro */
+  background-color: #f7f2f6;
   border-radius: 20px;
   padding: 30px 25px 25px;
   width: 900px;
-  color: #6a40d6; /* roxo escuro */
+  color: #6a40d6;
   font-family: 'Baloo 2', cursive;
   box-shadow: 0 0 15px rgba(106, 64, 214, 0.3);
 }
@@ -435,7 +449,45 @@ footer {
     padding: 8px 30px;
   }
 
-  /* Esconde ajuda e contato */
+  /* Ajustes para a área de jogos */
+  .educativo h2, .jogo h2 {
+    margin-left: 0;
+    text-align: center;
+    padding: 0 15px;
+  }
+
+  .carrossel {
+    margin: 0 15px;
+    gap: 10px;
+    padding-bottom: 15px;
+  }
+
+  .card {
+    width: 120px;
+    height: 100px;
+  }
+
+  .barra {
+    margin: 10px 15px;
+  }
+
+  .jogo {
+    padding: 20px 15px 30px 15px;
+  }
+
+  .jogo-box {
+    padding: 40px 20px;
+  }
+
+  .game-icon {
+    width: 80px;
+  }
+
+  .jogo-box p {
+    font-size: 16px;
+  }
+
+  /* Esconde ajuda e contato na navbar de jogos */
   .navbar-left a:not(.logo) {
     display: none;
   }
@@ -448,47 +500,6 @@ footer {
 
   .navbar-left {
     gap: 10px;
-  }
-
-  /* Títulos centralizados */
-  .educativo h2, .jogo h2 {
-    margin-left: 0;
-    text-align: center;
-    padding: 0 15px;
-  }
-
-  /* Carrossel ocupa tela toda sem achatar */
-  .carrossel {
-    margin: 0 15px;
-    gap: 15px;
-    padding-bottom: 15px;
-  }
-
-  /* Área do jogo ocupa largura total */
-  .jogo {
-    padding: 0 15px 20px 15px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .jogo-box {
-    padding: 40px 20px;
-    margin: 0 auto;
-    max-width: 90%;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .game-icon {
-    width: 80px;
-  }
-
-  .jogo-box p {
-    font-size: 16px;
   }
 
   /* Footer menor */
@@ -529,10 +540,34 @@ footer {
     min-height: 100vh;
   }
   
+  /* Ajustes para a área de jogos em mobile pequeno */
+  .educativo h2, .jogo h2 {
+    font-size: 20px;
+    margin: 10px 0;
+  }
+  
+  .carrossel {
+    margin: 0 10px;
+    gap: 8px;
+    padding-bottom: 10px;
+  }
+  
+  .card {
+    width: 100px;
+    height: 90px;
+  }
+  
+  .barra {
+    margin: 8px 10px;
+  }
+  
+  .jogo {
+    padding: 15px 10px 20px 10px;
+  }
+  
   .jogo-box {
     padding: 30px 15px;
-    margin: 0 10px 20px 10px;
-    width: auto;
+    margin: 0 5px 15px 5px;
     min-height: 200px;
   }
 
@@ -543,28 +578,11 @@ footer {
 
   .jogo-box p {
     font-size: 14px;
-    margin: 0;
   }
 
   footer {
     font-size: 12px;
     padding: 10px;
-  }
-  
-  .educativo, .jogo {
-    flex: 1;
-  }
-  
-  /* Ajusta o carrossel para mobile */
-  .carrossel {
-    margin: 0 10px;
-    gap: 10px;
-    padding-bottom: 15px;
-  }
-  
-  .card {
-    width: 100px;
-    height: 90px;
   }
   
   /* Ajustes no header para mobile pequeno */
