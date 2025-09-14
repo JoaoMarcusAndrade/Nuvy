@@ -497,6 +497,11 @@ footer {
     flex-direction: column;
   }
   
+  /* CORREÇÃO: Garante que a seção de jogos fique escondida quando não estiver ativa */
+  .section:not(.active) {
+    display: none !important;
+  }
+  
   /* Ajuste específico para a seção de jogos */
   #jogos-section {
     display: flex;
