@@ -13,6 +13,11 @@ body {
   flex-direction: column;
 }
 
+/* Garantir que o HTML também ocupe 100% da altura */
+html {
+  height: 100%;
+}
+
 /* Cabeçalho e links do menu */
 header {
   display: flex;
@@ -374,7 +379,7 @@ footer {
 }
 
 /* ========================= */
-/* RESPONSIVIDADE */
+/* RESPONSIVIDADE - CORREÇÕES APLICADAS */
 /* ========================= */
 @media (max-width: 768px) {
   /* Ajusta o cabeçalho no mobile */
@@ -382,6 +387,7 @@ footer {
     justify-content: center;  
     margin-left: 0;
     gap: 20px;
+    padding: 15px;
   }
 
   header a {
@@ -394,6 +400,7 @@ footer {
     align-items: center;
     text-align: center;
     gap: 30px;
+    padding: 20px;
   }
 
   .cloud {
@@ -426,6 +433,7 @@ footer {
   /* Login vai para a esquerda */
   .navbar {
     justify-content: space-between;
+    padding: 10px 15px;
   }
 
   .navbar-left {
@@ -436,23 +444,33 @@ footer {
   .educativo h2, .jogo h2 {
     margin-left: 0;
     text-align: center;
+    padding: 0 15px;
   }
 
   /* Carrossel ocupa tela toda sem achatar */
   .carrossel {
     margin: 0 15px;
     gap: 15px;
+    padding-bottom: 15px;
   }
 
   /* Área do jogo ocupa largura total */
   .jogo {
     padding: 0 15px 20px 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   .jogo-box {
     padding: 40px 20px;
     margin: 0 auto;
     max-width: 90%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   .game-icon {
@@ -479,10 +497,18 @@ footer {
     flex-direction: column;
   }
   
+  /* Ajuste específico para a seção de jogos */
+  #jogos-section {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
   .jogo-box {
     padding: 30px 15px;
     margin: 0 10px 20px 10px;
     width: auto;
+    min-height: 200px;
   }
 
   .game-icon {
@@ -504,13 +530,6 @@ footer {
     width: 100%;
   }
   
-  /* Ajusta a seção de jogos para mobile */
-  #jogos-section {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  
   .educativo, .jogo {
     flex: 1;
   }
@@ -526,4 +545,17 @@ footer {
     width: 100px;
     height: 90px;
   }
+  
+  /* Garante que o container principal ocupe toda a altura */
+  .container {
+    min-height: calc(100vh - 120px);
+  }
+}
+
+/* Adicionado para garantir que o footer fique sempre no final */
+.main-wrapper {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
