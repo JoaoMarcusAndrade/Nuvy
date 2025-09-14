@@ -45,6 +45,7 @@ header a:hover {
 
 /* Container principal da página */
 .container {
+  display: flex;
   justify-content: center;
   align-items: center;
   height: 80vh;
@@ -240,6 +241,7 @@ footer {
   font-weight: bold;
   margin-top: auto; /* fixa no fim */
   width: 100%;
+  flex-shrink: 0; /* impede que o footer encolha */
 }
 
 /* ===== Estilos Customizados do Modal ===== */
@@ -394,6 +396,13 @@ footer {
     font-size: 18px;
   }
 
+  /* Container principal ajustado para mobile */
+  .container {
+    height: auto;
+    min-height: calc(100vh - 150px);
+    padding: 20px 0;
+  }
+
   /* Empilha elementos na home */
   #home {
     flex-direction: column;   
@@ -485,8 +494,6 @@ footer {
   footer {
     font-size: 14px;
     padding: 8px;
-    position: relative;
-    bottom: 0;
   }
 }
 
@@ -495,6 +502,12 @@ footer {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+  }
+  
+  /* Container ajustado para mobile pequeno */
+  .container {
+    min-height: calc(100vh - 130px);
+    padding: 15px 0;
   }
   
   /* CORREÇÃO: Garante que a seção de jogos fique escondida quando não estiver ativa */
@@ -506,7 +519,7 @@ footer {
   #jogos-section {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: calc(100vh - 130px);
   }
   
   .jogo-box {
@@ -529,10 +542,6 @@ footer {
   footer {
     font-size: 12px;
     padding: 10px;
-    margin-top: auto;
-    position: relative;
-    bottom: 0;
-    width: 100%;
   }
   
   .educativo, .jogo {
@@ -551,9 +560,22 @@ footer {
     height: 90px;
   }
   
-  /* Garante que o container principal ocupe toda a altura */
-  .container {
-    min-height: calc(100vh - 120px);
+  /* Ajustes no header para mobile pequeno */
+  header {
+    padding: 10px;
+    gap: 15px;
+  }
+  
+  header a {
+    font-size: 16px;
+  }
+  
+  .NuvyH1 {
+    font-size: 60px;
+  }
+  
+  .NuvyP {
+    font-size: 18px;
   }
 }
 
@@ -563,4 +585,9 @@ footer {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+/* CORREÇÃO: Garantir que as seções não ativas permaneçam ocultas em todas as resoluções */
+.section:not(.active) {
+  display: none !important;
 }
