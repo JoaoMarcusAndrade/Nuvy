@@ -401,6 +401,7 @@ footer {
     height: auto;
     min-height: calc(100vh - 150px);
     padding: 20px 0;
+    flex-direction: column;
   }
 
   /* Empilha elementos na home */
@@ -510,11 +511,6 @@ footer {
     padding: 15px 0;
   }
   
-  /* CORREÇÃO: Garante que a seção de jogos fique escondida quando não estiver ativa */
-  .section:not(.active) {
-    display: none !important;
-  }
-  
   /* Ajuste específico para a seção de jogos */
   #jogos-section {
     display: flex;
@@ -587,7 +583,5 @@ footer {
   min-height: 100vh;
 }
 
-/* CORREÇÃO: Garantir que as seções não ativas permaneçam ocultas em todas as resoluções */
-.section:not(.active) {
-  display: none !important;
-}
+/* REMOVIDA A REGRA PROBLEMÁTICA QUE ESTAVA ESCONDENDO TODAS AS SEÇÕES */
+/* A regra original .section { display: none; } e .active { display: flex; } já são suficientes */
