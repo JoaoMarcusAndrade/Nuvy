@@ -10,9 +10,8 @@
     integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
   <!-- Fonte personalizada -->
   <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap" rel="stylesheet" />
-  <!-- CSS customizado -->
+  <!-- CSS customizado unificado -->
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/conteudo.css" />
   <link rel="manifest" href="manifest.json">
 </head>
 
@@ -40,7 +39,7 @@
   </div>
 
   <!-- Área de Jogos (inicialmente oculta) -->
-  <div id="jogos-section" class="section" style="display: none;">
+  <div id="jogos-section" class="section">
     <!-- Navbar para área de jogos -->
     <nav class="navbar">
       <div class="navbar-left">
@@ -265,9 +264,6 @@
     // Renderiza a view ao carregar a página e ao navegar pelo histórico
     window.addEventListener("DOMContentLoaded", () => {
       renderView(window.location.pathname);
-      
-      // Verifica se o usuário já está logado
-      checkAuthStatus();
     });
     
     window.addEventListener("popstate", () => renderView(window.location.pathname));
@@ -282,26 +278,6 @@
     toCadastro.onclick = e => { e.preventDefault(); history.pushState({}, "", "/cadastro"); renderView("/cadastro"); };
     // Troca para tela de login
     toLogin.onclick = e => { e.preventDefault(); history.pushState({}, "", "/login"); renderView("/login"); };
-
-    /* ---------- AUTENTICAÇÃO ---------- */
-    // Verifica se o usuário está autenticado
-    async function checkAuthStatus() {
-      try {
-        const response = await fetch('/check-auth', {
-          method: 'GET',
-          credentials: 'include'
-        });
-        
-        if (response.ok) {
-          const data = await response.json();
-          if (data.authenticated) {
-            showJogosSection();
-          }
-        }
-      } catch (error) {
-        console.error('Erro ao verificar autenticação:', error);
-      }
-    }
 
     /* ---------- CADASTRO USUÁRIO ---------- */
     // Lógica de cadastro de usuário
@@ -331,7 +307,6 @@
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, senha, nome, idade }),
-          credentials: 'include'
         });
         const data = await res.json();
         if (!res.ok) {
@@ -386,7 +361,6 @@
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, senha, nome }),
-          credentials: 'include'
         });
         const data = await res.json();
         if (!res.ok) {
@@ -403,8 +377,7 @@
           const vinculoRes = await fetch("/vincular", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ idUsuario: usuarioRecemCadastradoID, idResponsavel: data.responsavel.ID_responsaveis }),
-            credentials: 'include'
+            body: JSON.stringify({ idUsuario: usuarioRecemCadastradoID, idResponsavel: data.responsavel.ID_responsaveis })
           });
           
           if (vinculoRes.ok) {
@@ -437,7 +410,6 @@
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, senha }),
-          credentials: 'include'
         });
         const data = await res.json();
         if (res.ok) {
@@ -476,7 +448,6 @@
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, senha }),
-          credentials: 'include'
         });
         const data = await res.json();
         if (res.ok) {

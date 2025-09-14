@@ -7,7 +7,7 @@ body {
   font-family: "Comic Sans MS", sans-serif;
   background-color: #6a40d6;
   color: white;
-  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 /* Cabeçalho e links do menu */
@@ -96,55 +96,137 @@ header a:hover {
 /* Seções do SPA (Single Page Application) */
 .section {
   display: none;
-  padding: 40px;
 }
 
 .active {
-  display: block;
+  display: flex;
 }
 
-/* Responsividade para telas menores */
-@media (max-width: 768px) {
-  /* Ajusta o cabeçalho no mobile */
-  header {
-    justify-content: center;  
-    margin-left: 0;
-    gap: 20px;
-  }
+/* ===== ESTILOS DA ÁREA DE JOGOS ===== */
 
-  header a {
-    font-size: 18px;
-  }
+/* Navbar */
+.navbar {
+  background: #fff;
+  color: #6a40d6;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.2);
+}
 
-  /* Empilha elementos na home */
-  #home {
-    flex-direction: column;   
-    align-items: center;
-    text-align: center;
-    gap: 30px;
-  }
+.logo {
+  height: 40px;
+  margin-right: 20px;
+}
 
-  .cloud {
-    width: 300px;
-    height: auto;
-  }
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
 
-  .text-box {
-    align-items: center;  
-  }
+.navbar-left a {
+  color: #6a40d6;
+  font-weight: bold;
+  font-size: 18px;
+  text-decoration: none;
+}
 
-  #home h1 {
-    font-size: 70px;
-  }
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
 
-  #home p {
-    font-size: 20px;
-  }
+.educativo h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  margin-left: 90px;
+}
 
-  .btn {
-    font-size: 20px;
-    padding: 8px 30px;
-  }
+.carrossel {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 0 90px;
+  padding-bottom: 10px;
+}
+
+.carrossel::-webkit-scrollbar {
+  height: 8px;
+}
+
+.carrossel::-webkit-scrollbar-thumb {
+  background: #fff;
+  border-radius: 10px;
+}
+
+.card {
+  flex: 0 0 auto; /* impede de achatar */
+  width: 120px;
+  height: 110px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s;
+  margin: 5px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+/* Área do jogo */
+.jogo {
+  padding: 0 90px 30px 90px;
+}
+
+.jogo h2 {
+  font-size: 20px;
+  margin: 15px 0;
+}
+
+.jogo-box {
+  background: #dcdcdc;
+  color: #6a40d6;
+  border-radius: 18px;
+  padding: 100px;
+  text-align: center;
+  box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.5);
+}
+
+.game-icon {
+  width: 130px;
+  margin-bottom: 20px;
+}
+
+.jogo-box p {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Footer */
+footer {
+  background: #fff;
+  color: #6a40d6;
+  text-align: center;
+  padding: 12px;
+  font-weight: bold;
+  margin-top: auto; /* fixa no fim */
 }
 
 /* ===== Estilos Customizados do Modal ===== */
@@ -272,3 +354,126 @@ header a:hover {
   color: #8861e7;
 }
 
+/* Botão Voltar */
+.btn-outline-secondary {
+  border-color: #6a40d6;
+  color: #6a40d6;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #6a40d6;
+  color: white;
+}
+
+/* ========================= */
+/* RESPONSIVIDADE */
+/* ========================= */
+@media (max-width: 768px) {
+  /* Ajusta o cabeçalho no mobile */
+  header {
+    justify-content: center;  
+    margin-left: 0;
+    gap: 20px;
+  }
+
+  header a {
+    font-size: 18px;
+  }
+
+  /* Empilha elementos na home */
+  #home {
+    flex-direction: column;   
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+  }
+
+  .cloud {
+    width: 300px;
+    height: auto;
+  }
+
+  .text-box {
+    align-items: center;  
+  }
+
+  .NuvyH1 {
+    font-size: 70px;
+  }
+
+  .NuvyP {
+    font-size: 20px;
+  }
+
+  .btn {
+    font-size: 20px;
+    padding: 8px 30px;
+  }
+
+  /* Esconde ajuda e contato */
+  .navbar-left a:not(.logo) {
+    display: none;
+  }
+
+  /* Login vai para a esquerda */
+  .navbar {
+    justify-content: space-between;
+  }
+
+  .navbar-left {
+    gap: 10px;
+  }
+
+  /* Títulos centralizados */
+  .educativo h2, .jogo h2 {
+    margin-left: 0;
+    text-align: center;
+  }
+
+  /* Carrossel ocupa tela toda sem achatar */
+  .carrossel {
+    margin: 0 15px;
+    gap: 15px;
+  }
+
+  /* Área do jogo ocupa largura total */
+  .jogo {
+    padding: 0 15px 20px 15px;
+  }
+
+  .jogo-box {
+    padding: 60px 20px;
+  }
+
+  .game-icon {
+    width: 80px;
+  }
+
+  .jogo-box p {
+    font-size: 16px;
+  }
+
+  /* Footer menor */
+  footer {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .jogo-box {
+    padding: 40px 10px;
+  }
+
+  .game-icon {
+    width: 60px;
+  }
+
+  .jogo-box p {
+    font-size: 14px;
+  }
+
+  footer {
+    font-size: 12px;
+  }
+}
