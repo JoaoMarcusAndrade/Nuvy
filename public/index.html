@@ -46,7 +46,6 @@
         <img src="img/NuvyPet.png" alt="Logo Nuvy" class="logo">
         <a href="#ajuda">Ajuda</a>
         <a href="#contato">Contato</a>
-        <button id="back-to-home" class="btn btn-sm btn-outline-secondary">Voltar</button>
       </div>
       <div class="navbar-right">
         <img src="img/Login.png" width="55vh" alt="" style="margin-right: 30px;">
@@ -198,7 +197,6 @@
     const homeSection = document.getElementById("home");
     const jogosSection = document.getElementById("jogos-section");
     const mainHeader = document.getElementById("main-header");
-    const backToHomeBtn = document.getElementById("back-to-home");
 
     // Botões de navegação entre login/cadastro
     const toCadastro = document.getElementById("toCadastro");
@@ -267,11 +265,6 @@
     });
     
     window.addEventListener("popstate", () => renderView(window.location.pathname));
-
-    // Botão para voltar para a home
-    if (backToHomeBtn) {
-      backToHomeBtn.addEventListener('click', showHomeSection);
-    }
 
     /* ---------- NAVEGAÇÃO ---------- */
     // Troca para tela de cadastro
