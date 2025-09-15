@@ -271,7 +271,7 @@
       jogosSection.classList.add("active");
       jogosSection.style.display = "flex";
 
-      history.pushState({}, "", "/jogo");
+      history.pushState({}, "", "/jogos");
       // Forçar redimensionamento para corrigir layout
       setTimeout(() => { window.dispatchEvent(new Event('resize')); }, 50);
       window.scrollTo(0, 0);
