@@ -57,33 +57,6 @@
     <section class="educativo">
       <h2>Conteúdo educativo</h2>
       <div class="carrossel" id="youtube-cards">
-        <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
-        </div>
-        <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
-        </div>
-        <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
-        </div>
-        <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
-        </div>
-        <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
-        </div>
-        <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
-        </div>
-        <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
-        </div>
-        <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
-        </div>
-        <div class="card">
-          <img src="img/Comp.jpg" alt="Vídeo educativo" class="videoscards">
-        </div>
       </div>
       <div class="barra"></div>
     </section>
@@ -303,6 +276,8 @@
       jogosSection.style.display = "flex";
 
       history.pushState({}, "", "/jogos");
+
+      carregarVideos("computação para crianças");
       // Forçar redimensionamento para corrigir layout
       setTimeout(() => { window.dispatchEvent(new Event('resize')); }, 50);
       window.scrollTo(0, 0);
