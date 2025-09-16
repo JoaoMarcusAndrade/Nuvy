@@ -120,6 +120,7 @@ router.post("/login", async (req, res) => {
     res.cookie('usuarioId', usuario.ID_usuarios, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000 // 1 dia
     });
     
@@ -144,6 +145,7 @@ router.post("/login/responsavel", async (req, res) => {
     res.cookie('responsavelId', responsavel.ID_responsaveis, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000 // 1 dia
     });
     
@@ -200,6 +202,7 @@ router.post("/cadastro/responsavel", async (req, res) => {
     res.cookie('responsavelId', novo.ID_responsaveis, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000 // 1 dia
     });
     
