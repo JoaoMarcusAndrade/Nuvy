@@ -185,10 +185,11 @@
         const card = document.createElement("div");
         card.className = "card";
         card.innerHTML = `
-      <img src="${thumb}" alt="${titulo}" />
-      <h3>${titulo}</h3>
-      <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">Assistir</a>
-    `;
+          <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">
+          <img src="${thumb}" alt="${titulo}" />
+          <p>${titulo}</p>
+          </a>
+        `;
         container.appendChild(card);
       });
     }
