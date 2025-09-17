@@ -187,15 +187,14 @@ router.post("/cadastro", async (req, res) => {
 // ---------- CADASTRO RESPONSÁVEL ----------
 router.post("/cadastro/responsavel", async (req, res) => {
   try {
-    const { email, senha, nome } = req.body;
+    const { email, senha } = req.body;
 
     const existe = await Responsaveis.findOne({ where: { email_resp: email } });
     if (existe) return res.status(400).json({ msg: "E-mail já cadastrado" });
 
     const novo = await Responsaveis.create({
       email_resp: email,
-      password_resp: senha,
-      name_resp: nome || undefined
+      password_resp: senha
     });
 
     // Define cookie de autenticação após cadastro
