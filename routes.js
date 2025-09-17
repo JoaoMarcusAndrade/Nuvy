@@ -121,19 +121,39 @@ router.post("/login", async (req, res) => {
 router.post("/login/responsavel", async (req, res) => {
   try {
     const { email, senha } = req.body;
-    const responsavel = await Responsaveis.findOne({ where: { email_resp: email } });
+
+    const responsavel = await Responsaveis.findOne({
+      where: { email_resp: email },
+    });
 
     if (!responsavel) return res.status(404).json({ msg: "Responsável não encontrado" });
     if (responsavel.password_resp !== senha) return res.status(401).json({ msg: "Senha incorreta" });
 
+    // Define cookie de autenticação
     res.cookie('responsavelId', responsavel.ID_responsaveis, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
-      maxAge: 24 * 60 * 60 * 1000
+      maxAge: 24 * 60 * 60 * 1000 // 1 dia
     });
 
+    // --- NOVO: vincular automaticamente usuário menor ---
+    // Pega o ID do usuário que está esperando vínculo (vindo do front via body ou cookie)
+    const { idUsuarioParaVinculo } = req.body; // front precisa enviar
+    if (idUsuarioParaVinculo) {
+      const usuario = await Usuarios.findByPk(idUsuarioParaVinculo);
+      if (usuario && usuario.idade < 16 && !usuario.responsavel_vinculado) {
+        await Controle.create({
+          ID_usuarios: usuario.ID_usuarios,
+          ID_responsaveis: responsavel.ID_responsaveis
+        });
+        usuario.responsavel_vinculado = true;
+        await usuario.save();
+      }
+    }
+
     res.json({ msg: "Login do responsável bem-sucedido", responsavel });
+
   } catch (err) {
     res.status(500).json({ msg: "Erro no login do responsável", erro: err.message });
   }
