@@ -201,11 +201,11 @@ router.post("/vincular", async (req, res) => {
     const usuarioId = idUsuario || idUsuarioParaVinculo;
     if (!usuarioId || !idResponsavel) return res.status(400).json({ msg: "IDs obrigatórios" });
 
-    const usuario = await Usuarios.findByPk(idUsuario);
+    const usuario = await Usuarios.findByPk(usuarioId); // <- usar usuarioId correto
     if (!usuario) return res.status(404).json({ msg: "Usuário não encontrado" });
     if (usuario.idade >= 16) return res.status(400).json({ msg: "Usuário tem 16 anos ou mais" });
 
-    const vinculo = await Controle.create({ ID_usuarios: idUsuario, ID_responsaveis: idResponsavel });
+    const vinculo = await Controle.create({ ID_usuarios: usuarioId, ID_responsaveis: idResponsavel }); // <- usar usuarioId correto
 
     usuario.responsavel_vinculado = true;
     await usuario.save();
@@ -215,6 +215,7 @@ router.post("/vincular", async (req, res) => {
     res.status(500).json({ msg: "Erro ao vincular usuário e responsável", erro: err.message });
   }
 });
+
 
 // ---------- LOGOUT ----------
 router.post('/logout', (req, res) => {
