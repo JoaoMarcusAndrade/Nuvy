@@ -197,8 +197,9 @@ router.post("/cadastro/responsavel", async (req, res) => {
 // ---------- VINCULAR USUÁRIO E RESPONSÁVEL ----------
 router.post("/vincular", async (req, res) => {
   try {
-    const { idUsuario, idResponsavel } = req.body;
-    if (!idUsuario || !idResponsavel) return res.status(400).json({ msg: "IDs obrigatórios" });
+    const { idUsuario, idUsuarioParaVinculo , idResponsavel } = req.body;
+    const usuarioId = idUsuario || idUsuarioParaVinculo;
+    if (!usuarioId || !idResponsavel) return res.status(400).json({ msg: "IDs obrigatórios" });
 
     const usuario = await Usuarios.findByPk(idUsuario);
     if (!usuario) return res.status(404).json({ msg: "Usuário não encontrado" });
