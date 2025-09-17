@@ -68,7 +68,8 @@ export const Controle = sequelize.define('Controle', {
     defaultValue: "00:00:00"
   }
 }, {
-  tableName: 'Controle' // evita pluralização
+  tableName: 'Controle',
+  freezeTableName: true
 });
 
 // USUARIOS
