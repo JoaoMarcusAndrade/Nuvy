@@ -77,7 +77,6 @@ router.get("/api/jogos", checkAuthentication, (req, res) => {
   res.json({ jogos: [] });
 });
 
-// ---------- LOGIN USUÁRIO ----------
 router.post("/login", async (req, res) => {
   try {
     const { email, senha } = req.body;
@@ -86,24 +85,16 @@ router.post("/login", async (req, res) => {
     if (!usuario) return res.status(404).json({ msg: "Usuário não encontrado" });
     if (usuario.password_user !== senha) return res.status(401).json({ msg: "Senha incorreta" });
 
-    // Verifica vínculo real na tabela Controle
-    let requerResponsavel = false;
-    if (usuario.idade < 16) {
-      const vinculo = await Controle.findOne({ where: { ID_usuarios: usuario.ID_usuarios } });
-      requerResponsavel = !vinculo;
-      if (!usuario.responsavel_vinculado && vinculo) {
-        usuario.responsavel_vinculado = true;
-        await usuario.save();
-      }
-    }
-
-    if (requerResponsavel) {
+    // Se menor de 16 anos e não vinculado
+    if (usuario.idade < 16 && !usuario.responsavel_vinculado) {
       return res.status(403).json({
         msg: "Usuário menor de idade precisa cadastrar ou vincular um responsável.",
-        requireResponsavel: true
+        requireResponsavel: true,
+        idUsuario: usuario.ID_usuarios // envia ID para front
       });
     }
 
+    // Usuário maior ou menor já vinculado → login normal
     res.cookie('usuarioId', usuario.ID_usuarios, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -112,34 +103,29 @@ router.post("/login", async (req, res) => {
     });
 
     res.json({ msg: "Login bem-sucedido", usuario });
+
   } catch (err) {
     res.status(500).json({ msg: "Erro no login", erro: err.message });
   }
 });
 
-// ---------- LOGIN RESPONSÁVEL ----------
+
 router.post("/login/responsavel", async (req, res) => {
   try {
-    const { email, senha } = req.body;
-
-    const responsavel = await Responsaveis.findOne({
-      where: { email_resp: email },
-    });
+    const { email, senha, idUsuarioParaVinculo } = req.body;
+    const responsavel = await Responsaveis.findOne({ where: { email_resp: email } });
 
     if (!responsavel) return res.status(404).json({ msg: "Responsável não encontrado" });
     if (responsavel.password_resp !== senha) return res.status(401).json({ msg: "Senha incorreta" });
 
-    // Define cookie de autenticação
     res.cookie('responsavelId', responsavel.ID_responsaveis, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
-      maxAge: 24 * 60 * 60 * 1000 // 1 dia
+      maxAge: 24 * 60 * 60 * 1000
     });
 
-    // --- NOVO: vincular automaticamente usuário menor ---
-    // Pega o ID do usuário que está esperando vínculo (vindo do front via body ou cookie)
-    const { idUsuarioParaVinculo } = req.body; // front precisa enviar
+    // Cria vínculo se vier ID do usuário menor
     if (idUsuarioParaVinculo) {
       const usuario = await Usuarios.findByPk(idUsuarioParaVinculo);
       if (usuario && usuario.idade < 16 && !usuario.responsavel_vinculado) {
