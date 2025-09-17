@@ -138,9 +138,7 @@
           <!-- CADASTRO RESPONSÁVEL -->
           <div id="cadastroResponsavelView" style="display: none;">
             <h2 class="text-center mb-4">Cadastro Responsável</h2>
-            <form id="formCadastroResp">
-              <input id="inpnomeResp" type="text" maxlength="40" placeholder="Nome do Responsável" />
-              <input id="inpgmailCadastroResp" type="email" maxlength="100" placeholder="E-mail do Responsável."
+            <form id="formCadastroResp"><input id="inpgmailCadastroResp" type="email" maxlength="100" placeholder="E-mail do Responsável."
                 required />
               <input id="inpsenhaCadastroResp" type="password" maxlength="30" placeholder="Digite sua senha."
                 required />
@@ -419,7 +417,6 @@
       e.preventDefault();
       const email = document.getElementById("inpgmailCadastroResp").value;
       const senha = document.getElementById("inpsenhaCadastroResp").value;
-      const nome = document.getElementById("inpnomeResp").value;
       const confirmaSenha = document.getElementById("inpconfirmsenhaResp").value;
 
       // Validação de senha
@@ -439,7 +436,7 @@
         const res = await fetch("/cadastro/responsavel", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, senha, nome }),
+          body: JSON.stringify({ email, senha }),
         });
         const data = await res.json();
         if (!res.ok) {

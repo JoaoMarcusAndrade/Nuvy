@@ -43,11 +43,6 @@ export const Responsaveis = sequelize.define('Responsaveis', {
             isEmail: true, // valida formato de e-mail
             len: [6, 254]
         }
-    },
-    name_resp: {
-        type: DataTypes.STRING(30),
-        allowNull: false,
-        defaultValue: () => geraNome()
     }
 })
 
@@ -60,6 +55,10 @@ export const Controle = sequelize.define('Controle', {
     tempoTela: {
         type: DataTypes.INTEGER,
         defaultValue: 0
+    },
+    horaLimite: {
+        type: DataTypes.TIME,
+        defaultValue: "00:00:00"
     }
 })
 
@@ -88,7 +87,7 @@ export const Usuarios = sequelize.define('Usuarios', {
     name_user: {
         type: DataTypes.STRING(30),
         allowNull: false,
-        defaultValue: () => geraNome()
+        defaultValue: geraNome
     },
     XP_user: {
         type: DataTypes.INTEGER,
