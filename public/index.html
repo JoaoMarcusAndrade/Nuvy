@@ -138,8 +138,8 @@
           <!-- CADASTRO RESPONSÁVEL -->
           <div id="cadastroResponsavelView" style="display: none;">
             <h2 class="text-center mb-4">Cadastro Responsável</h2>
-            <form id="formCadastroResp"><input id="inpgmailCadastroResp" type="email" maxlength="100" placeholder="E-mail do Responsável."
-                required />
+            <form id="formCadastroResp"><input id="inpgmailCadastroResp" type="email" maxlength="100"
+                placeholder="E-mail do Responsável." required />
               <input id="inpsenhaCadastroResp" type="password" maxlength="30" placeholder="Digite sua senha."
                 required />
               <input id="inpconfirmsenhaResp" type="password" maxlength="30" placeholder="Confirme sua senha."
@@ -523,7 +523,12 @@
         const res = await fetch("/login/responsavel", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, senha }),
+          body: JSON.stringify({
+            email: email,
+            senha: senha,
+            idUsuarioParaVinculo: usuarioRecemCadastradoID // aqui é o usuário menor
+          }),
+          credentials: "include"
         });
         const data = await res.json();
         if (res.ok) {
