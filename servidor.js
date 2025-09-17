@@ -5,7 +5,10 @@ import cookieParser from 'cookie-parser';
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://nuvy-1.onrender.com',
+  credentials: true
+}));
 app.use(cookieParser());
 app.use(express.json());
 app.use('/', routes);
