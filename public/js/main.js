@@ -283,14 +283,15 @@ document.getElementById("formLogin").onsubmit = async e => {
     const email = document.getElementById("inpgmailLogin").value;
     const senha = document.getElementById("inpsenhaLogin").value;
 
-    // Envia dados para o backend
     try {
         const res = await fetch("/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, senha }),
+            credentials: "include"
         });
         const data = await res.json();
+
         if (res.ok) {
             avisoLogin.style.color = "green";
             avisoLogin.textContent = data.msg;
@@ -302,8 +303,11 @@ document.getElementById("formLogin").onsubmit = async e => {
             avisoLogin.style.color = "red";
             avisoLogin.textContent = data.msg;
 
-            // Se o erro indicar que precisa de responsável, vai para o login do responsável (ALTERADO)
+            // Se o erro indicar que precisa de responsável
             if (data.requireResponsavel) {
+                // Salva o ID do usuário menor no localStorage para usar no login do responsável
+                localStorage.setItem("idUsuarioParaVinculo", data.idUsuario);
+
                 history.pushState({}, "", "/login/responsavel");
                 renderView("/login/responsavel");
             }
@@ -321,22 +325,24 @@ document.getElementById("formLoginResp").onsubmit = async e => {
     const email = document.getElementById("inpgmailLoginResp").value;
     const senha = document.getElementById("inpsenhaLoginResp").value;
 
-    // Envia dados para o backend
     try {
+        // Pega o ID do usuário menor do localStorage
+        const idUsuarioParaVinculo = usuarioRecemCadastradoID || localStorage.getItem("idUsuarioParaVinculo");
+
         const res = await fetch("/login/responsavel", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                email: email,
-                senha: senha,
-                idUsuarioParaVinculo: usuarioRecemCadastradoID // aqui é o usuário menor
-            }),
+            body: JSON.stringify({ email, senha, idUsuarioParaVinculo }),
             credentials: "include"
         });
         const data = await res.json();
+
         if (res.ok) {
             avisoLoginResp.style.color = "green";
             avisoLoginResp.textContent = data.msg;
+
+            // Limpa o localStorage após criar vínculo
+            localStorage.removeItem("idUsuarioParaVinculo");
 
             // Fecha o modal e mostra a área de jogos
             closeModal();
