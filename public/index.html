@@ -11,9 +11,7 @@
   <!-- Fonte personalizada -->
   <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap" rel="stylesheet" />
   <!-- CSS customizado unificado -->
-  <link rel="stylesheet" href="/public/css/style.css" />
-  <!-- Adicionar o CSS do jogo -->
-  <link rel="stylesheet" href="/public/css/Ztyle.css" />
+  <link rel="stylesheet" href="/css/style.css" />
   <link rel="manifest" href="/manifest.json">
 </head>
 
@@ -66,8 +64,7 @@
     <!-- Área do jogo -->
     <section class="jogo">
       <h2>Divirta-se e aprenda</h2>
-      <div id="game-container" class="jogo-box">
-        <!-- O jogo será carregado aqui dinamicamente -->
+      <div class="jogo-box">
         <img src="img/controle.png" alt="Controle" class="game-icon">
         <p>Aguarde enquanto carregamos o jogo...</p>
       </div>
@@ -93,8 +90,8 @@
           <div id="loginView">
             <h2 class="text-center mb-4">Login</h2>
             <form id="formLogin">
-              <input id="inpgmailLogin" type="email" placeholder="Digite seu E-mail......" required />
-              <input id="inpsenhaLogin" type="password" placeholder="Digite sua senha......" required />
+              <input id="inpgmailLogin" type="email" placeholder="Digite seu E-mail." required />
+              <input id="inpsenhaLogin" type="password" placeholder="Digite sua senha." required />
               <button type="submit" class="btn-login">Entrar</button>
             </form>
             <p class="signup-text">
@@ -108,8 +105,8 @@
           <div id="loginResponsavelView" style="display: none;">
             <h2 class="text-center mb-4">Login Responsável</h2>
             <form id="formLoginResp">
-              <input id="inpgmailLoginResp" type="email" placeholder="E-mail do Responsável......" required />
-              <input id="inpsenhaLoginResp" type="password" placeholder="Digite sua senha......" required />
+              <input id="inpgmailLoginResp" type="email" placeholder="E-mail do Responsável." required />
+              <input id="inpsenhaLoginResp" type="password" placeholder="Digite sua senha." required />
               <button type="submit" class="btn-login">Entrar</button>
             </form>
             <p class="signup-text">
@@ -124,11 +121,11 @@
           <div id="cadastroView" style="display:none;">
             <h2 class="text-center mb-4">Cadastro</h2>
             <form id="formCadastro">
-              <input id="inpnome" type="text" maxlength="40" placeholder="Digite seu Nome......" />
-              <input id="inpgmailCadastro" type="email" maxlength="100" placeholder="Digite seu E-mail......" required />
-              <input id="inpsenhaCadastro" type="password" maxlength="30" placeholder="Digite sua senha......" required />
-              <input id="inpconfirmsenha" type="password" maxlength="30" placeholder="Confirme sua senha......" required />
-              <input id="inpidade" type="number" min="1" max="120" placeholder="Digite sua idade......" required />
+              <input id="inpnome" type="text" maxlength="40" placeholder="Digite seu Nome" />
+              <input id="inpgmailCadastro" type="email" maxlength="100" placeholder="Digite seu E-mail." required />
+              <input id="inpsenhaCadastro" type="password" maxlength="30" placeholder="Digite sua senha." required />
+              <input id="inpconfirmsenha" type="password" maxlength="30" placeholder="Confirme sua senha." required />
+              <input id="inpidade" type="number" min="1" max="120" placeholder="Digite sua idade" required />
               <button type="submit" class="btn-login">Cadastrar</button>
             </form>
             <p class="signup-text">
@@ -142,10 +139,10 @@
           <div id="cadastroResponsavelView" style="display: none;">
             <h2 class="text-center mb-4">Cadastro Responsável</h2>
             <form id="formCadastroResp"><input id="inpgmailCadastroResp" type="email" maxlength="100"
-                placeholder="E-mail do Responsável......" required />
-              <input id="inpsenhaCadastroResp" type="password" maxlength="30" placeholder="Digite sua senha......"
+                placeholder="E-mail do Responsável." required />
+              <input id="inpsenhaCadastroResp" type="password" maxlength="30" placeholder="Digite sua senha."
                 required />
-              <input id="inpconfirmsenhaResp" type="password" maxlength="30" placeholder="Confirme sua senha......"
+              <input id="inpconfirmsenhaResp" type="password" maxlength="30" placeholder="Confirme sua senha."
                 required />
               <button type="submit" class="btn-login">Cadastrar</button>
             </form>
@@ -201,248 +198,6 @@
   </script>
   <!-- ROTAS E ETC... -->
   <script src="js/main.js"></script>
-  
-  <!-- Script do jogo Nuvy -->
-  <script>
-    // Função para carregar o jogo quando a seção de jogos for acessada
-    function loadNuvyGame() {
-      const gameContainer = document.getElementById('game-container');
-      gameContainer.innerHTML = ''; // Limpa o conteúdo anterior
-      
-      // Criar elementos do jogo Nuvy
-      const gameWrapper = document.createElement('div');
-      gameWrapper.id = 'nuvy-game-wrapper';
-      gameWrapper.style.width = '100%';
-      gameWrapper.style.height = '100%';
-      gameWrapper.style.minHeight = '500px';
-      
-      // Criar nuvens decorativas
-      const cloud1 = document.createElement('div');
-      cloud1.className = 'cloud cloud-1';
-      
-      const cloud2 = document.createElement('div');
-      cloud2.className = 'cloud cloud-2';
-      
-      const cloud3 = document.createElement('div');
-      cloud3.className = 'cloud cloud-3';
-      
-      // Criar container principal do jogo
-      const container = document.createElement('div');
-      container.className = 'container';
-      
-      // Criar cabeçalho do jogo
-      const header = document.createElement('div');
-      header.className = 'header';
-      
-      const title = document.createElement('div');
-      title.className = 'title';
-      title.innerHTML = 'Nível <span id="current-level">1</span>';
-      
-      const infoContainer = document.createElement('div');
-      infoContainer.className = 'info-container';
-      
-      const xpContainer = document.createElement('div');
-      xpContainer.className = 'xp-container';
-      
-      const xpText = document.createElement('span');
-      xpText.className = 'xp-text';
-      xpText.textContent = 'XP: 0/500';
-      
-      const xpBar = document.createElement('div');
-      xpBar.className = 'xp-bar';
-      
-      const xpProgress = document.createElement('div');
-      xpProgress.className = 'xp-progress';
-      
-      xpBar.appendChild(xpProgress);
-      xpContainer.appendChild(xpText);
-      xpContainer.appendChild(xpBar);
-      
-      const timer = document.createElement('div');
-      timer.className = 'timer';
-      timer.textContent = 'Tempo: 05:00';
-      
-      infoContainer.appendChild(xpContainer);
-      infoContainer.appendChild(timer);
-      
-      header.appendChild(title);
-      header.appendChild(infoContainer);
-      
-      // Criar instruções
-      const instructions = document.createElement('div');
-      instructions.className = 'instructions';
-      
-      const instructionsText = document.createElement('div');
-      instructionsText.className = 'instructions-text';
-      instructionsText.textContent = 'Arraste as coisas para a nuvem correta!';
-      
-      instructions.appendChild(instructionsText);
-      
-      // Criar área de jogo
-      const gameArea = document.createElement('div');
-      gameArea.className = 'game-area';
-      
-      const targetsContainer = document.createElement('div');
-      targetsContainer.className = 'targets-container';
-      
-      const draggablesContainer = document.createElement('div');
-      draggablesContainer.className = 'draggables-container';
-      
-      gameArea.appendChild(targetsContainer);
-      gameArea.appendChild(draggablesContainer);
-      
-      container.appendChild(header);
-      container.appendChild(instructions);
-      container.appendChild(gameArea);
-      
-      // Adicionar elementos ao wrapper
-      gameWrapper.appendChild(cloud1);
-      gameWrapper.appendChild(cloud2);
-      gameWrapper.appendChild(cloud3);
-      gameWrapper.appendChild(container);
-      
-      // Adicionar modais do jogo
-      const infoModal = document.createElement('div');
-      infoModal.className = 'modal';
-      infoModal.id = 'info-modal';
-      infoModal.style.display = 'none';
-      
-      const modalContent = document.createElement('div');
-      modalContent.className = 'modal-content';
-      
-      const modalTitle = document.createElement('h2');
-      modalTitle.className = 'modal-title';
-      modalTitle.textContent = 'Nuvem da Internet';
-      
-      const modalDescription = document.createElement('p');
-      modalDescription.className = 'modal-description';
-      modalDescription.innerHTML = 'A nuvem da internet é como uma caixinha mágica que guarda nossas coisas!<br><br>Ela guarda:<br>📸 Nossas fotos e vídeos<br>🎵 Nossas músicas favoritas<br>🎮 Nossos joguinhos divertidos<br>🎨 Nossos desenhos coloridos<br><br>Assim podemos acessá-las de qualquer lugar!';
-      
-      const modalButton = document.createElement('button');
-      modalButton.className = 'modal-button';
-      modalButton.id = 'close-modal';
-      modalButton.textContent = 'Entendi!';
-      
-      modalContent.appendChild(modalTitle);
-      modalContent.appendChild(modalDescription);
-      modalContent.appendChild(modalButton);
-      infoModal.appendChild(modalContent);
-      
-      const levelCompleteModal = document.createElement('div');
-      levelCompleteModal.className = 'modal';
-      levelCompleteModal.id = 'level-complete-modal';
-      levelCompleteModal.style.display = 'none';
-      
-      const levelModalContent = document.createElement('div');
-      levelModalContent.className = 'modal-content';
-      
-      const levelModalTitle = document.createElement('h2');
-      levelModalTitle.className = 'modal-title';
-      levelModalTitle.textContent = 'Parabéns!';
-      
-      const levelModalDescription = document.createElement('p');
-      levelModalDescription.className = 'modal-description';
-      levelModalDescription.id = 'level-complete-message';
-      levelModalDescription.textContent = 'Você completou o nível 1!';
-      
-      const nextLevelButton = document.createElement('button');
-      nextLevelButton.className = 'modal-button';
-      nextLevelButton.id = 'next-level-btn';
-      nextLevelButton.textContent = 'Próximo Nível';
-      
-      levelModalContent.appendChild(levelModalTitle);
-      levelModalContent.appendChild(levelModalDescription);
-      levelModalContent.appendChild(nextLevelButton);
-      levelCompleteModal.appendChild(levelModalContent);
-      
-      // Adicionar feedback e botões de ação
-      const feedback = document.createElement('div');
-      feedback.className = 'feedback';
-      feedback.id = 'feedback';
-      
-      const infoButton = document.createElement('button');
-      infoButton.className = 'action-button info-button';
-      infoButton.id = 'info-btn';
-      infoButton.setAttribute('aria-label', 'Informações');
-      infoButton.textContent = '?';
-      
-      const restartButton = document.createElement('button');
-      restartButton.className = 'action-button restart-button';
-      restartButton.id = 'restart-btn';
-      restartButton.textContent = 'Jogar Novamente';
-      restartButton.style.display = 'none';
-      
-      const musicButton = document.createElement('button');
-      musicButton.className = 'action-button music-button';
-      musicButton.id = 'music-btn';
-      musicButton.setAttribute('aria-label', 'Controle de música');
-      musicButton.textContent = '🔊';
-      
-      // Adicionar elementos de áudio
-      const pickupSound = document.createElement('audio');
-      pickupSound.id = 'pickup-sound';
-      pickupSound.src = 'som1.wav';
-      pickupSound.preload = 'auto';
-      
-      const dropSound = document.createElement('audio');
-      dropSound.id = 'drop-sound';
-      dropSound.src = 'som2.wav';
-      dropSound.preload = 'auto';
-      
-      const infoSound = document.createElement('audio');
-      infoSound.id = 'info-sound';
-      infoSound.src = 'som4.mp3';
-      infoSound.preload = 'auto';
-      
-      // Adicionar todos os elementos ao wrapper
-      gameWrapper.appendChild(infoModal);
-      gameWrapper.appendChild(levelCompleteModal);
-      gameWrapper.appendChild(feedback);
-      gameWrapper.appendChild(infoButton);
-      gameWrapper.appendChild(restartButton);
-      gameWrapper.appendChild(musicButton);
-      gameWrapper.appendChild(pickupSound);
-      gameWrapper.appendChild(dropSound);
-      gameWrapper.appendChild(infoSound);
-      
-      // Adicionar o jogo ao container
-      gameContainer.appendChild(gameWrapper);
-      
-      // Carregar o script do jogo
-      const script = document.createElement('script');
-      script.src = '/public/js/Game.js';
-      document.body.appendChild(script);
-      
-      // Inicializar o jogo após o carregamento
-      script.onload = function() {
-        if (typeof initGame === 'function') {
-          initGame();
-        }
-      };
-    }
-    
-    // Carregar o jogo quando a seção de jogos for ativada
-    document.addEventListener('DOMContentLoaded', function() {
-      // Observar mudanças na seção ativa
-      const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-            const jogosSection = document.getElementById('jogos-section');
-            if (jogosSection.classList.contains('active')) {
-              // Carregar o jogo apenas se ainda não foi carregado
-              if (!document.getElementById('nuvy-game-wrapper')) {
-                loadNuvyGame();
-              }
-            }
-          }
-        });
-      });
-      
-      // Observar mudanças na classe da seção de jogos
-      const jogosSection = document.getElementById('jogos-section');
-      observer.observe(jogosSection, { attributes: true });
-    });
-  </script>
 </body>
 
 </html>
