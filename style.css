@@ -833,7 +833,7 @@ button:focus-visible,
     opacity: 0.8;
 }
 
-/* Botão de controle de música */
+
 .music-button {
   position: fixed;
   bottom: 80px;
