@@ -11,9 +11,9 @@
   <!-- Fonte personalizada -->
   <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap" rel="stylesheet" />
   <!-- CSS customizado unificado -->
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/public/css/style.css" />
   <!-- Adicionar o CSS do jogo -->
-  <link rel="stylesheet" href="/css/Ztyle.css" />
+  <link rel="stylesheet" href="/public/css/Ztyle.css" />
   <link rel="manifest" href="/manifest.json">
 </head>
 
@@ -93,8 +93,8 @@
           <div id="loginView">
             <h2 class="text-center mb-4">Login</h2>
             <form id="formLogin">
-              <input id="inpgmailLogin" type="email" placeholder="Digite seu E-mail." required />
-              <input id="inpsenhaLogin" type="password" placeholder="Digite sua senha." required />
+              <input id="inpgmailLogin" type="email" placeholder="Digite seu E-mail......" required />
+              <input id="inpsenhaLogin" type="password" placeholder="Digite sua senha......" required />
               <button type="submit" class="btn-login">Entrar</button>
             </form>
             <p class="signup-text">
@@ -108,8 +108,8 @@
           <div id="loginResponsavelView" style="display: none;">
             <h2 class="text-center mb-4">Login Responsável</h2>
             <form id="formLoginResp">
-              <input id="inpgmailLoginResp" type="email" placeholder="E-mail do Responsável." required />
-              <input id="inpsenhaLoginResp" type="password" placeholder="Digite sua senha." required />
+              <input id="inpgmailLoginResp" type="email" placeholder="E-mail do Responsável......" required />
+              <input id="inpsenhaLoginResp" type="password" placeholder="Digite sua senha......" required />
               <button type="submit" class="btn-login">Entrar</button>
             </form>
             <p class="signup-text">
@@ -124,11 +124,11 @@
           <div id="cadastroView" style="display:none;">
             <h2 class="text-center mb-4">Cadastro</h2>
             <form id="formCadastro">
-              <input id="inpnome" type="text" maxlength="40" placeholder="Digite seu Nome" />
-              <input id="inpgmailCadastro" type="email" maxlength="100" placeholder="Digite seu E-mail." required />
-              <input id="inpsenhaCadastro" type="password" maxlength="30" placeholder="Digite sua senha." required />
-              <input id="inpconfirmsenha" type="password" maxlength="30" placeholder="Confirme sua senha." required />
-              <input id="inpidade" type="number" min="1" max="120" placeholder="Digite sua idade" required />
+              <input id="inpnome" type="text" maxlength="40" placeholder="Digite seu Nome......" />
+              <input id="inpgmailCadastro" type="email" maxlength="100" placeholder="Digite seu E-mail......" required />
+              <input id="inpsenhaCadastro" type="password" maxlength="30" placeholder="Digite sua senha......" required />
+              <input id="inpconfirmsenha" type="password" maxlength="30" placeholder="Confirme sua senha......" required />
+              <input id="inpidade" type="number" min="1" max="120" placeholder="Digite sua idade......" required />
               <button type="submit" class="btn-login">Cadastrar</button>
             </form>
             <p class="signup-text">
@@ -142,10 +142,10 @@
           <div id="cadastroResponsavelView" style="display: none;">
             <h2 class="text-center mb-4">Cadastro Responsável</h2>
             <form id="formCadastroResp"><input id="inpgmailCadastroResp" type="email" maxlength="100"
-                placeholder="E-mail do Responsável." required />
-              <input id="inpsenhaCadastroResp" type="password" maxlength="30" placeholder="Digite sua senha."
+                placeholder="E-mail do Responsável......" required />
+              <input id="inpsenhaCadastroResp" type="password" maxlength="30" placeholder="Digite sua senha......"
                 required />
-              <input id="inpconfirmsenhaResp" type="password" maxlength="30" placeholder="Confirme sua senha."
+              <input id="inpconfirmsenhaResp" type="password" maxlength="30" placeholder="Confirme sua senha......"
                 required />
               <button type="submit" class="btn-login">Cadastrar</button>
             </form>
@@ -410,7 +410,7 @@
       
       // Carregar o script do jogo
       const script = document.createElement('script');
-      script.src = '/js/Game.js';
+      script.src = '/public/js/Game.js';
       document.body.appendChild(script);
       
       // Inicializar o jogo após o carregamento
