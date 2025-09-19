@@ -49,7 +49,7 @@ const levelConfigs = {
       { type: "fotos", color: "#FF9E00", description: "Guarda nossas fotos e vídeos" },
       { type: "musica", color: "#4CAF50", description: "Guarda nossas músicas" },
       { type: "jogos", color: "#2196F3", description: "Guarda nossos joguinhos" },
-      { type: "desenhos", color: "#9C27B0", description: "Guarda nossos desenhos" }
+      { type: "desenhos", color: "#cc27e9ff", description: "Guarda nossos desenhos" }
     ]
   },
   2: {
@@ -57,7 +57,7 @@ const levelConfigs = {
     description: "Encontre a casa certa para cada item!",
     targets: [
       { type: "fotos", color: "#FF5722", description: "Fotos e lembranças" },
-      { type: "musica", color: "#673AB7", description: "Músicas divertidas" },
+      { type: "musica", color: "#b73a9cff", description: "Músicas divertidas" },
       { type: "jogos", color: "#009688", description: "Jogos legais" },
       { type: "desenhos", color: "#E91E63", description: "Desenhos criativos" }
     ]
@@ -66,7 +66,7 @@ const levelConfigs = {
     title: "Nuvens Mágicas",
     description: "Cada coisa no seu lugar!",
     targets: [
-      { type: "fotos", color: "#3F51B5", description: "Fotos da família" },
+      { type: "fotos", color: "#11ececff", description: "Fotos da família" },
       { type: "musica", color: "#FF9800", description: "Canções favoritas" },
       { type: "jogos", color: "#4CAF50", description: "Jogos educativos" },
       { type: "desenhos", color: "#F44336", description: "Artes coloridas" }
@@ -76,9 +76,9 @@ const levelConfigs = {
     title: "Nuvens Douradas",
     description: "Último desafio! Você consegue!",
     targets: [
-      { type: "fotos", color: "#795548", description: "Memórias especiais" },
-      { type: "musica", color: "#607D8B", description: "Ritmos animados" },
-      { type: "jogos", color: "#9E9E9E", description: "Diversão garantida" },
+      { type: "fotos", color: "#d3b015ff", description: "Memórias especiais" },
+      { type: "musica", color: "#22729bff", description: "Ritmos animados" },
+      { type: "jogos", color: "#e6e2e2ff", description: "Diversão garantida" },
       { type: "desenhos", color: "#00BCD4", description: "Criatividade solta" }
     ]
   }
