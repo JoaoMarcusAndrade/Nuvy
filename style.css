@@ -832,3 +832,29 @@ button:focus-visible,
 .draggable:hover .drag-hint {
     opacity: 0.8;
 }
+
+/* Botão de controle de música */
+.music-button {
+  position: fixed;
+  bottom: 80px;
+  left: 20px;
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+  color: var(--text-light);
+  border: none;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.music-button:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-lg);
+}

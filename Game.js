@@ -16,7 +16,7 @@ let touchOffsetX, touchOffsetY;
 let activeDraggable = null;
 
 // Variáveis para sons
-let pickupSound, dropSound;
+let pickupSound, dropSound, backgroundMusic;
 
 // Elementos DOM
 const timerElement = document.querySelector('.timer');
@@ -82,14 +82,76 @@ const levelConfigs = {
 function loadSounds() {
   pickupSound = new Audio('som1.wav');
   dropSound = new Audio('som2.wav');
+  backgroundMusic = new Audio('som3.wav');
   
   // Configurar volumes
   pickupSound.volume = 0.7;
   dropSound.volume = 0.7;
+  backgroundMusic.volume = 0.5; // Volume mais baixo para música de fundo
+  
+  // Configurar música de fundo para loop
+  backgroundMusic.loop = true;
   
   // Pré-carregar os sons
   pickupSound.load();
   dropSound.load();
+  backgroundMusic.load();
+}
+
+// Iniciar música de fundo
+function startBackgroundMusic() {
+  if (backgroundMusic) {
+    // Tentar reproduzir a música
+    const playPromise = backgroundMusic.play();
+    
+    // Lidar com a promessa de reprodução
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          console.log("Música de fundo iniciada com sucesso");
+        })
+        .catch(error => {
+          console.log("Reprodução automática impedida:", error);
+          // Mostrar botão para ativar o som
+          showMusicEnableButton();
+        });
+    }
+  }
+}
+
+// Mostrar botão para ativar a música
+function showMusicEnableButton() {
+  const musicButton = document.createElement('button');
+  musicButton.id = 'music-enable-btn';
+  musicButton.className = 'action-button music-button';
+  musicButton.innerHTML = '🔈';
+  musicButton.title = 'Ativar música';
+  musicButton.style.bottom = '80px';
+  musicButton.style.left = '20px';
+  musicButton.style.zIndex = '1000';
+  
+  musicButton.addEventListener('click', () => {
+    if (backgroundMusic) {
+      backgroundMusic.play()
+        .then(() => {
+          musicButton.innerHTML = '🔊';
+          musicButton.title = 'Desativar música';
+        })
+        .catch(error => {
+          console.log("Não foi possível iniciar a música:", error);
+        });
+    }
+  });
+  
+  document.body.appendChild(musicButton);
+}
+
+// Parar música de fundo
+function stopBackgroundMusic() {
+  if (backgroundMusic) {
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0;
+  }
 }
 
 // Inicializar o jogo
@@ -112,6 +174,11 @@ function initGame() {
   
   // Iniciar contagem de tempo
   startTime = Date.now();
+  
+  // Iniciar música de fundo
+  setTimeout(() => {
+    startBackgroundMusic();
+  }, 1000);
 }
 
 // Carregar nível
