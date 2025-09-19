@@ -613,19 +613,36 @@ html, body {
         padding: 5px 10px;
     }
     
+    /* Ajustes específicos para responsividade dos encaixes no mobile */
     .targets-container {
-        grid-template-columns: 1fr;
-        grid-template-rows: repeat(4, 1fr);
-        height: 60%;
+        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-rows: repeat(2, 1fr) !important;
+        height: 55% !important;
     }
     
     .draggables-container {
-        height: 40%;
+        grid-template-columns: repeat(2, 1fr) !important;
+        height: 45% !important;
+    }
+    
+    /* Ajustar tamanho dos elementos para caberem melhor */
+    .target {
+        padding: 0.5vh;
+    }
+    
+    .target-description {
+        font-size: 11px !important;
+        padding: 0.3vh;
+    }
+    
+    .draggable-title {
+        font-size: 12px !important;
+        margin-bottom: 0.5vh;
     }
     
     .draggable-icon {
-        width: 35px;
-        height: 35px;
+        width: 30px !important;
+        height: 30px !important;
     }
     
     .action-button {
@@ -650,11 +667,11 @@ html, body {
     }
     
     .draggable-title {
-        font-size: 12px;
+        font-size: 11px !important;
     }
     
     .target-description {
-        font-size: 11px;
+        font-size: 10px !important;
     }
     
     .info-container {
@@ -774,7 +791,7 @@ button:focus-visible,
     border: 0;
 }
 
-/* Melhorias para dispositivos com telas muito pequenas */
+/* Melhorias para dispositivos với telas muito pequenas */
 @media (max-height: 500px) {
     .game-area {
         height: 72vh;

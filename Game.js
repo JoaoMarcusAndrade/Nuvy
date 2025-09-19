@@ -5,9 +5,18 @@ let correctPieces = 0;
 let totalPieces = 4;
 let gameFinished = false;
 let xpCurrent = 0;
-const xpMax = 500;
+const xpMax = 400;
 let currentLevel = 1;
 const maxLevels = 4;
+let startTime; // Nova variável para controlar o tempo inicial
+let playerLevel = 1; // Novo nível do jogador
+
+// Variáveis para controle do touch
+let touchOffsetX, touchOffsetY;
+let activeDraggable = null;
+
+// Variáveis para sons
+let pickupSound, dropSound;
 
 // Elementos DOM
 const timerElement = document.querySelector('.timer');
@@ -44,7 +53,7 @@ const levelConfigs = {
       { type: "fotos", color: "#FF5722", description: "Fotos e lembranças" },
       { type: "musica", color: "#673AB7", description: "Músicas divertidas" },
       { type: "jogos", color: "#009688", description: "Jogos legais" },
-      { type: "desenhos", color: "#E91E63", description: "Desenhos creativos" }
+      { type: "desenhos", color: "#E91E63", description: "Desenhos criativos" }
     ]
   },
   3: {
@@ -69,8 +78,23 @@ const levelConfigs = {
   }
 };
 
+// Carregar sons
+function loadSounds() {
+  pickupSound = new Audio('som1.wav');
+  dropSound = new Audio('som2.wav');
+  
+  // Configurar volumes
+  pickupSound.volume = 0.7;
+  dropSound.volume = 0.7;
+  
+  // Pré-carregar os sons
+  pickupSound.load();
+  dropSound.load();
+}
+
 // Inicializar o jogo
 function initGame() {
+  loadSounds(); // Carregar os sons
   loadLevel(currentLevel);
   
   // Configurar botões
@@ -85,6 +109,9 @@ function initGame() {
 
   // Atualizar XP
   updateXP();
+  
+  // Iniciar contagem de tempo
+  startTime = Date.now();
 }
 
 // Carregar nível
@@ -161,6 +188,211 @@ function loadLevel(level) {
     
     draggablesContainer.appendChild(draggableElement);
   });
+  
+  // Adicionar suporte a touch após criar os elementos
+  setTimeout(() => {
+    addTouchSupport();
+  }, 100);
+}
+
+// Adicionar suporte a eventos touch para elementos arrastáveis
+function addTouchSupport() {
+  const draggables = document.querySelectorAll('.draggable');
+  
+  draggables.forEach(draggable => {
+    // Remover event listeners existentes para evitar duplicação
+    draggable.removeEventListener('touchstart', handleTouchStart);
+    draggable.removeEventListener('touchmove', handleTouchMove);
+    draggable.removeEventListener('touchend', handleTouchEnd);
+    
+    // Adicionar event listeners para touch
+    draggable.addEventListener('touchstart', handleTouchStart, { passive: false });
+    draggable.addEventListener('touchmove', handleTouchMove, { passive: false });
+    draggable.addEventListener('touchend', handleTouchEnd);
+  });
+}
+
+function handleTouchStart(e) {
+  if (gameFinished) {
+    e.preventDefault();
+    return;
+  }
+  
+  const touch = e.touches[0];
+  const draggable = e.target.closest('.draggable');
+  
+  if (!draggable) return;
+  
+  activeDraggable = draggable;
+  
+  // Tocar som de pegar o elemento
+  if (pickupSound) {
+    pickupSound.currentTime = 0;
+    pickupSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
+  }
+  
+  // Obter a posição atual do elemento (incluindo qualquer transformação)
+  const rect = draggable.getBoundingClientRect();
+  
+  // Calcular offset do toque em relação ao elemento
+  // Usar pageX/pageY para consistência entre dispositivos
+  touchOffsetX = touch.pageX - rect.left;
+  touchOffsetY = touch.pageY - rect.top;
+  
+  // Salvar a posição original para restaurar se necessário
+  draggable.dataset.originalLeft = rect.left + 'px';
+  draggable.dataset.originalTop = rect.top + 'px';
+  
+  // Adicionar classe de arrastando
+  draggable.classList.add('dragging');
+  
+  // Prevenir comportamento padrão
+  e.preventDefault();
+}
+
+function handleTouchMove(e) {
+  if (!activeDraggable || gameFinished) return;
+  
+  const touch = e.touches[0];
+  
+  // Mover o elemento arrastável usando transform para melhor performance
+  activeDraggable.style.position = 'fixed';
+  activeDraggable.style.zIndex = '1000';
+  
+  // Calcular a nova posição baseada no offset correto
+  const newLeft = touch.pageX - touchOffsetX;
+  const newTop = touch.pageY - touchOffsetY;
+  
+  activeDraggable.style.left = newLeft + 'px';
+  activeDraggable.style.top = newTop + 'px';
+  
+  // Prevenir comportamento padrão (scroll/zoom)
+  e.preventDefault();
+}
+
+function handleTouchEnd(e) {
+  if (!activeDraggable || gameFinished) return;
+  
+  // Encontrar o alvo mais próximo com melhor precisão
+  const targets = document.querySelectorAll('.target');
+  let closestTarget = null;
+  let minDistance = 200; // Distância aumentada para melhor experiência em mobile
+  
+  // Obter a posição do elemento sendo arrastado
+  const draggableRect = activeDraggable.getBoundingClientRect();
+  const draggableCenterX = draggableRect.left + draggableRect.width / 2;
+  const draggableCenterY = draggableRect.top + draggableRect.height / 2;
+  
+  targets.forEach(target => {
+    const targetRect = target.getBoundingClientRect();
+    
+    // Calcular distância entre centros
+    const targetCenterX = targetRect.left + targetRect.width / 2;
+    const targetCenterY = targetRect.top + targetRect.height / 2;
+    
+    const distance = Math.sqrt(
+      Math.pow(targetCenterX - draggableCenterX, 2) +
+      Math.pow(targetCenterY - draggableCenterY, 2)
+    );
+    
+    // Verificar si está dentro da área do alvo com tolerância
+    const isWithinTargetArea = 
+      draggableCenterX > targetRect.left - 40 && 
+      draggableCenterX < targetRect.right + 40 &&
+      draggableCenterY > targetRect.top - 40 && 
+      draggableCenterY < targetRect.bottom + 40;
+    
+    if ((distance < minDistance) || isWithinTargetArea) {
+      minDistance = distance;
+      closestTarget = target;
+    }
+  });
+  
+  // Verificar si soltou em um alvo válido
+  if (closestTarget && minDistance < 250) {
+    const draggedType = activeDraggable.dataset.type;
+    const targetType = closestTarget.dataset.target;
+    
+    if (draggedType === targetType) {
+      handleCorrectDrop(activeDraggable, closestTarget);
+    } else {
+      // Tocar som de erro
+      if (pickupSound) {
+        pickupSound.currentTime = 0;
+        pickupSound.playbackRate = 0.7; // Tom mais grave para indicar erro
+        pickupSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
+        // Restaurar a velocidade normal após tocar
+        setTimeout(() => { pickupSound.playbackRate = 1.0; }, 300);
+      }
+      
+      showFeedback('Tente novamente! 🤔', 'error');
+      resetDraggablePosition(activeDraggable);
+    }
+  } else {
+    // Retornar à posição original se não encaixou
+    resetDraggablePosition(activeDraggable);
+  }
+  
+  // Limpar estado - garantir que o elemento seja sempre visível
+  activeDraggable.classList.remove('dragging');
+  activeDraggable.style.opacity = '1'; // Forçar opacidade total
+  activeDraggable = null;
+}
+
+function resetDraggablePosition(draggable) {
+  // Restaurar para posição estática normal
+  draggable.style.position = '';
+  draggable.style.zIndex = '';
+  draggable.style.left = '';
+  draggable.style.top = '';
+  draggable.style.transform = '';
+  draggable.style.opacity = '1';
+  
+  // Forçar reflow para garantir que o elemento volte ao fluxo normal
+  draggable.offsetHeight;
+}
+
+function handleCorrectDrop(draggable, target) {
+  // Tocar som de soltar/encaixar
+  if (dropSound) {
+    dropSound.currentTime = 0;
+    dropSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
+  }
+  
+  // Adicionar classe de correto
+  target.classList.add('correct');
+  draggable.classList.add('correct');
+  
+  // Remover elemento arrastável da área de origem
+  draggable.remove();
+  
+  // Adicionar o elemento arrastável ao alvo
+  const clone = draggable.cloneNode(true);
+  clone.style.position = 'absolute';
+  clone.style.top = '0';
+  clone.style.left = '0';
+  clone.style.width = '100%';
+  clone.style.height = '100%';
+  clone.style.margin = '0';
+  clone.style.padding = '0';
+  clone.style.borderRadius = 'calc(var(--border-radius) - 3px)';
+  clone.style.cursor = 'default';
+  
+  target.appendChild(clone);
+  
+  // Atualizar contador
+  correctPieces++;
+  
+  // Mostrar feedback positivo
+  showFeedback('Correto! 🎉', 'success');
+  
+  // Adicionar XP
+  addXP(25);
+  
+  // Verificar se o nível foi concluído
+  if (correctPieces === totalPieces) {
+    finishLevel();
+  }
 }
 
 // Funções auxiliares para itens
@@ -184,7 +416,7 @@ function getItemIcon(type) {
   return icons[type] || "";
 }
 
-// Funções de arrastar e soltar - CORRIGIDAS (removida a transparência)
+// Funções de arrastar e soltar - CORREÇÃO COMPLETA
 function handleDragStart(e) {
   if (gameFinished) {
     e.preventDefault();
@@ -194,16 +426,19 @@ function handleDragStart(e) {
   e.dataTransfer.setData('text/plain', e.target.dataset.type);
   e.target.classList.add('dragging');
   
-  // REMOVIDO: código que adicionava transparência
-  // setTimeout(() => {
-  //   e.target.style.opacity = '0.4';
-  // }, 0);
+  // Tocar som de pegar o elemento
+  if (pickupSound) {
+    pickupSound.currentTime = 0;
+    pickupSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
+  }
+  
+  // REMOVIDO COMPLETAMENTE: qualquer código relacionado a opacidade
+  // Isso estava causando o problema de desaparecimento no mobile
 }
 
 function handleDragEnd(e) {
   e.target.classList.remove('dragging');
-  // REMOVIDO: código que restaurava opacidade
-  // e.target.style.opacity = '1';
+  // REMOVIDO COMPLETAMENTE: código que restaurava opacidade
 }
 
 function handleDragOver(e) {
@@ -221,6 +456,12 @@ function handleDrop(e) {
   const targetType = e.target.closest('.target').dataset.target;
   
   if (draggedType === targetType) {
+    // Tocar som de soltar/encaixar
+    if (dropSound) {
+      dropSound.currentTime = 0;
+      dropSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
+    }
+    
     // Acertou
     const draggedElement = document.querySelector(`.draggable[data-type="${draggedType}"]`);
     const targetElement = e.target.closest('.target');
@@ -261,7 +502,16 @@ function handleDrop(e) {
       finishLevel();
     }
   } else {
-    // Errou
+    // Errou - tocar som de erro
+    if (pickupSound) {
+      pickupSound.currentTime = 0;
+      pickupSound.playbackRate = 0.7; // Tom mais grave para indicar erro
+      pickupSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
+      // Restaurar a velocidade normal após tocar
+      setTimeout(() => { pickupSound.playbackRate = 1.0; }, 300);
+    }
+    
+    // Mostrar feedback de erro
     showFeedback('Tente novamente! 🤔', 'error');
   }
 }
@@ -319,31 +569,88 @@ function nextLevel() {
     loadLevel(currentLevel);
     restartButton.style.display = 'none';
   } else {
-    // Jogo completo
+    // Jogo completo - usar o novo modal
     levelCompleteModal.style.display = 'none';
-    showFeedback('Parabéns! Você completou todos os níveis! 🏆', 'success');
+    showGameCompleteModal();
     restartButton.style.display = 'block';
     currentLevel = 1; // Reiniciar para o nível 1
   }
 }
 
-function showFeedback(message, type) {
+// Nova função para mostrar mensagem de jogo completo
+function showGameCompleteModal() {
+  const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+  const minutes = Math.floor(elapsedTime / 60);
+  const seconds = elapsedTime % 60;
+  const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  
+  const levelsGained = playerLevel - 1; // Níveis ganhos durante o jogo
+  const xpEarned = xpCurrent; // XP total adquirido
+  
+  // Configurar o modal para mostrar informações de jogo completo
+  levelCompleteMessage.innerHTML = `
+    <div class="game-complete-stats">
+      <h3>🎉 Jogo Concluído! 🎉</h3>
+      <div class="stat-row">
+        <span class="stat-label">Tempo total:</span>
+        <span class="stat-value">${timeString}</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Níveis conquistados:</span>
+        <span class="stat-value">${levelsGained}</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">XP total:</span>
+        <span class="stat-value">${xpEarned}/${xpMax}</span>
+      </div>
+    </div>
+  `;
+  
+  // Alterar o texto do botão para "Jogar Novamente"
+  nextLevelButton.textContent = "Jogar Novamente";
+  
+  // Mostrar o modal
+  levelCompleteModal.style.display = 'flex';
+  
+  // Adicionar efeito de confete extra
+  createConfetti();
+  setTimeout(() => createConfetti(), 500);
+  setTimeout(() => createConfetti(), 1000);
+}
+
+// Modificar a função showFeedback para aceitar um parâmetro de duração personalizado
+function showFeedback(message, type, duration = 5000) {
   feedbackElement.textContent = message;
   feedbackElement.style.display = 'block';
   feedbackElement.style.backgroundColor = type === 'success' ? 'rgba(76, 175, 80, 0.95)' : 'rgba(244, 67, 54, 0.95)';
+  feedbackElement.style.whiteSpace = 'pre-line'; // Permite quebras de linha na mensagem
   
   setTimeout(() => {
     feedbackElement.style.display = 'none';
-  }, 2000);
+  }, duration);
 }
 
 function addXP(amount) {
+  const oldPlayerLevel = playerLevel;
   xpCurrent += amount;
   if (xpCurrent > xpMax) {
     xpCurrent = xpMax;
   }
   
+  // Calcular novo nível do jogador (a cada 50 XP = 1 nível)
+  playerLevel = Math.floor(xpCurrent / 50) + 1;
+  
+  // Si o nível do jogador aumentou, mostrar mensagem
+  if (playerLevel > oldPlayerLevel) {
+    showLevelUpMessage(playerLevel);
+  }
+  
   updateXP();
+}
+
+// Nova função para mostrar mensagem de aumento de nível
+function showLevelUpMessage(newLevel) {
+  showFeedback(`🎊 Nível Up! 🎊\nAgora você é nível ${newLevel}!`, 'success', 8000); // Aumentado para 8 segundos
 }
 
 function updateXP() {
