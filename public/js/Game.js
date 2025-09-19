@@ -16,7 +16,7 @@ let touchOffsetX, touchOffsetY;
 let activeDraggable = null;
 
 // Variáveis para sons
-let pickupSound, dropSound, backgroundMusic;
+let pickupSound, dropSound, backgroundMusic, infoSound; // ← Adicione infoSound aqui
 
 // Adicione esta variável global no início do arquivo
 let isMusicPlaying = false;
@@ -84,16 +84,18 @@ const levelConfigs = {
   }
 };
 
-// Modifique a função loadSounds para incluir o evento de término da música
+// Modifique a função loadSounds para usar MP3
 function loadSounds() {
   pickupSound = new Audio('som1.wav');
   dropSound = new Audio('som2.wav');
   backgroundMusic = new Audio('som3.wav');
+  infoSound = new Audio('som4.mp3'); // ← Alterado para MP3
   
   // Configurar volumes
   pickupSound.volume = 0.7;
   dropSound.volume = 0.7;
-  backgroundMusic.volume = 0.5; // Volume mais baixo para música de fundo
+  backgroundMusic.volume = 0.5;
+  infoSound.volume = 0.7;
   
   // Configurar música de fundo para loop
   backgroundMusic.loop = true;
@@ -108,6 +110,7 @@ function loadSounds() {
   pickupSound.load();
   dropSound.load();
   backgroundMusic.load();
+  infoSound.load(); // ← Adicionar pré-carregamento do som de informação
 }
 
 function toggleMusic() {
@@ -185,6 +188,11 @@ function initGame() {
   restartButton.addEventListener('click', restartGame);
   infoButton.addEventListener('click', () => {
     modalInfo.style.display = 'flex';
+    // Tocar som de informação
+    if (infoSound) {
+      infoSound.currentTime = 0;
+      infoSound.play().catch(e => console.log("Não foi possível tocar o som de informação: ", e));
+    }
   });
   closeModalButton.addEventListener('click', () => {
     modalInfo.style.display = 'none';
