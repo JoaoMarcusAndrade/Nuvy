@@ -166,7 +166,7 @@
   <!-- API youtube -->
   <script>
     const API_KEY = "AIzaSyBxtBtd9sz9cgafxGT1zkPMb4lHXmGxsLU"
-    async function carregarVideos(termo = "jogos educativos") {
+    async function carregarVideos(termo = "Videos educacionais Infantil sobre computação em nuvem") {
       const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(termo)}&type=video&maxResults=6&key=${API_KEY}`;
 
       const resposta = await fetch(url);
