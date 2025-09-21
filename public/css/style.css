@@ -205,8 +205,10 @@ header a:hover {
 }
 
 .img{
-  height: 33px;
-  width: 33px;
+  height: 26px;
+  width: 30px;
+  margin-right:10px ;
+  cursor: pointer;
 }
 
 .card:hover {
@@ -602,7 +604,7 @@ footer {
     padding: 10px;
   }
 
-  #pfooter {
+  footer p#pfooter {
     margin: 0 !important;
   }
   
