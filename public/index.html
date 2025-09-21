@@ -43,13 +43,13 @@
     <!-- Navbar para área de jogos -->
     <nav class="navbar">
       <div class="navbar-left">
-        <img src="img/NuvyPet.png" alt="Logo Nuvy" class="logo">
+        <img src="img/Nuvy - Mascote.png" alt="Logo Nuvy" class="logo">
         <a href="#ajuda">Ajuda</a>
         <a href="#contato">Contato</a>
       </div>
       <div class="navbar-right">
-        <img src="img/Login.png" width="55vh" alt="" style="margin-right: 30px;">
-        <button id="logoutBtn" class="btn btn-outline-danger">Sair</button>
+        <img src="img/Nuvy - Usuário.png" width="55vh" alt="" style="margin-right: 30px;">
+        <img src="img/Nuvy - Porta.png" id="logoutBtn" class="btn btn-outline-danger">
       </div>
     </nav>
 
@@ -65,14 +65,14 @@
     <section class="jogo">
       <h2>Divirta-se e aprenda</h2>
       <div class="jogo-box">
-        <img src="img/controle.png" alt="Controle" class="game-icon">
+        <img src="img/Nuvy - Controle.png" alt="Controle" class="game-icon">
         <p>Aguarde enquanto carregamos o jogo...</p>
       </div>
     </section>
 
     <!-- Footer -->
     <footer>
-      <p>© todos os direitos reservados - 2025</p>
+      <p id="pfooter">© todos os direitos reservados - 2025</p>
     </footer>
   </div>
 
@@ -167,7 +167,7 @@
   <script>
     const API_KEY = "AIzaSyBxtBtd9sz9cgafxGT1zkPMb4lHXmGxsLU"
     async function carregarVideos(termo = "Videos educacionais Infantil sobre computação em nuvem") {
-      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(termo)}&type=video&maxResults=6&key=${API_KEY}`;
+      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(termo)}&type=video&maxResults=12&key=${API_KEY}`;
 
       const resposta = await fetch(url);
       const dados = await resposta.json();

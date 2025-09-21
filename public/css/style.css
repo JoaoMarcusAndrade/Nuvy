@@ -171,6 +171,9 @@ header a:hover {
   overflow-y: hidden;
   margin: 0 90px;
   padding-bottom: 15px;
+  padding-top: 10px;
+  padding-left: 6px;
+  padding-right: 6px;
 }
 
 .carrossel::-webkit-scrollbar {
@@ -592,6 +595,10 @@ footer {
   footer {
     font-size: 12px;
     padding: 10px;
+  }
+
+  #pfooter {
+    margin: 0;
   }
   
   /* Ajustes no header para mobile pequeno */
