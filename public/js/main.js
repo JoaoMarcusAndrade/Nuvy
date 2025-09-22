@@ -120,16 +120,45 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 // ---------- LOGOUT ----------
+async function logoutUser() {
+    try {
+        // faz o logout no servidor e limpa cookies
+        await fetch("/logout", { method: "POST", credentials: "include" });
+        
+        // Limpa os dados do localStorage
+        localStorage.removeItem('userData');
+        localStorage.removeItem('userXP');
+        localStorage.removeItem("idUsuarioParaVinculo");
+        
+        // volta para a tela inicial/login
+        showHomeSection();
+        history.pushState({}, "", "/login");
+        renderView("/login");
+        
+        // Fecha o modal se estiver aberto
+        const modal = bootstrap.Modal.getInstance(document.getElementById('staticBackdrop'));
+        if (modal) {
+            modal.hide();
+        }
+        
+        console.log("Logout realizado com sucesso");
+    } catch (error) {
+        console.error("Erro ao fazer logout:", error);
+        // Mesmo em caso de erro, redireciona para home
+        showHomeSection();
+        history.pushState({}, "", "/login");
+        renderView("/login");
+    }
+}
+
+// Configura os botões de logout
 document.addEventListener("DOMContentLoaded", () => {
-    const logoutBtn = document.getElementById("logoutBtn");
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", async () => {
-            // faz o logout no servidor e limpa cookies
-            await fetch("/logout", { method: "POST", credentials: "include" });
-            // volta para a tela inicial/login
-            showHomeSection();
-            history.pushState({}, "", "/login");
-            renderView("/login");
+    // Botão de logout da navbar
+    const logoutBtnNav = document.getElementById("logoutBtnNav");
+    if (logoutBtnNav) {
+        logoutBtnNav.addEventListener("click", async (e) => {
+            e.preventDefault();
+            await logoutUser();
         });
     }
 });
@@ -362,7 +391,7 @@ function initializeProfileSidebar() {
     const profilePic = document.querySelector('.profile-pic-btn');
     const closeSidebar = document.getElementById('closeSidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
-    const sidebarLogout = document.getElementById('sidebarLogout');
+    const sidebarLogout = document.getElementById('logoutBtnSidebar');
     const profileSidebar = document.getElementById('profileSidebar');
     
     // Abrir sidebar ao clicar na foto de perfil
@@ -404,11 +433,6 @@ function initializeProfileSidebar() {
             if (window.innerWidth <= 768) { // Apenas no mobile
                 e.preventDefault();
                 closeProfileSidebar();
-                
-                // Se for o link de logout, executa a função
-                if (this.id === 'sidebarLogout') {
-                    setTimeout(logoutUser, 300);
-                }
             }
         });
     });
@@ -472,23 +496,6 @@ function loadUserData() {
     }
 }
 
-// Função de logout (já existente no seu código)
-function logoutUser() {
-    // Limpa os dados de autenticação
-    localStorage.removeItem('userData');
-    localStorage.removeItem('userXP');
-    
-    // Redireciona para a página inicial
-    document.getElementById('jogos-section').classList.remove('active');
-    document.getElementById('home').classList.add('active');
-    
-    // Fecha o modal se estiver aberto
-    const modal = bootstrap.Modal.getInstance(document.getElementById('staticBackdrop'));
-    if (modal) {
-        modal.hide();
-    }
-}
-
 // Fechar sidebar ao redimensionar a janela (se mudar de mobile para desktop)
 window.addEventListener('resize', function() {
     const profileSidebar = document.getElementById('profileSidebar');
@@ -503,11 +510,4 @@ window.addEventListener('resize', function() {
 // Inicializar o sidebar quando a página carregar
 document.addEventListener('DOMContentLoaded', function() {
     initializeProfileSidebar();
-    
-    // Inicializar o botão de logout existente
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', logoutUser);
-    }
 });
-
