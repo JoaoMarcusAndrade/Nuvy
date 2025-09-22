@@ -187,7 +187,7 @@ header a:hover {
 
 .card {
   flex: 0 0 auto;
-  width: 200px;
+  width: 180px;
   height: 140px;
   background: #fff;
   overflow: hidden;
@@ -212,7 +212,7 @@ header a:hover {
 }
 
 .card:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .barra {
