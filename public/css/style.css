@@ -232,31 +232,59 @@ header a:hover {
   margin: 15px 0;
 }
 
+/* Garantir que a div do jogo tenha o tamanho correto */
 .jogo-box {
-  background: #dcdcdc;
-  color: #6a40d6;
-  border-radius: 18px;
-  padding: 80px;
-  text-align: center;
-  box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.5);
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+    width: 100%;
+    height: 600px; /* Altura fixa para o jogo */
+    min-height: 500px;
+    background: transparent;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    margin: 20px 0;
 }
 
-.game-icon {
-  width: 130px;
-  margin-bottom: 20px;
+/* Responsividade para o container do jogo */
+@media (max-width: 768px) {
+    .jogo-box {
+        height: 500px;
+        min-height: 400px;
+    }
 }
 
-.jogo-box p {
-  font-size: 20px;
-  font-weight: bold;
-  margin: 0;
+@media (max-width: 480px) {
+    .jogo-box {
+        height: 450px;
+        min-height: 350px;
+    }
 }
 
+/* Garantir que o jogo se adapte a diferentes tamanhos de tela */
+#game-container {
+    width: 100%;
+    height: 100%;
+}
+
+/* Isolar o jogo do CSS global */
+#game-container * {
+    font-family: inherit !important;
+}
+
+/* Ajustes específicos para a seção de jogos quando ativa */
+#jogos-section.active .jogo-box {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 /* Footer FIXO */
 footer {
   background: #fff;

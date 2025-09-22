@@ -1,0 +1,728 @@
+/* CSS do Jogo Nuvy - Namespace isolado para evitar conflitos */
+#game-container {
+  all: initial; /* Reset para o container do jogo */
+}
+
+#game-container * {
+  box-sizing: border-box;
+}
+
+/* Importar fontes específicas para o jogo */
+@import url('https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Comic+Neue:wght@300;400;700&display=swap');
+
+/* Variáveis CSS específicas do jogo */
+:root {
+  --game-primary-color: #6a4bc6;
+  --game-primary-light: #8366d4;
+  --game-primary-dark: #5239a1;
+  --game-accent-yellow: #FFC107;
+  --game-accent-orange: #FF9E00;
+  --game-accent-green: #4CAF50;
+  --game-accent-blue: #2196F3;
+  --game-accent-purple: #9C27B0;
+  --game-text-light: #f8f2f5;
+  --game-text-dark: #333333;
+  --game-success: #4CAF50;
+  --game-error: #F44336;
+  --game-warning: #FF9800;
+  --game-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --game-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.2);
+  --game-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.3);
+  --game-border-radius: 12px;
+  --game-transition: all 0.3s ease;
+}
+
+/* Container principal do jogo */
+.game-wrapper {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--game-primary-color) 0%, var(--game-primary-dark) 100%);
+  overflow: hidden;
+  font-family: 'Comic Neue', cursive;
+  position: relative;
+  touch-action: manipulation;
+  border-radius: 18px;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-height: 100vh;
+  padding: 2vh 3vw;
+  position: relative;
+  z-index: 2;
+}
+
+/* Nuvens decorativas melhoradas */
+.game-cloud {
+  position: absolute;
+  background-color: #ffffff;
+  border-radius: 50%;
+  opacity: 0.8;
+  z-index: 1;
+  animation: game-float 20s infinite ease-in-out;
+  filter: drop-shadow(0 5px 5px rgba(255, 255, 255, 0.2));
+  will-change: transform;
+}
+
+.game-cloud::before, .game-cloud::after {
+  content: '';
+  position: absolute;
+  background-color: #ffffff;
+  border-radius: 50%;
+}
+
+.game-cloud-1 {
+  width: 80px;
+  height: 45px;
+  top: 5%;
+  left: 3%;
+  animation-delay: 0s;
+}
+
+.game-cloud-1::before {
+  width: 40px;
+  height: 40px;
+  top: -15px;
+  left: 10px;
+}
+
+.game-cloud-1::after {
+  width: 30px;
+  height: 30px;
+  top: -10px;
+  right: 10px;
+}
+
+.game-cloud-2 {
+  width: 100px;
+  height: 55px;
+  top: 15%;
+  right: 3%;
+  animation-delay: -5s;
+}
+
+.game-cloud-2::before {
+  width: 45px;
+  height: 45px;
+  top: -20px;
+  left: 15px;
+}
+
+.game-cloud-2::after {
+  width: 35px;
+  height: 35px;
+  top: -15px;
+  right: 15px;
+}
+
+.game-cloud-3 {
+  width: 70px;
+  height: 40px;
+  bottom: 10%;
+  left: 8%;
+  animation-delay: -10s;
+}
+
+.game-cloud-3::before {
+  width: 35px;
+  height: 35px;
+  top: -12px;
+  left: 8px;
+}
+
+.game-cloud-3::after {
+  width: 25px;
+  height: 25px;
+  top: -8px;
+  right: 8px;
+}
+
+@keyframes game-float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-10px) translateX(5px);
+  }
+  50% {
+    transform: translateY(5px) translateX(10px);
+  }
+  75% {
+    transform: translateY(-5px) translateX(-5px);
+  }
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 10vh;
+  min-height: 60px;
+  margin-bottom: 1vh;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: var(--game-border-radius);
+  padding: 0 15px;
+  box-shadow: var(--game-shadow-sm);
+}
+
+.game-title {
+  font-family: "Bagel Fat One", cursive;
+  font-size: clamp(18px, 4vw, 24px);
+  color: var(--game-text-light);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.game-info-container {
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+  min-width: 180px;
+  justify-content: flex-end;
+}
+
+.game-xp-container {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+.game-xp-text {
+  font-family: "Bagel Fat One", cursive;
+  color: var(--game-accent-yellow);
+  margin-right: 8px;
+  font-size: clamp(14px, 3vw, 16px);
+  white-space: nowrap;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.game-xp-bar {
+  width: 90px;
+  height: 14px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 7px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.game-xp-progress {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--game-accent-yellow) 0%, var(--game-accent-orange) 100%);
+  border-radius: 7px;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 5px var(--game-accent-yellow);
+}
+
+.game-timer {
+  font-family: "Bagel Fat One", cursive;
+  color: var(--game-text-light);
+  font-size: clamp(14px, 3vw, 16px);
+  white-space: nowrap;
+  min-width: 95px;
+  text-align: right;
+  background-color: rgba(106, 75, 198, 0.7);
+  padding: 6px 12px;
+  border-radius: 20px;
+  box-shadow: var(--game-shadow-sm);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.game-instructions {
+  height: 8vh;
+  min-height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 1vh;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  border-radius: var(--game-border-radius);
+  box-shadow: var(--game-shadow-sm);
+}
+
+.game-instructions-text {
+  font-family: "Bagel Fat One", cursive;
+  color: var(--game-text-light);
+  font-size: clamp(16px, 3vw, 20px);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.game-area {
+  display: flex;
+  flex-direction: column;
+  height: 78vh;
+  gap: 1.5vh;
+}
+
+.game-targets-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1.5vh;
+  height: 55%;
+  padding: 1vh;
+}
+
+.game-target {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 3px dashed var(--game-text-light);
+  border-radius: var(--game-border-radius);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1vh;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+  transition: var(--game-transition);
+}
+
+.game-target:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-3px);
+  box-shadow: var(--game-shadow-md);
+}
+
+.game-target-description {
+  font-family: 'Comic Neue', cursive;
+  font-weight: 700;
+  font-size: clamp(12px, 2vw, 16px);
+  color: var(--game-text-light);
+  padding: 0.5vh;
+  z-index: 1;
+  transition: opacity 0.3s ease;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.game-draggables-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5vh;
+  height: 45%;
+  padding: 1vh;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: var(--game-border-radius);
+  backdrop-filter: blur(5px);
+  box-shadow: var(--game-shadow-sm);
+}
+
+.game-draggable {
+  background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+  border-radius: var(--game-border-radius);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+  transition: var(--game-transition);
+  box-shadow: var(--game-shadow-md);
+  padding: 1vh;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  touch-action: none;
+  transform: translateZ(0);
+}
+
+.game-draggable::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--game-accent-blue) 0%, var(--game-accent-purple) 100%);
+}
+
+.game-draggable:active {
+  cursor: grabbing;
+  transform: scale(1.03) rotate(2deg);
+  box-shadow: var(--game-shadow-lg);
+}
+
+.game-draggable.dragging {
+  opacity: 1s;
+  transform: scale(1.05) rotate(5deg);
+  z-index: 100;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+.game-draggable-title {
+  font-family: "Bagel Fat One", cursive;
+  font-size: clamp(14px, 2.5vw, 18px);
+  color: var(--game-primary-color);
+  text-align: center;
+  margin-bottom: 1vh;
+  z-index: 1;
+}
+
+.game-draggable-icon {
+  width: 45px;
+  height: 45px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 1;
+  transition: var(--game-transition);
+}
+
+.game-draggable:hover .game-draggable-icon {
+  transform: scale(1.1);
+}
+
+.game-draggable.correct {
+  border: 3px solid var(--game-success);
+  box-shadow: 0 0 15px var(--game-success);
+  animation: game-pulse 1s infinite;
+}
+
+@keyframes game-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.game-target.correct {
+  border: 3px solid var(--game-success);
+  background-color: rgba(76, 175, 80, 0.2);
+}
+
+/* CORREÇÃO: Estilo simplificado para elementos corretos */
+.game-target.correct .game-target-description {
+  opacity: 0;
+}
+
+.game-target.correct::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 60%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 1;
+}
+
+.game-target.correct[data-target="fotos"]::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='10' y='10' width='44' height='44' fill='%23ffffff' stroke='%236a4bc6' stroke-width='2'/%3E%3Ccircle cx='20' cy='24' r='6' fill='%23ff9800'/%3E%3Cpolygon points='40,44 24,34 14,44' fill='%236a4bc6'/%3E%3C/svg%3E");
+}
+
+.game-target.correct[data-target="musica"]::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='10' y='24' width='12' height='30' fill='%23ffffff' stroke='%236a4bc6' stroke-width='2'/%3E%3Crect x='30' y='18' width='12' height='36' fill='%23ffffff' stroke='%236a4bc6' stroke-width='2'/%3E%3Crect x='50' y='10' width='12' height='44' fill='%23ffffff' stroke='%236a4bc6' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+.game-target.correct[data-target="jogos"]::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='10' y='10' width='44' height='44' fill='%23ffffff' stroke='%236a4bc6' stroke-width='2' rx='5'/%3E%3Ccircle cx='24' cy='32' r='8' fill='%23ff5e90'/%3E%3Crect x='36' y='20' width='8' height='8' fill='%236a4bc6'/%3E%3Crect x='20' y='20' width='8' height='8' fill='%236a4bc6'/%3E%3C/svg%3E");
+}
+
+.game-target.correct[data-target="desenhos"]::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='10' y='10' width='44' height='44' fill='%23ffffff' stroke='%236a4bc6' stroke-width='2'/%3E%3Cline x1='18' y1='20' x2='46' y2='38' stroke='%23ff9e00' stroke-width='3'/%3E%3Cline x1='46' y1='20' x2='18' y2='38' stroke='%23ff9e00' stroke-width='3'/%3E%3Ccircle cx='32' cy='29' r='8' fill='none' stroke='%236a4bc6' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+/* Modal de informação */
+.game-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.game-modal-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f2f5 100%);
+  padding: 25px;
+  border-radius: var(--game-border-radius);
+  max-width: 90%;
+  width: 380px;
+  text-align: center;
+  color: var(--game-primary-color);
+  box-shadow: var(--game-shadow-lg);
+  border: 2px solid var(--game-primary-light);
+  animation: game-modalAppear 0.3s ease-out;
+}
+
+@keyframes game-modalAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.game-modal-title {
+  font-family: "Bagel Fat One", cursive;
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: var(--game-primary-color);
+}
+
+.game-modal-description {
+  font-family: 'Comic Neue', cursive;
+  margin-bottom: 20px;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+.game-modal-button {
+  background: linear-gradient(135deg, var(--game-primary-color) 0%, var(--game-primary-dark) 100%);
+  color: var(--game-text-light);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-family: "Bagel Fat One", cursive;
+  font-size: 16px;
+  cursor: pointer;
+  transition: var(--game-transition);
+  box-shadow: var(--game-shadow-sm);
+}
+
+.game-modal-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--game-shadow-md);
+}
+
+/* Mensagens de feedback */
+.game-feedback {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(106, 75, 198, 0.95);
+  color: var(--game-text-light);
+  padding: 15px 30px;
+  border-radius: var(--game-border-radius);
+  font-family: "Bagel Fat One", cursive;
+  font-size: 1.3rem;
+  z-index: 100;
+  display: none;
+  text-align: center;
+  box-shadow: var(--game-shadow-lg);
+  animation: game-feedbackAppear 0.3s ease-out;
+  will-change: opacity, transform;
+}
+
+@keyframes game-feedbackAppear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -40%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Botões de ação */
+.game-action-button {
+  position: fixed;
+  z-index: 100;
+  border: none;
+  border-radius: 50%;
+  font-family: "Bagel Fat One", cursive;
+  cursor: pointer;
+  box-shadow: var(--game-shadow-md);
+  transition: var(--game-transition);
+}
+
+.game-action-button:hover {
+  transform: scale(1.1);
+  box-shadow: var(--game-shadow-lg);
+}
+
+.game-info-button {
+  bottom: 20px;
+  left: 20px;
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(135deg, var(--game-accent-yellow) 0%, var(--game-accent-orange) 100%);
+  color: var(--game-text-light);
+  font-size: 1.2rem;
+}
+
+.game-restart-button {
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, var(--game-primary-color) 0%, var(--game-primary-dark) 100%);
+  color: var(--game-text-light);
+  border-radius: 25px;
+  font-size: 1rem;
+  display: none;
+}
+
+/* Media Queries para responsividade do jogo */
+@media (min-width: 768px) {
+  .game-area {
+    flex-direction: row;
+  }
+  
+  .game-targets-container {
+    flex: 2;
+    margin-right: 1vw;
+    height: 100%;
+  }
+  
+  .game-draggables-container {
+    flex: 1;
+    grid-template-columns: 1fr;
+    height: 100%;
+  }
+  
+  .game-modal-content {
+    width: 450px;
+    padding: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-container {
+    padding: 1vh 2vw;
+  }
+  
+  .game-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1vh;
+    height: auto;
+    margin-bottom: 1vh;
+    padding: 10px;
+  }
+  
+  .game-info-container {
+    width: 100%;
+    justify-content: space-between;
+    min-width: 160px;
+    flex-wrap: wrap;
+  }
+  
+  .game-timer {
+    min-width: 85px;
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+  
+  /* Ajustes específicos para responsividade dos encaixes no mobile */
+  .game-targets-container {
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: repeat(2, 1fr) !important;
+    height: 55% !important;
+  }
+  
+  .game-draggables-container {
+    grid-template-columns: repeat(2, 1fr) !important;
+    height: 45% !important;
+  }
+  
+  /* Ajustar tamanho dos elementos para caberem melhor */
+  .game-target {
+    padding: 0.5vh;
+  }
+  
+  .game-target-description {
+    font-size: 11px !important;
+    padding: 0.3vh;
+  }
+  
+  .game-draggable-title {
+    font-size: 12px !important;
+    margin-bottom: 0.5vh;
+  }
+  
+  .game-draggable-icon {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  
+  .game-action-button {
+    bottom: 15px;
+  }
+  
+  .game-info-button {
+    left: 15px;
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .game-restart-button {
+    right: 15px;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Estilos para orientação paisagem em dispositivos móveis */
+@media (max-height: 500px) and (orientation: landscape) {
+  .game-container {
+    padding: 1vh 2vw;
+  }
+  
+  .game-header {
+    height: 8vh;
+    min-height: 50px;
+    margin-bottom: 0.5vh;
+  }
+  
+  .game-instructions {
+    height: 6vh;
+    min-height: 30px;
+    margin-bottom: 0.5vh;
+  }
+  
+  .game-area {
+    height: 82vh;
+    flex-direction: row;
+  }
+  
+  .game-targets-container {
+    flex: 2;
+    margin-right: 1vw;
+    height: 100%;
+  }
+  
+  .game-draggables-container {
+    flex: 1;
+    grid-template-columns: 1fr;
+    height: 100%;
+  }
+}
+
+/* Ajustes para telas muito pequenas */
+@media (max-width: 320px) {
+  .game-xp-bar {
+    width: 70px;
+  }
+  
+  .game-timer {
+    min-width: 75px;
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+  
+  .game-target-description {
+    font-size: 10px !important;
+  }
+  
+  .game-draggable-title {
+    font-size: 11px !important;
+  }
+}
