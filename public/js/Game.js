@@ -16,7 +16,7 @@ let touchOffsetX, touchOffsetY;
 let activeDraggable = null;
 
 // Variáveis para sons
-let pickupSound, dropSound, backgroundMusic, infoSound; // ← Adicione infoSound aqui
+let pickupSound, dropSound, backgroundMusic, infoSound, levelUpSound, gameCompleteSound;
 
 // Adicione esta variável global no início do arquivo
 let isMusicPlaying = false;
@@ -89,7 +89,7 @@ function loadSounds() {
   pickupSound = new Audio('som1.wav');
   dropSound = new Audio('som2.wav');
   backgroundMusic = new Audio('som3.wav');
-  infoSound = new Audio('som4.mp3'); // ← Alterado para MP3
+  infoSound = new Audio('som4.mp3');
   
   // Configurar volumes
   pickupSound.volume = 0.7;
@@ -110,7 +110,21 @@ function loadSounds() {
   pickupSound.load();
   dropSound.load();
   backgroundMusic.load();
-  infoSound.load(); // ← Adicionar pré-carregamento do som de informação
+  infoSound.load();
+}
+
+// Nova função para carregar sons de nível
+function loadLevelSounds() {
+  levelUpSound = new Audio(`som${4 + currentLevel}.mp3`);
+  levelUpSound.volume = 0.7;
+  levelUpSound.load();
+}
+
+// Nova função para carregar som de jogo completo
+function loadGameCompleteSound() {
+  gameCompleteSound = new Audio('som8.mp3');
+  gameCompleteSound.volume = 0.7;
+  gameCompleteSound.load();
 }
 
 function toggleMusic() {
@@ -182,6 +196,8 @@ function stopBackgroundMusic() {
 // Modifique a função initGame para adicionar o event listener do botão de música
 function initGame() {
   loadSounds(); // Carregar os sons
+  loadLevelSounds(); // Carregar sons de nível
+  loadGameCompleteSound(); // Carregar som de jogo completo
   loadLevel(currentLevel);
   
   // Configurar botões
@@ -640,6 +656,12 @@ function finishLevel() {
   gameFinished = true;
   clearInterval(timer);
   
+  // Tocar som de conclusão de nível
+  if (levelUpSound) {
+    levelUpSound.currentTime = 0;
+    levelUpSound.play().catch(e => console.log("Não foi possível tocar o som de nível: ", e));
+  }
+  
   // Criar efeito de confete
   createConfetti();
   
@@ -668,9 +690,16 @@ function nextLevel() {
   if (currentLevel < maxLevels) {
     currentLevel++;
     levelCompleteModal.style.display = 'none';
+    loadLevelSounds(); // Carregar som do próximo nível
     loadLevel(currentLevel);
     restartButton.style.display = 'none';
   } else {
+    // Tocar som de jogo completo
+    if (gameCompleteSound) {
+      gameCompleteSound.currentTime = 0;
+      gameCompleteSound.play().catch(e => console.log("Não foi possível tocar o som de jogo completo: ", e));
+    }
+    
     // Jogo completo - usar o novo modal
     levelCompleteModal.style.display = 'none';
     showGameCompleteModal();
