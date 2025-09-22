@@ -410,17 +410,17 @@ footer {
 .profile-sidebar {
   position: fixed;
   top: 0;
-  left: -400px;
+  right: -400px; /* Alterado para direita */
   width: 350px;
   height: 100vh;
   background: #fff;
   z-index: 2000;
-  transition: left 0.3s ease-in-out;
-  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
+  transition: right 0.3s ease-in-out; /* Alterado para right */
+  box-shadow: -2px 0 15px rgba(0, 0, 0, 0.3); /* Sombra na esquerda */
 }
 
 .profile-sidebar.active {
-  left: 0;
+  right: 0; /* Alterado para direita */
 }
 
 .sidebar-content {
@@ -432,7 +432,7 @@ footer {
 
 .sidebar-header {
   padding: 15px 20px;
-  text-align: right;
+  text-align: left; /* Alterado para esquerda */
   border-bottom: 1px solid #eee;
 }
 
@@ -653,7 +653,7 @@ footer {
   /* Responsividade do Sidebar */
   .profile-sidebar {
     width: 300px;
-    left: -300px;
+    right: -300px; /* Alterado para direita */
   }
   
   .user-profile {
@@ -784,6 +784,6 @@ footer {
   /* Responsividade do Sidebar para mobile pequeno */
   .profile-sidebar {
     width: 280px;
-    left: -280px;
+    right: -280px; /* Alterado para direita */
   }
 }

@@ -408,7 +408,10 @@ function openProfileSidebar() {
         
         profileSidebar.classList.add('active');
         sidebarOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Previne scroll do body
+        // CORREÇÃO: Não desabilita o scroll, apenas evita que o conteúdo principal seja rolado
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
     }
 }
 
@@ -419,7 +422,10 @@ function closeProfileSidebar() {
     if (profileSidebar && sidebarOverlay) {
         profileSidebar.classList.remove('active');
         sidebarOverlay.classList.remove('active');
-        document.body.style.overflow = ''; // Restaura scroll do body
+        // CORREÇÃO: Restaura o scroll do body corretamente
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
     }
 }
 
@@ -469,4 +475,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Seu código existente para login/cadastro continua aqui...
-// ... (mantenha o restante do seu código JavaScript existente)
