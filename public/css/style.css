@@ -406,6 +406,136 @@ footer {
   color: white;
 }
 
+/* ===== SIDEBAR DO PERFIL ===== */
+.profile-sidebar {
+  position: fixed;
+  top: 0;
+  left: -400px;
+  width: 350px;
+  height: 100vh;
+  background: #fff;
+  z-index: 2000;
+  transition: left 0.3s ease-in-out;
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.profile-sidebar.active {
+  left: 0;
+}
+
+.sidebar-content {
+  position: relative;
+  height: 100%;
+  z-index: 2;
+  background: #fff;
+}
+
+.sidebar-header {
+  padding: 15px 20px;
+  text-align: right;
+  border-bottom: 1px solid #eee;
+}
+
+.close-sidebar {
+  background: none;
+  border: none;
+  font-size: 30px;
+  color: #6a40d6;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  line-height: 1;
+}
+
+.close-sidebar:hover {
+  color: #8861e7;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  padding: 30px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.profile-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 15px;
+  border: 3px solid #6a40d6;
+}
+
+.user-info h3 {
+  margin: 0 0 5px 0;
+  color: #6a40d6;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.user-xp {
+  margin: 0;
+  color: #888;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.sidebar-menu {
+  padding: 20px 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  text-decoration: none;
+  color: #6a40d6;
+  font-size: 18px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.menu-item:hover {
+  background-color: #f8f5ff;
+  color: #8861e7;
+}
+
+.menu-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 15px;
+}
+
+.logout-btn {
+  color: #dc3545 !important;
+}
+
+.logout-btn:hover {
+  background-color: #ffe6e6 !important;
+  color: #c82333 !important;
+}
+
+/* Overlay para fechar o sidebar */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* ========================= */
 /* RESPONSIVIDADE - CORREÇÕES APLICADAS */
 /* ========================= */
@@ -519,6 +649,30 @@ footer {
     font-size: 14px;
     padding: 8px;
   }
+
+  /* Responsividade do Sidebar */
+  .profile-sidebar {
+    width: 300px;
+    left: -300px;
+  }
+  
+  .user-profile {
+    padding: 20px 15px;
+  }
+  
+  .profile-pic {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .user-info h3 {
+    font-size: 18px;
+  }
+  
+  .menu-item {
+    padding: 12px 15px;
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -625,5 +779,11 @@ footer {
   
   .NuvyP {
     font-size: 18px;
+  }
+
+  /* Responsividade do Sidebar para mobile pequeno */
+  .profile-sidebar {
+    width: 280px;
+    left: -280px;
   }
 }

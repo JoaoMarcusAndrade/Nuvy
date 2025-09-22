@@ -356,3 +356,117 @@ document.getElementById("formLoginResp").onsubmit = async e => {
         avisoLoginResp.textContent = "Erro ao conectar com servidor";
     }
 };
+
+// Funções para controlar o sidebar do perfil
+function initializeProfileSidebar() {
+    const profilePic = document.querySelector('.profile-pic-btn');
+    const closeSidebar = document.getElementById('closeSidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const sidebarLogout = document.getElementById('sidebarLogout');
+    const profileSidebar = document.getElementById('profileSidebar');
+    
+    // Abrir sidebar ao clicar na foto de perfil
+    if (profilePic) {
+        profilePic.addEventListener('click', openProfileSidebar);
+    }
+    
+    // Fechar sidebar
+    if (closeSidebar) {
+        closeSidebar.addEventListener('click', closeProfileSidebar);
+    }
+    
+    // Fechar sidebar ao clicar no overlay
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeProfileSidebar);
+    }
+    
+    // Logout pelo sidebar
+    if (sidebarLogout) {
+        sidebarLogout.addEventListener('click', function(e) {
+            e.preventDefault();
+            closeProfileSidebar();
+            // Aguarda a animação do sidebar fechar antes do logout
+            setTimeout(logoutUser, 300);
+        });
+    }
+    
+    // Fechar sidebar com a tecla ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && profileSidebar.classList.contains('active')) {
+            closeProfileSidebar();
+        }
+    });
+}
+
+function openProfileSidebar() {
+    const profileSidebar = document.getElementById('profileSidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    
+    if (profileSidebar && sidebarOverlay) {
+        // Carregar dados do usuário antes de abrir
+        loadUserData();
+        
+        profileSidebar.classList.add('active');
+        sidebarOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Previne scroll do body
+    }
+}
+
+function closeProfileSidebar() {
+    const profileSidebar = document.getElementById('profileSidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    
+    if (profileSidebar && sidebarOverlay) {
+        profileSidebar.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+        document.body.style.overflow = ''; // Restaura scroll do body
+    }
+}
+
+function loadUserData() {
+    // Recupera dados do usuário do localStorage
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    const userNameElement = document.getElementById('userName');
+    const userXPElement = document.getElementById('userXP');
+    
+    if (userData && userNameElement) {
+        userNameElement.textContent = userData.nome || 'Usuário';
+    }
+    
+    if (userXPElement) {
+        // Recupera XP do localStorage ou define como 0
+        const userXP = localStorage.getItem('userXP') || '0';
+        userXPElement.textContent = userXP;
+    }
+}
+
+// Função de logout (já existente no seu código)
+function logoutUser() {
+    // Limpa os dados de autenticação
+    localStorage.removeItem('userData');
+    localStorage.removeItem('userXP');
+    
+    // Redireciona para a página inicial
+    document.getElementById('jogos-section').classList.remove('active');
+    document.getElementById('home').classList.add('active');
+    
+    // Fecha o modal se estiver aberto
+    const modal = bootstrap.Modal.getInstance(document.getElementById('staticBackdrop'));
+    if (modal) {
+        modal.hide();
+    }
+}
+
+// Inicializar o sidebar quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+    initializeProfileSidebar();
+    
+    // Inicializar o botão de logout existente
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', logoutUser);
+    }
+});
+
+// Seu código existente para login/cadastro continua aqui...
+// ... (mantenha o restante do seu código JavaScript existente)

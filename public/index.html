@@ -11,7 +11,7 @@
   <!-- Fonte personalizada -->
   <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap" rel="stylesheet" />
   <!-- CSS customizado unificado -->
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="css/style.css" />
   <link rel="manifest" href="/manifest.json">
 </head>
 
@@ -48,7 +48,7 @@
         <a href="#contato">Contato</a>
       </div>
       <div class="navbar-right">
-        <img src="img/Nuvy - Usuário.png" width="55vh" alt="" style="margin-right: 20px;" "cursor: pointer;">
+        <img src="img/Nuvy - Usuário.png" width="55vh" alt="Foto do Perfil" style="margin-right: 20px; cursor: pointer;" class="profile-pic-btn">
         <img src="img/Nuvy - Porta.png" id="logoutBtn" class="img btn-outline-danger">
       </div>
     </nav>
@@ -74,6 +74,44 @@
     <footer>
       <p id="pfooter" style="margin-bottom:0 ;">© todos os direitos reservados - 2025</p>
     </footer>
+  </div>
+
+  <!-- Sidebar do Perfil -->
+  <div id="profileSidebar" class="profile-sidebar">
+    <div class="sidebar-content">
+      <!-- Cabeçalho do Sidebar -->
+      <div class="sidebar-header">
+        <button id="closeSidebar" class="close-sidebar">&times;</button>
+      </div>
+      
+      <!-- Perfil do Usuário -->
+      <div class="user-profile">
+        <img src="img/Nuvy - Usuário.png" alt="Foto do Perfil" class="profile-pic">
+        <div class="user-info">
+          <h3 id="userName">Nome do Usuário</h3>
+          <p class="user-xp">XP: <span id="userXP">0</span></p>
+        </div>
+      </div>
+      
+      <!-- Menu de Opções -->
+      <div class="sidebar-menu">
+        <a href="#controle-pais" class="menu-item">
+          <img src="img/Nuvy - Controle.png" alt="Controle" class="menu-icon">
+          Controle dos Pais
+        </a>
+        <a href="#contato" class="menu-item">
+          <img src="img/Nuvy - Mascote.png" alt="Contato" class="menu-icon">
+          Contato
+        </a>
+        <a href="#" id="sidebarLogout" class="menu-item logout-btn">
+          <img src="img/Nuvy - Porta.png" alt="Sair" class="menu-icon">
+          Sair
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay para fechar o sidebar clicando fora -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
   </div>
 
   <!-- Modal -->
