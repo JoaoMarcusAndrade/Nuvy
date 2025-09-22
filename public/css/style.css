@@ -818,8 +818,4 @@ footer {
     transition: opacity 0.3s ease-in-out;
   }
 
-  .sidebar-overlay.active {
-    opacity: 1;
-    visibility: visible;
-  }
 }
