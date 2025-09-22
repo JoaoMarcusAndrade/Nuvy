@@ -375,7 +375,7 @@ function initializeProfileSidebar() {
         closeSidebar.addEventListener('click', closeProfileSidebar);
     }
     
-    // Fechar sidebar ao clicar no overlay
+    // Fechar sidebar ao clicar no overlay (apenas desktop)
     if (sidebarOverlay) {
         sidebarOverlay.addEventListener('click', closeProfileSidebar);
     }
@@ -396,22 +396,44 @@ function initializeProfileSidebar() {
             closeProfileSidebar();
         }
     });
+
+    // Fechar sidebar ao clicar em links do menu (mobile)
+    const menuItems = document.querySelectorAll('.menu-item');
+    menuItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) { // Apenas no mobile
+                e.preventDefault();
+                closeProfileSidebar();
+                
+                // Se for o link de logout, executa a função
+                if (this.id === 'sidebarLogout') {
+                    setTimeout(logoutUser, 300);
+                }
+            }
+        });
+    });
 }
 
 function openProfileSidebar() {
     const profileSidebar = document.getElementById('profileSidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     
-    if (profileSidebar && sidebarOverlay) {
+    if (profileSidebar) {
         // Carregar dados do usuário antes de abrir
         loadUserData();
         
         profileSidebar.classList.add('active');
-        sidebarOverlay.classList.add('active');
-        // CORREÇÃO: Não desabilita o scroll, apenas evita que o conteúdo principal seja rolado
-        document.body.style.overflow = 'hidden';
-        document.body.style.position = 'fixed';
-        document.body.style.width = '100%';
+        
+        // Apenas no desktop mostra o overlay
+        if (sidebarOverlay && window.innerWidth > 768) {
+            sidebarOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // No mobile, apenas adiciona uma classe para evitar scroll
+        if (window.innerWidth <= 768) {
+            document.body.classList.add('sidebar-open');
+        }
     }
 }
 
@@ -419,13 +441,17 @@ function closeProfileSidebar() {
     const profileSidebar = document.getElementById('profileSidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     
-    if (profileSidebar && sidebarOverlay) {
+    if (profileSidebar) {
         profileSidebar.classList.remove('active');
-        sidebarOverlay.classList.remove('active');
-        // CORREÇÃO: Restaura o scroll do body corretamente
+        
+        // Remove overlay no desktop
+        if (sidebarOverlay) {
+            sidebarOverlay.classList.remove('active');
+        }
+        
+        // Restaura o scroll
         document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.width = '';
+        document.body.classList.remove('sidebar-open');
     }
 }
 
@@ -463,6 +489,17 @@ function logoutUser() {
     }
 }
 
+// Fechar sidebar ao redimensionar a janela (se mudar de mobile para desktop)
+window.addEventListener('resize', function() {
+    const profileSidebar = document.getElementById('profileSidebar');
+    if (window.innerWidth > 768 && profileSidebar.classList.contains('active')) {
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        if (sidebarOverlay) {
+            sidebarOverlay.classList.add('active');
+        }
+    }
+});
+
 // Inicializar o sidebar quando a página carregar
 document.addEventListener('DOMContentLoaded', function() {
     initializeProfileSidebar();
@@ -474,4 +511,3 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Seu código existente para login/cadastro continua aqui...

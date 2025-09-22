@@ -517,25 +517,6 @@ footer {
   color: #c82333 !important;
 }
 
-/* Overlay para fechar o sidebar */
-.sidebar-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1999;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.sidebar-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
 /* ========================= */
 /* RESPONSIVIDADE - CORREÇÕES APLICADAS */
 /* ========================= */
@@ -650,10 +631,26 @@ footer {
     padding: 8px;
   }
 
-  /* Responsividade do Sidebar */
+  /* ===== SIDEBAR MOBILE - VEM DE CIMA PARA BAIXO ===== */
   .profile-sidebar {
-    width: 300px;
-    right: -300px; /* Alterado para direita */
+    width: 100%;
+    height: auto;
+    right: 0;
+    top: -100vh; /* Escondido acima da tela */
+    left: 0;
+    transition: top 0.3s ease-in-out; /* Transição pelo topo */
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 0 0 20px 20px;
+  }
+
+  .profile-sidebar.active {
+    top: 0; /* Aparece vindo de cima */
+  }
+
+  .sidebar-content {
+    height: auto;
+    max-height: 80vh;
+    overflow-y: auto;
   }
   
   .user-profile {
@@ -672,6 +669,11 @@ footer {
   .menu-item {
     padding: 12px 15px;
     font-size: 16px;
+  }
+
+  /* Remove overlay no mobile */
+  .sidebar-overlay {
+    display: none;
   }
 }
 
@@ -781,9 +783,43 @@ footer {
     font-size: 18px;
   }
 
-  /* Responsividade do Sidebar para mobile pequeno */
+  /* Sidebar mobile pequeno */
   .profile-sidebar {
-    width: 280px;
-    right: -280px; /* Alterado para direita */
+    max-height: 70vh;
+  }
+  
+  .user-profile {
+    padding: 15px 10px;
+  }
+  
+  .profile-pic {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .menu-item {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+}
+
+/* Estilos para desktop (acima de 768px) */
+@media (min-width: 769px) {
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
   }
 }
