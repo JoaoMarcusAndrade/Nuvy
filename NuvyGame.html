@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Jogo Nuvy - Nuvens da Internet</title>
+  <link rel="stylesheet" href="/public/css/Ztyle.css">
+</head>
+
+<body>
+  <!-- Nuvens decorativas -->
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
+  <div class="cloud cloud-3"></div>
+
+  <!-- Container principal -->
+  <div class="container">
+    <!-- Cabeçalho -->
+    <div class="header">
+      <div class="title">Nível <span id="current-level">1</span></div>
+      <div class="info-container">
+        <div class="xp-container">
+          <span class="xp-text">XP: 0/500</span>
+          <div class="xp-bar">
+            <div class="xp-progress"></div>
+          </div>
+        </div>
+        <div class="timer">Tempo: 05:00</div>
+      </div>
+    </div>
+
+    <!-- Instruções -->
+    <div class="instructions">
+      <div class="instructions-text">Arraste as coisas para a nuvem correta!</div>
+    </div>
+
+    <!-- Área de jogo -->
+    <div class="game-area">
+      <div class="targets-container">
+        <!-- As áreas de destino serão preenchidas dinamicamente pelo JavaScript -->
+      </div>
+
+      <div class="draggables-container">
+        <!-- Os elementos arrastáveis serão preenchidos dinamicamente pelo JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Informação -->
+  <div class="modal" id="info-modal">
+    <div class="modal-content">
+      <h2 class="modal-title">Nuvem da Internet</h2>
+      <p class="modal-description">
+        A nuvem da internet é como uma caixinha mágica que guarda nossas coisas!
+        <br><br>
+        Ela guarda:
+        <br>
+        📸 Nossas fotos e vídeos
+        <br>
+        🎵 Nossas músicas favoritas
+        <br>
+        🎮 Nossos joguinhos divertidos
+        <br>
+        🎨 Nossos desenhos coloridos
+        <br><br>
+        Assim podemos acessá-las de qualquer lugar!
+      </p>
+      <button class="modal-button" id="close-modal">Entendi!</button>
+    </div>
+  </div>
+
+  <!-- Modal de Nível Concluído -->
+  <div class="modal" id="level-complete-modal">
+    <div class="modal-content">
+      <h2 class="modal-title">Parabéns!</h2>
+      <p class="modal-description" id="level-complete-message">
+        Você completou o nível 1!
+      </p>
+      <button class="modal-button" id="next-level-btn">Próximo Nível</button>
+    </div>
+  </div>
+
+  <div class="feedback" id="feedback"></div>
+  <button class="action-button info-button" id="info-btn" aria-label="Informações">?</button>
+  <button class="action-button restart-button" id="restart-btn">Jogar Novamente</button>
+  <audio id="pickup-sound" src="som1.wav" preload="auto"></audio>
+  <audio id="drop-sound" src="som2.wav" preload="auto"></audio>
+  <audio id="info-sound" src="som4.mp3" preload="auto"></audio>
+  <button class="action-button music-button" id="music-btn" aria-label="Controle de música">🔊</button>
+
+  <script src="/public/js/Game.js"></script>
+</body>
+
+</html>
