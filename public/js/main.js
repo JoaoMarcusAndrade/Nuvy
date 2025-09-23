@@ -48,6 +48,11 @@ const avisoCadastroResp = document.getElementById("avisoCadastroResp");
 // Variável para guardar ID do usuário recém cadastrado
 let usuarioRecemCadastradoID = null;
 
+// Variáveis para controle de tempo
+let tempoInicioSessao = null;
+let tempoLimiteSessao = null;
+let monitorTempo = null;
+
 /* ---------- FUNÇÕES DE VIEW ---------- */
 // Esconde todas as views do modal
 function hideAllViews() {
@@ -94,6 +99,9 @@ function showJogosSection() {
 
     history.pushState({}, "", "/jogos");
 
+    // Inicia o controle de tempo
+    iniciarControleTempo();
+
     // Carrega vídeos apenas se a função existir
     if (typeof carregarVideos === 'function') {
         setTimeout(() => {
@@ -114,6 +122,9 @@ function showJogosSection() {
 // Mostra a seção home e esconde a de jogos
 function showHomeSection() {
     if (!homeSection || !jogosSection) return;
+    
+    // Para o monitor de tempo
+    pararControleTempo();
     
     jogosSection.classList.remove("active");
     jogosSection.style.display = "none";
@@ -136,9 +147,80 @@ function closeModal() {
     }
 }
 
+/* ---------- CONTROLE DE TEMPO ---------- */
+function iniciarControleTempo() {
+    // Para qualquer monitor anterior
+    pararControleTempo();
+    
+    // Recupera configurações do localStorage
+    const configControle = JSON.parse(localStorage.getItem('configControlePais') || '{}');
+    
+    if (configControle.ativo && configControle.tempoLimite) {
+        tempoInicioSessao = Date.now();
+        tempoLimiteSessao = configControle.tempoLimite * 60 * 1000; // Converter para milissegundos
+        
+        console.log(`Controle de tempo ativado: ${configControle.tempoLimite} minutos`);
+        
+        // Inicia o monitor
+        monitorTempo = setInterval(verificarTempo, 60000); // Verifica a cada minuto
+        
+        // Verifica imediatamente
+        setTimeout(verificarTempo, 1000);
+    }
+}
+
+function pararControleTempo() {
+    if (monitorTempo) {
+        clearInterval(monitorTempo);
+        monitorTempo = null;
+    }
+    tempoInicioSessao = null;
+    tempoLimiteSessao = null;
+}
+
+function verificarTempo() {
+    if (!tempoInicioSessao || !tempoLimiteSessao) return;
+    
+    const tempoDecorrido = Date.now() - tempoInicioSessao;
+    const tempoRestante = tempoLimiteSessao - tempoDecorrido;
+    
+    console.log(`Tempo restante: ${Math.round(tempoRestante / 60000)} minutos`);
+    
+    if (tempoRestante <= 0) {
+        // Tempo esgotado - bloquear acesso
+        bloquearAcesso();
+    } else if (tempoRestante <= 300000) { // 5 minutos restantes
+        // Aviso de tempo prestes a acabar
+        mostrarAvisoTempo(tempoRestante);
+    }
+}
+
+function bloquearAcesso() {
+    pararControleTempo();
+    
+    // Mostra modal de acesso bloqueado
+    const modalElement = document.getElementById("acessoBloqueadoModal");
+    if (modalElement) {
+        const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+        modal.show();
+        
+        // Limpa campo de senha
+        document.getElementById("senhaAcessoBloqueado").value = "";
+        document.getElementById("erroSenhaAcesso").style.display = "none";
+    }
+}
+
+function mostrarAvisoTempo(tempoRestante) {
+    const minutos = Math.ceil(tempoRestante / 60000);
+    alert(`Atenção! Você tem apenas ${minutos} minuto(s) restante(s) de uso.`);
+}
+
 /* ---------- LOGOUT ---------- */
 async function logoutUser() {
     try {
+        // Para o controle de tempo
+        pararControleTempo();
+        
         // faz o logout no servidor e limpa cookies
         await fetch("/logout", { method: "POST", credentials: "include" });
         
@@ -176,6 +258,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         
         // Inicializa eventos do modal de controle de pais
         initializeControlePaisModal();
+        
+        // Inicializa eventos do modal de acesso bloqueado
+        initializeAcessoBloqueadoModal();
         
         // verifica se há cookie válido no servidor
         const res = await fetch("/check-auth", { credentials: "include" });
@@ -254,7 +339,19 @@ function initializeControlePaisModal() {
     const limiteTempo = document.getElementById("limiteTempo");
     const aplicarBtn = document.getElementById("aplicarControlePais");
     
+    // Carrega configurações salvas
+    const configSalva = JSON.parse(localStorage.getItem('configControlePais') || '{}');
     if (acessoLimitado && limiteTempo) {
+        acessoLimitado.checked = configSalva.ativo || false;
+        limiteTempo.disabled = !acessoLimitado.checked;
+        
+        if (configSalva.tempoLimite) {
+            // Converte minutos para formato HH:MM
+            const horas = Math.floor(configSalva.tempoLimite / 60);
+            const minutos = configSalva.tempoLimite % 60;
+            limiteTempo.value = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+        }
+        
         acessoLimitado.addEventListener("change", function () {
             limiteTempo.disabled = !this.checked;
         });
@@ -263,16 +360,35 @@ function initializeControlePaisModal() {
     if (aplicarBtn) {
         aplicarBtn.addEventListener("click", function () {
             const acessoLimitado = document.getElementById("acessoLimitado").checked;
-            const limiteTempo = document.getElementById("limiteTempo").value;
+            const limiteTempoValue = document.getElementById("limiteTempo").value;
 
-            if (acessoLimitado && !limiteTempo) {
+            if (acessoLimitado && !limiteTempoValue) {
                 alert("Por favor, defina um limite de tempo.");
                 return;
             }
 
-            alert("Configurações aplicadas:\n" +
+            // Converte HH:MM para minutos
+            let tempoEmMinutos = 0;
+            if (acessoLimitado && limiteTempoValue) {
+                const [horas, minutos] = limiteTempoValue.split(':').map(Number);
+                tempoEmMinutos = horas * 60 + minutos;
+            }
+
+            // Salva configurações
+            const config = {
+                ativo: acessoLimitado,
+                tempoLimite: tempoEmMinutos
+            };
+            localStorage.setItem('configControlePais', JSON.stringify(config));
+
+            alert("Configurações aplicadas com sucesso!\n" +
                 "Acesso limitado: " + (acessoLimitado ? "Sim" : "Não") +
-                "\nLimite de tempo: " + (limiteTempo || "Não definido"));
+                "\nLimite de tempo: " + (limiteTempoValue || "Não definido"));
+
+            // Reinicia o controle de tempo se estiver na seção de jogos
+            if (jogosSection && jogosSection.classList.contains('active')) {
+                iniciarControleTempo();
+            }
                 
             // Fecha o modal após aplicar
             const modalElement = document.getElementById("controlePaisModal");
@@ -281,6 +397,66 @@ function initializeControlePaisModal() {
                 if (modal) modal.hide();
             }
         });
+    }
+}
+
+// Configura eventos do modal de acesso bloqueado
+function initializeAcessoBloqueadoModal() {
+    const btnEnviarAcesso = document.getElementById("btnEnviarAcesso");
+    const senhaAcessoBloqueado = document.getElementById("senhaAcessoBloqueado");
+    const erroSenhaAcesso = document.getElementById("erroSenhaAcesso");
+
+    if (btnEnviarAcesso && senhaAcessoBloqueado) {
+        btnEnviarAcesso.addEventListener("click", function() {
+            const senhaDigitada = senhaAcessoBloqueado.value;
+            
+            if (!senhaDigitada) {
+                erroSenhaAcesso.textContent = "Por favor, digite a senha.";
+                erroSenhaAcesso.style.display = "block";
+                return;
+            }
+
+            // Aqui você deve verificar a senha do responsável
+            // Por enquanto, vou simular uma verificação
+            verificarSenhaResponsavel(senhaDigitada);
+        });
+
+        // Permitir enviar com Enter
+        senhaAcessoBloqueado.addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+                btnEnviarAcesso.click();
+            }
+        });
+    }
+}
+
+function verificarSenhaResponsavel(senhaDigitada) {
+    // Simulação - você deve integrar com seu backend
+    // Por enquanto, vou usar uma verificação simples
+    
+    const senhaCorreta = "senha123"; // Substitua pela verificação real
+    
+    if (senhaDigitada === senhaCorreta) {
+        // Senha correta - reinicia o tempo
+        const configControle = JSON.parse(localStorage.getItem('configControlePais') || '{}');
+        if (configControle.ativo) {
+            tempoInicioSessao = Date.now();
+            iniciarControleTempo();
+        }
+        
+        // Fecha o modal
+        const modalElement = document.getElementById("acessoBloqueadoModal");
+        if (modalElement) {
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            if (modal) modal.hide();
+        }
+        
+        alert("Acesso liberado! O tempo foi reiniciado.");
+    } else {
+        // Senha incorreta
+        document.getElementById("erroSenhaAcesso").textContent = "Senha incorreta. Tente novamente.";
+        document.getElementById("erroSenhaAcesso").style.display = "block";
+        document.getElementById("senhaAcessoBloqueado").value = "";
     }
 }
 
@@ -573,19 +749,8 @@ function openControlePaisModal() {
     setTimeout(() => {
         const modalElement = document.getElementById("controlePaisModal");
         if (modalElement) {
-            // Remove aria-hidden do modal para corrigir o problema de acessibilidade
-            modalElement.removeAttribute('aria-hidden');
-            modalElement.setAttribute('aria-modal', 'true');
-            
             const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
             modal.show();
-            
-            // Configura evento para quando o modal for fechado
-            modalElement.addEventListener('hidden.bs.modal', function() {
-                // Restaura o aria-hidden quando o modal for fechado
-                modalElement.setAttribute('aria-hidden', 'true');
-                modalElement.removeAttribute('aria-modal');
-            });
             
             // Foca no primeiro elemento do modal para melhor UX
             setTimeout(() => {
@@ -622,24 +787,4 @@ window.addEventListener('resize', function() {
             sidebarOverlay.classList.remove('active');
         }
     }
-});
-
-// Corrige o problema do aria-hidden nos modais do Bootstrap
-document.addEventListener('DOMContentLoaded', function() {
-    // Observa mudanças nos modais para corrigir problemas de acessibilidade
-    const modalElements = document.querySelectorAll('.modal');
-    
-    modalElements.forEach(modal => {
-        modal.addEventListener('show.bs.modal', function() {
-            // Remove aria-hidden quando o modal é aberto
-            this.removeAttribute('aria-hidden');
-            this.setAttribute('aria-modal', 'true');
-        });
-        
-        modal.addEventListener('hidden.bs.modal', function() {
-            // Restaura aria-hidden quando o modal é fechado
-            this.setAttribute('aria-hidden', 'true');
-            this.removeAttribute('aria-modal');
-        });
-    });
 });
