@@ -482,16 +482,19 @@ function initializeProfileSidebar() {
 function openProfileSidebar() {
     const profileSidebar = document.getElementById('profileSidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const jogosSection = document.getElementById('jogos-section');
     
     if (profileSidebar) {
         loadUserData();
         profileSidebar.classList.add('active');
         
-        if (sidebarOverlay && window.innerWidth > 768) {
+        // Só mostra overlay se estiver na seção de jogos (DESKTOP)
+        if (sidebarOverlay && window.innerWidth > 768 && jogosSection && jogosSection.classList.contains('active')) {
             sidebarOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
         
+        // Para mobile
         if (window.innerWidth <= 768) {
             document.body.classList.add('sidebar-open');
         }
@@ -542,7 +545,7 @@ window.addEventListener('resize', function() {
     }
 });
 
-// Abrir modal quando clicar no link do menu - VERSÃO CORRIGIDA
+// Abrir modal quando clicar no link do menu - VERSÃO OTIMIZADA
 document.addEventListener('DOMContentLoaded', function() {
     const controlePaisLink = document.querySelector('a[href="#controle-pais"]');
     
@@ -553,15 +556,20 @@ document.addEventListener('DOMContentLoaded', function() {
             // Fecha o sidebar do perfil primeiro
             closeProfileSidebar();
             
-            // Pequeno delay para garantir que o sidebar feche antes do modal abrir
+            // Delay reduzido para o modal aparecer mais rápido
             setTimeout(() => {
-                // Abre o modal de controle dos pais
                 const modalElement = document.getElementById("controlePaisModal");
                 if (modalElement) {
-                    const modal = new bootstrap.Modal(modalElement);
+                    const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
                     modal.show();
+                    
+                    // Foca no primeiro elemento do modal para melhor UX
+                    setTimeout(() => {
+                        const primeiroInput = modalElement.querySelector('input, select, button');
+                        if (primeiroInput) primeiroInput.focus();
+                    }, 50);
                 }
-            }, 300); // 300ms é o tempo da transição do sidebar
+            }, 150); // Reduzido de 300ms para 150ms
         });
     }
 });
