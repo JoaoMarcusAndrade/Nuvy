@@ -542,21 +542,28 @@ window.addEventListener('resize', function() {
     }
 });
 
-// Abrir modal quando clicar no link do menu
-document.querySelector('a[href="#controle-pais"]').addEventListener("click", function (e) {
-  e.preventDefault();
-
-  // Fecha o menu lateral (força o fechamento mesmo se o instance não pegar)
-  const offcanvasEl = document.querySelector('.offcanvas.show');
-  if (offcanvasEl) {
-    offcanvasEl.classList.remove("show");
-    offcanvasEl.style.visibility = "hidden";
-    document.body.classList.remove("offcanvas-backdrop", "show");
-  }
-
-  // Abre o modal
-  const modal = new bootstrap.Modal(document.getElementById("controlePaisModal"));
-  modal.show();
+// Abrir modal quando clicar no link do menu - VERSÃO CORRIGIDA
+document.addEventListener('DOMContentLoaded', function() {
+    const controlePaisLink = document.querySelector('a[href="#controle-pais"]');
+    
+    if (controlePaisLink) {
+        controlePaisLink.addEventListener("click", function (e) {
+            e.preventDefault();
+            
+            // Fecha o sidebar do perfil primeiro
+            closeProfileSidebar();
+            
+            // Pequeno delay para garantir que o sidebar feche antes do modal abrir
+            setTimeout(() => {
+                // Abre o modal de controle dos pais
+                const modalElement = document.getElementById("controlePaisModal");
+                if (modalElement) {
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                }
+            }, 300); // 300ms é o tempo da transição do sidebar
+        });
+    }
 });
 
 // Habilitar campo de tempo quando o switch for ativado

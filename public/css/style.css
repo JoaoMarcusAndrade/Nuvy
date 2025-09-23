@@ -866,3 +866,23 @@ footer {
   transform: translateX(30px);
 }
 
+/* Adicione ao seu CSS */
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.profile-sidebar:not(.active) {
+    right: -400px;
+}
+
+/* Para mobile */
+@media (max-width: 768px) {
+    .profile-sidebar:not(.active) {
+        top: -100vh;
+    }
+}
+
+.body.sidebar-open {
+    overflow: hidden;
+}
