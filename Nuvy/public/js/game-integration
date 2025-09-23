@@ -1,0 +1,82 @@
+// Script de integração do jogo
+document.addEventListener('DOMContentLoaded', function() {
+    const gameContainer = document.getElementById('game-container');
+    
+    // Criar iframe para carregar o jogo
+    const gameIframe = document.createElement('iframe');
+    gameIframe.src = 'NuvemGame.html';
+    gameIframe.style.width = '100%';
+    gameIframe.style.height = '100%';
+    gameIframe.style.border = 'none';
+    gameIframe.style.borderRadius = '18px';
+    gameIframe.allow = 'autoplay';
+    
+    // Adicionar iframe ao container
+    gameContainer.appendChild(gameIframe);
+    
+    // Ajustar altura do iframe para se adaptar ao conteúdo
+    gameIframe.onload = function() {
+        // Ajustar a altura do iframe baseado no conteúdo
+        function adjustIframeHeight() {
+            try {
+                const iframeDoc = gameIframe.contentDocument || gameIframe.contentWindow.document;
+                const iframeBody = iframeDoc.body;
+                const iframeHtml = iframeDoc.documentElement;
+                
+                const height = Math.max(
+                    iframeBody.scrollHeight,
+                    iframeBody.offsetHeight,
+                    iframeHtml.clientHeight,
+                    iframeHtml.scrollHeight,
+                    iframeHtml.offsetHeight
+                );
+                
+                gameIframe.style.height = height + 'px';
+            } catch (e) {
+                console.log('Não foi possível ajustar a altura do iframe:', e);
+            }
+        }
+        
+        // Ajustar altura inicial
+        setTimeout(adjustIframeHeight, 100);
+        
+        // Reajustar altura quando a janela for redimensionada
+        window.addEventListener('resize', adjustIframeHeight);
+    };
+    
+    // Prevenir problemas de redimensionamento
+    window.addEventListener('message', function(event) {
+        if (event.data && event.data.type === 'GAME_RESIZE') {
+            gameIframe.style.height = event.data.height + 'px';
+        }
+    });
+    
+    // Adicionar estilos CSS específicos para o jogo integrado
+    const style = document.createElement('style');
+    style.textContent = `
+        /* Garantir que o jogo ocupe todo o espaço disponível */
+        #game-container iframe {
+            min-height: 600px;
+        }
+        
+        /* Otimizações para mobile */
+        @media (max-width: 768px) {
+            #game-container iframe {
+                min-height: 500px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #game-container iframe {
+                min-height: 400px;
+            }
+        }
+        
+        /* Melhorar a experiência de toque no mobile */
+        #game-container {
+            -webkit-overflow-scrolling: touch;
+            overflow: auto;
+        }
+    `;
+    document.head.appendChild(style);
+});

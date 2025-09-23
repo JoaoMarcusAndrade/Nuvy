@@ -221,29 +221,9 @@ header a:hover {
   margin: 10px 90px;
 }
 
-/* Área do jogo */
-.jogo {
-  padding: 0px 90px 30px 90px;
-  flex: 1;
-}
-
 .jogo h2 {
   font-size: 24px;
   margin: 15px 0;
-}
-
-.jogo-box {
-  background: #dcdcdc;
-  color: #6a40d6;
-  border-radius: 18px;
-  padding: 80px;
-  text-align: center;
-  box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.5);
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 .game-icon {
@@ -930,4 +910,83 @@ footer {
 #jogos-section {
     position: relative;
     z-index: 1;
+}
+
+/* Área do jogo */
+.jogo {
+  padding: 0px 90px 30px 90px;
+  flex: 1;
+  width: 100%;
+  height: 100vh;
+}
+
+.jogo-box {
+  background: #dcdcdc;
+  color: #6a40d6;
+  border-radius: 18px;
+  padding: 0;
+  text-align: center;
+  box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 80vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Container do jogo integrado */
+#game-container {
+  width: 100%;
+  height: 100%;
+  border: none;
+  overflow: hidden;
+}
+
+
+
+/* ========================= */
+/* RESPONSIVIDADE - CORREÇÕES APLICADAS */
+/* ========================= */
+@media (max-width: 768px) {
+  .jogo {
+    padding: 20px 15px 30px 15px;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .jogo-box {
+    height: 70vh;
+    padding: 0;
+    margin: 0;
+  }
+
+  .jogo h2 {
+    font-size: 20px;
+    margin: 10px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .jogo {
+    padding: 15px 10px 20px 10px;
+    padding-bottom: 60px;
+  }
+
+  .jogo-box {
+    height: 65vh;
+    min-height: 400px;
+  }
+
+  .jogo h2 {
+    font-size: 18px;
+  }
+
+  footer {
+    font-size: 12px;
+    padding: 10px;
+  }
 }

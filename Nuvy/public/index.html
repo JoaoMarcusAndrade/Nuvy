@@ -64,9 +64,8 @@
     <!-- Área do jogo -->
     <section class="jogo">
       <h2>Divirta-se e aprenda</h2>
-      <div class="jogo-box">
-        <img src="img/Nuvy - Controle.png" alt="Controle" class="game-icon">
-        <p>Aguarde enquanto carregamos o jogo...</p>
+      <div class="jogo-box" id="game-container">
+        <!-- O jogo será carregado aqui -->
       </div>
     </section>
 
@@ -226,12 +225,9 @@
   </div>
 </div>
 
-
-
   <!-- Scripts -->
   <!-- PopperJS para Bootstrap -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <!-- API youtube -->
@@ -290,6 +286,8 @@ carregarVideos();
 </script>
   <!-- ROTAS E ETC... -->
   <script src="js/main.js"></script>
+  <!-- Script de integração do jogo -->
+  <script src="js/game-integration.js"></script>
 </body>
 
 </html>
