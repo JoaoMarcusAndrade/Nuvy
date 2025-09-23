@@ -196,27 +196,6 @@
       </div>
     </div>
   </div>
-  <!-- Modal para reprodução de vídeos do YouTube -->
-<div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content video-modal-content">
-      <div class="modal-header video-modal-header">
-        <h5 class="modal-title" id="videoModalLabel">Assistir Vídeo</h5>
-        <button type="button" class="btn-close video-modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body video-modal-body">
-        <div id="videoPlayerContainer">
-          <iframe id="youtubePlayer" width="100%" height="400" 
-                  src="" 
-                  frameborder="0" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                  allowfullscreen>
-          </iframe>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
   <!-- Scripts -->
   <!-- PopperJS para Bootstrap -->
@@ -225,76 +204,39 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <!-- API youtube -->
-<script>
-const API_KEY = "AIzaSyBxtBtd9sz9cgafxGT1zkPMb4lHXmGxsLU"
+  <script>
+    const API_KEY = "AIzaSyBxtBtd9sz9cgafxGT1zkPMb4lHXmGxsLU"
+    async function carregarVideos(termo = "Videos educacionais Infantil sobre computação em nuvem") {
+      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(termo)}&type=video&maxResults=12&key=${API_KEY}`;
 
-async function carregarVideos(termo = "Videos educacionais Infantil sobre computação em nuvem") {
-  const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(termo)}&type=video&maxResults=12&key=${API_KEY}`;
+      const resposta = await fetch(url);
+      const dados = await resposta.json();
 
-  const resposta = await fetch(url);
-  const dados = await resposta.json();
+      const container = document.getElementById("youtube-cards");
+      container.innerHTML = ""; // limpa antes de inserir novos cards
 
-  const container = document.getElementById("youtube-cards");
-  container.innerHTML = ""; // limpa antes de inserir novos cards
+      dados.items.forEach(item => {
+        const videoId = item.id.videoId;
+        const titulo = item.snippet.title;
+        const thumb = item.snippet.thumbnails.medium.url;
 
-  dados.items.forEach(item => {
-    const videoId = item.id.videoId;
-    const titulo = item.snippet.title;
-    const thumb = item.snippet.thumbnails.medium.url;
-
-    // card HTML - Agora com evento para abrir modal
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <div class="video-card" data-video-id="${videoId}" data-video-title="${titulo}">
-        <img src="${thumb}" alt="${titulo}" />
-        <p>${titulo}</p>
-      </div>
-    `;
-    container.appendChild(card);
-  });
-
-  // Adiciona event listeners para os cards de vídeo
-  adicionarEventListenersVideos();
-}
-
-function adicionarEventListenersVideos() {
-  const videoCards = document.querySelectorAll('.video-card');
-  
-  videoCards.forEach(card => {
-    card.addEventListener('click', function() {
-      const videoId = this.getAttribute('data-video-id');
-      const videoTitle = this.getAttribute('data-video-title');
-      abrirModalVideo(videoId, videoTitle);
-    });
-  });
-}
-
-function abrirModalVideo(videoId, videoTitle) {
-  // Atualiza o título do modal
-  document.getElementById('videoModalLabel').textContent = videoTitle;
-  
-  // Configura a URL do vídeo com autoplay
-  const videoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-  
-  // Atualiza o iframe do player
-  const player = document.getElementById('youtubePlayer');
-  player.src = videoUrl;
-  
-  // Abre o modal
-  const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
-  videoModal.show();
-}
-
-// Fechar o modal quando ele for escondido (limpar o vídeo)
-document.getElementById('videoModal').addEventListener('hidden.bs.modal', function() {
-  const player = document.getElementById('youtubePlayer');
-  player.src = ''; // Para o vídeo
-});
+        // card HTML
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">
+          <img src="${thumb}" alt="${titulo}" />
+          <p>${titulo}</p>
+          </a>
+        `;
+        container.appendChild(card);
+      });
+    }
 
     // Carregar vídeos ao abrir a página
     carregarVideos();
   </script>
+  
   <!-- ROTAS E ETC... -->
   <script src="js/main.js"></script>
   <!-- Script do jogo -->
@@ -302,4 +244,5 @@ document.getElementById('videoModal').addEventListener('hidden.bs.modal', functi
   <!-- Carregador do jogo (DEVE VIR DEPOIS do jogo) -->
   <script src="js/game-loader.js"></script>
 </body>
+
 </html>

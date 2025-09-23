@@ -395,7 +395,6 @@ document.getElementById("formLoginResp").onsubmit = async e => {
     }
 };
 
-// ===== SIDEBAR DO PERFIL =====
 // Funções para controlar o sidebar do perfil
 function initializeProfileSidebar() {
     const profilePic = document.querySelector('.profile-pic-btn');
@@ -517,116 +516,7 @@ window.addEventListener('resize', function() {
     }
 });
 
-// ===== MODAL DE VÍDEO DO YOUTUBE =====
-// Função para inicializar o modal de vídeo
-function initializeVideoModal() {
-    const videoModal = document.getElementById('videoModal');
-    
-    // Fechar modal com tecla ESC
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && videoModal.classList.contains('show')) {
-            const modal = bootstrap.Modal.getInstance(videoModal);
-            modal.hide();
-        }
-    });
-    
-    // Limpar o vídeo quando o modal for fechado
-    videoModal.addEventListener('hidden.bs.modal', function() {
-        const player = document.getElementById('youtubePlayer');
-        player.src = ''; // Para o vídeo
-    });
-}
-
-// Função para adicionar event listeners aos cards de vídeo
-function adicionarEventListenersVideos() {
-    const videoCards = document.querySelectorAll('.video-card');
-    
-    videoCards.forEach(card => {
-        card.addEventListener('click', function() {
-            const videoId = this.getAttribute('data-video-id');
-            const videoTitle = this.getAttribute('data-video-title');
-            abrirModalVideo(videoId, videoTitle);
-        });
-    });
-}
-
-// Função para abrir o modal de vídeo
-function abrirModalVideo(videoId, videoTitle) {
-    // Atualiza o título do modal
-    document.getElementById('videoModalLabel').textContent = videoTitle;
-    
-    // Configura a URL do vídeo com autoplay
-    const videoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-    
-    // Atualiza o iframe do player
-    const player = document.getElementById('youtubePlayer');
-    player.src = videoUrl;
-    
-    // Abre o modal
-    const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
-    videoModal.show();
-}
-
-// ===== API YOUTUBE ATUALIZADA =====
-const API_KEY = "AIzaSyBxtBtd9sz9cgafxGT1zkPMb4lHXmGxsLU"
-
-async function carregarVideos(termo = "Videos educacionais Infantil sobre computação em nuvem") {
-    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(termo)}&type=video&maxResults=12&key=${API_KEY}`;
-
-    try {
-        const resposta = await fetch(url);
-        const dados = await resposta.json();
-
-        const container = document.getElementById("youtube-cards");
-        container.innerHTML = ""; // limpa antes de inserir novos cards
-
-        dados.items.forEach(item => {
-            const videoId = item.id.videoId;
-            const titulo = item.snippet.title;
-            const thumb = item.snippet.thumbnails.medium.url;
-
-            // card HTML - Agora com evento para abrir modal
-            const card = document.createElement("div");
-            card.className = "card video-card";
-            card.setAttribute('data-video-id', videoId);
-            card.setAttribute('data-video-title', titulo);
-            card.innerHTML = `
-                <img src="${thumb}" alt="${titulo}" />
-                <p>${titulo}</p>
-            `;
-            container.appendChild(card);
-        });
-
-        // Adiciona event listeners para os cards de vídeo
-        adicionarEventListenersVideos();
-    } catch (error) {
-        console.error('Erro ao carregar vídeos:', error);
-        const container = document.getElementById("youtube-cards");
-        container.innerHTML = '<p>Erro ao carregar vídeos. Tente novamente mais tarde.</p>';
-    }
-}
-
-// ===== INICIALIZAÇÃO GERAL =====
-// Inicializar tudo quando a página carregar
+// Inicializar o sidebar quando a página carregar
 document.addEventListener('DOMContentLoaded', function() {
     initializeProfileSidebar();
-    initializeVideoModal();
-    
-    // Inicializar o botão de logout existente
-    const logoutBtnNav = document.getElementById("logoutBtnNav");
-    if (logoutBtnNav) {
-        logoutBtnNav.addEventListener("click", async (e) => {
-            e.preventDefault();
-            await logoutUser();
-        });
-    }
-    
-    // Carregar vídeos se estiver na seção de jogos
-    if (window.location.pathname === "/jogos" || document.getElementById('jogos-section').classList.contains('active')) {
-        carregarVideos("computação para crianças");
-    }
 });
-
-// Exportar funções para uso global (se necessário)
-window.carregarVideos = carregarVideos;
-window.abrirModalVideo = abrirModalVideo;
