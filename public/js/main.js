@@ -78,17 +78,8 @@ function showJogosSection() {
     history.pushState({}, "", "/jogos");
 
     carregarVideos("computação para crianças");
-    
     // Forçar redimensionamento para corrigir layout
-    setTimeout(() => { 
-        window.dispatchEvent(new Event('resize')); 
-        
-        // INICIALIZAR O JOGO - LINHA ADICIONADA
-        if (typeof initializeGame === 'function') {
-            setTimeout(initializeGame, 100);
-        }
-    }, 50);
-    
+    setTimeout(() => { window.dispatchEvent(new Event('resize')); }, 50);
     window.scrollTo(0, 0);
 }
 
