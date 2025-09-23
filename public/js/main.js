@@ -546,11 +546,12 @@ window.addEventListener('resize', function() {
 document.querySelector('a[href="#controle-pais"]').addEventListener("click", function (e) {
   e.preventDefault();
 
-  // Fecha o menu lateral (se for offcanvas do Bootstrap)
+  // Fecha o menu lateral (força o fechamento mesmo se o instance não pegar)
   const offcanvasEl = document.querySelector('.offcanvas.show');
   if (offcanvasEl) {
-    const offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasEl);
-    if (offcanvasInstance) offcanvasInstance.hide();
+    offcanvasEl.classList.remove("show");
+    offcanvasEl.style.visibility = "hidden";
+    document.body.classList.remove("offcanvas-backdrop", "show");
   }
 
   // Abre o modal

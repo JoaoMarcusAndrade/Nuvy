@@ -835,13 +835,14 @@ footer {
 
 /* Estilo customizado do switch */
 .custom-switch {
-  width: 50px;
-  height: 25px;
-  background-color: #ddd;
-  border-radius: 25px;
+  width: 60px;
+  height: 30px;
+  background-color: #ccc;
+  border-radius: 30px;
   position: relative;
   appearance: none;
   cursor: pointer;
+  outline: none;
   transition: background-color 0.3s;
 }
 
@@ -851,8 +852,8 @@ footer {
 
 .custom-switch::before {
   content: "";
-  width: 21px;
-  height: 21px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: #fff;
   position: absolute;
@@ -862,5 +863,6 @@ footer {
 }
 
 .custom-switch:checked::before {
-  transform: translateX(25px);
+  transform: translateX(30px);
 }
+
