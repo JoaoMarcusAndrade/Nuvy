@@ -545,16 +545,25 @@ window.addEventListener('resize', function() {
 // Abrir modal quando clicar no link do menu
 document.querySelector('a[href="#controle-pais"]').addEventListener("click", function (e) {
   e.preventDefault();
+
+  // Fecha o menu lateral (se for offcanvas do Bootstrap)
+  const offcanvasEl = document.querySelector('.offcanvas.show');
+  if (offcanvasEl) {
+    const offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasEl);
+    if (offcanvasInstance) offcanvasInstance.hide();
+  }
+
+  // Abre o modal
   const modal = new bootstrap.Modal(document.getElementById("controlePaisModal"));
   modal.show();
 });
 
-// Habilitar campo de data quando o switch for ativado
+// Habilitar campo de tempo quando o switch for ativado
 document.getElementById("acessoLimitado").addEventListener("change", function () {
   document.getElementById("limiteTempo").disabled = !this.checked;
 });
 
-// Botão aplicar (aqui você pode salvar no localStorage, enviar para backend, etc.)
+// Botão aplicar
 document.getElementById("aplicarControlePais").addEventListener("click", function () {
   const acessoLimitado = document.getElementById("acessoLimitado").checked;
   const limiteTempo = document.getElementById("limiteTempo").value;

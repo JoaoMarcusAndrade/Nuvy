@@ -832,3 +832,35 @@ footer {
   font-weight: bold;
   color: #6a40d6;
 }
+
+/* Estilo customizado do switch */
+.custom-switch {
+  width: 50px;
+  height: 25px;
+  background-color: #ddd;
+  border-radius: 25px;
+  position: relative;
+  appearance: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.custom-switch:checked {
+  background-color: #6a40d6;
+}
+
+.custom-switch::before {
+  content: "";
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s;
+}
+
+.custom-switch:checked::before {
+  transform: translateX(25px);
+}

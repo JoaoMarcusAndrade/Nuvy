@@ -194,7 +194,7 @@
       </div>
     </div>
   </div>
-  <!-- Modal Controle de Pais -->
+<!-- Modal Controle de Pais -->
 <div class="modal fade" id="controlePaisModal" tabindex="-1" aria-labelledby="controlePaisLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content custom-modal">
@@ -203,18 +203,20 @@
         <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
       </div>
       <div class="modal-body">
+        
         <!-- Switch de Acesso Limitado -->
         <div class="mb-3">
-          <label class="form-label">Tempo de acesso limitado</label><br>
+          <label class="form-label d-block">Tempo de acesso limitado</label>
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="acessoLimitado">
+            <input class="form-check-input custom-switch" type="checkbox" id="acessoLimitado">
+            <label class="form-check-label" for="acessoLimitado">Ativar</label>
           </div>
         </div>
 
         <!-- Campo de Limite de Tempo -->
         <div class="mb-3">
-          <label for="limiteTempo" class="form-label">Limite de tempo</label>
-          <input type="date" class="form-control" id="limiteTempo" disabled>
+          <label for="limiteTempo" class="form-label">Limite de tempo (horas:minutos)</label>
+          <input type="time" class="form-control" id="limiteTempo" disabled>
         </div>
 
         <!-- Botão Aplicar -->
@@ -223,6 +225,7 @@
     </div>
   </div>
 </div>
+
 
 
   <!-- Scripts -->
