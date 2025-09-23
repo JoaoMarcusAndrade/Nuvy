@@ -541,3 +541,30 @@ window.addEventListener('resize', function() {
         }
     }
 });
+
+// Abrir modal quando clicar no link do menu
+document.querySelector('a[href="#controle-pais"]').addEventListener("click", function (e) {
+  e.preventDefault();
+  const modal = new bootstrap.Modal(document.getElementById("controlePaisModal"));
+  modal.show();
+});
+
+// Habilitar campo de data quando o switch for ativado
+document.getElementById("acessoLimitado").addEventListener("change", function () {
+  document.getElementById("limiteTempo").disabled = !this.checked;
+});
+
+// Botão aplicar (aqui você pode salvar no localStorage, enviar para backend, etc.)
+document.getElementById("aplicarControlePais").addEventListener("click", function () {
+  const acessoLimitado = document.getElementById("acessoLimitado").checked;
+  const limiteTempo = document.getElementById("limiteTempo").value;
+
+  if (acessoLimitado && !limiteTempo) {
+    alert("Por favor, defina um limite de tempo.");
+    return;
+  }
+
+  alert("Configurações aplicadas:\n" +
+    "Acesso limitado: " + (acessoLimitado ? "Sim" : "Não") +
+    "\nLimite de tempo: " + (limiteTempo || "Não definido"));
+});

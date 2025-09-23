@@ -819,3 +819,16 @@ footer {
   }
 
 }
+
+#controlePaisModal .modal-content {
+  background-color: #f7f2f6;
+  border-radius: 20px;
+  padding: 20px;
+  color: #6a40d6;
+  font-family: 'Baloo 2', cursive;
+}
+
+#controlePaisModal label {
+  font-weight: bold;
+  color: #6a40d6;
+}

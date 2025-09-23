@@ -194,6 +194,36 @@
       </div>
     </div>
   </div>
+  <!-- Modal Controle de Pais -->
+<div class="modal fade" id="controlePaisModal" tabindex="-1" aria-labelledby="controlePaisLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content custom-modal">
+      <div class="modal-header custom-modal-header">
+        <h5 class="modal-title" id="controlePaisLabel">Controle de Pais</h5>
+        <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Switch de Acesso Limitado -->
+        <div class="mb-3">
+          <label class="form-label">Tempo de acesso limitado</label><br>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="acessoLimitado">
+          </div>
+        </div>
+
+        <!-- Campo de Limite de Tempo -->
+        <div class="mb-3">
+          <label for="limiteTempo" class="form-label">Limite de tempo</label>
+          <input type="date" class="form-control" id="limiteTempo" disabled>
+        </div>
+
+        <!-- Botão Aplicar -->
+        <button id="aplicarControlePais" class="btn-login w-100">Aplicar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
   <!-- Scripts -->
   <!-- PopperJS para Bootstrap -->
@@ -207,7 +237,7 @@ const API_KEY = "AIzaSyBxtBtd9sz9cgafxGT1zkPMb4lHXmGxsLU"
 
 async function carregarVideos(termo = "Videos educacionais Infantil sobre computação em nuvem") {
   try {
-    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(termo)}&type=video&maxResults=12&key=${API_KEY}`;
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(termo)}&type=video&maxResults=1&key=${API_KEY}`;
 
     const resposta = await fetch(url);
     
