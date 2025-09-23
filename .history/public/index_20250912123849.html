@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nuvy</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    crossorigin="anonymous" />
+  <!-- Fonte personalizada -->
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap" rel="stylesheet" />
+
+  <!-- CSS embutido -->
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+    }
+
+    header {
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px;
+      padding: 15px 30px;
+      background: #007bff;
+    }
+
+    header a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .cloud {
+      display: block;
+      margin: 40px auto 20px auto;
+      max-width: 200px;
+    }
+
+    .text-box {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .NuvyH1 {
+      font-family: 'Bagel Fat One', cursive;
+      font-size: 48px;
+      margin: 0;
+    }
+
+    .NuvyP {
+      font-size: 18px;
+      margin: 15px 0;
+    }
+
+    .btn-login,
+    .btn-primary {
+      background: #007bff;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .btn-login:hover,
+    .btn-primary:hover {
+      background: #0056b3;
+    }
+
+    .custom-modal {
+      border-radius: 15px;
+    }
+
+    .custom-modal-header {
+      border-bottom: none;
+    }
+
+    .custom-btn-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+    }
+
+    .signup-text {
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    /* Jogo (conteudo.css) */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #007bff;
+      padding: 10px 30px;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+    }
+
+    .navbar .logo {
+      height: 50px;
+      margin-right: 20px;
+    }
+
+    .educativo {
+      padding: 40px;
+      text-align: center;
+    }
+
+    .carrossel {
+      display: flex;
+      overflow-x: auto;
+      gap: 15px;
+      padding: 20px 0;
+    }
+
+    .carrossel .card {
+      min-width: 180px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .carrossel img {
+      width: 100%;
+      display: block;
+    }
+
+    .barra {
+      height: 6px;
+      width: 100px;
+      background: #007bff;
+      margin: 20px auto;
+      border-radius: 3px;
+    }
+
+    .jogo {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .jogo-box {
+      margin: 20px auto;
+      padding: 30px;
+      border: 2px dashed #007bff;
+      border-radius: 12px;
+      max-width: 500px;
+    }
+
+    .game-icon {
+      width: 80px;
+      display: block;
+      margin: 0 auto 15px auto;
+    }
+
+    footer {
+      text-align: center;
+      background: #f1f1f1;
+      padding: 15px;
+      font-size: 14px;
+      color: #555;
+      margin-top: 30px;
+    }
+
+    /* SPA sections */
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HOME -->
+  <div id="home" class="section active">
+    <header>
+      <a href="#ajuda">Ajuda</a>
+      <a href="#contato">Contato</a>
+    </header>
+
+    <div class="container">
+      <img src="img/NuvyPet.png" alt="Nuvem" class="cloud" draggable="false" />
+      <div class="text-box">
+        <h1 class="NuvyH1">Nuvy</h1>
+        <p class="NuvyP">
+          Nosso programa de ensino mistura o brincar com o aprendizado, visando
+          sempre o conforto do nosso público.
+        </p>
+        <!-- Botão para abrir modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          Acessar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOGO -->
+  <div id="jogo" class="section">
+    <nav class="navbar">
+      <div class="navbar-left">
+        <img src="img/NuvyPet.png" alt="Logo Nuvy" class="logo">
+        <a href="#ajuda">Ajuda</a>
+        <a href="#contato">Contato</a>
+      </div>
+      <div class="navbar-right">
+        <img src="img/Login.png" width="55vh" alt="" style="margin-right: 30px;">
+      </div>
+    </nav>
+
+    <section class="educativo">
+      <h2>Conteúdo educativo</h2>
+      <div class="carrossel">
+        <div class="card"><img src="img/Comp.jpg" alt="Vídeo educativo"></div>
+        <div class="card"><img src="img/Comp.jpg" alt="Vídeo educativo"></div>
+        <div class="card"><img src="img/Comp.jpg" alt="Vídeo educativo"></div>
+        <div class="card"><img src="img/Comp.jpg" alt="Vídeo educativo"></div>
+        <div class="card"><img src="img/Comp.jpg" alt="Vídeo educativo"></div>
+        <div class="card"><img src="img/Comp.jpg" alt="Vídeo educativo"></div>
+        <div class="card"><img src="img/Comp.jpg" alt="Vídeo educativo"></div>
+        <div class="card"><img src="img/Comp.jpg" alt="Vídeo educativo"></div>
+        <div class="card"><img src="img/Comp.jpg" alt="Vídeo educativo"></div>
+      </div>
+      <div class="barra"></div>
+    </section>
+
+    <section class="jogo">
+      <h2>Divirta-se e aprenda</h2>
+      <div class="jogo-box">
+        <img src="img/controle.png" alt="Controle" class="game-icon">
+        <p>Aguarde enquanto carregamos o jogo...</p>
+      </div>
+    </section>
+
+    <footer>
+      <p>© todos os direitos reservados - 2025</p>
+    </footer>
+  </div>
+
+  <!-- MODAL LOGIN/CADASTRO -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content custom-modal">
+        <div class="modal-header custom-modal-header">
+          <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <!-- LOGIN USUÁRIO -->
+          <div id="loginView">
+            <h2 class="text-center mb-4">Login</h2>
+            <form id="formLogin">
+              <input id="inpgmailLogin" type="email" placeholder="Digite seu E-mail." required />
+              <input id="inpsenhaLogin" type="password" placeholder="Digite sua senha." required />
+              <button type="submit" class="btn-login">Entrar</button>
+            </form>
+            <p class="signup-text">
+              Não tem uma conta?
+              <a href="#" id="toCadastro">cadastre-se</a>
+            </p>
+            <p id="avisoLogin" class="text"></p>
+          </div>
+
+          <!-- LOGIN RESPONSÁVEL -->
+          <div id="loginResponsavelView" style="display: none;">
+            <h2 class="text-center mb-4">Login Responsável</h2>
+            <form id="formLoginResp">
+              <input id="inpgmailLoginResp" type="email" placeholder="E-mail do Responsável." required />
+              <input id="inpsenhaLoginResp" type="password" placeholder="Digite sua senha." required />
+              <button type="submit" class="btn-login">Entrar</button>
+            </form>
+            <p id="avisoLoginResp" class="text"></p>
+          </div>
+
+          <!-- CADASTRO USUÁRIO -->
+          <div id="cadastroView" style="display:none;">
+            <h2 class="text-center mb-4">Cadastro</h2>
+            <form id="formCadastro">
+              <input id="inpnome" type="text" maxlength="40" placeholder="Digite seu Nome" />
+              <input id="inpgmailCadastro" type="email" maxlength="100" placeholder="Digite seu E-mail." required />
+              <input id="inpsenhaCadastro" type="password" maxlength="30" placeholder="Digite sua senha." required />
+              <input id="inpconfirmsenha" type="password" maxlength="30" placeholder="Confirme sua senha." required />
+              <input id="inpidade" type="number" min="1" max="120" placeholder="Digite sua idade" required />
+              <button type="submit" class="btn-login">Cadastrar</button>
+            </form>
+            <p class="signup-text">
+              Já tem uma conta?
+              <a href="#" id="toLogin">voltar ao login</a>
+            </p>
+            <p id="avisoCadastro" class="text"></p>
+          </div>
+
+          <!-- CADASTRO RESPONSÁVEL -->
+          <div id="cadastroResponsavelView" style="display: none;">
+            <h2 class="text-center mb-4">Cadastro Responsável</h2>
+            <form id="formCadastroResp">
+              <input id="inpnomeResp" type="text" maxlength="40" placeholder="Nome do Responsável" />
+              <input id="inpgmailCadastroResp" type="email" maxlength="100" placeholder="E-mail do Responsável."
+                required />
+              <input id="inpsenhaCadastroResp" type="password" maxlength="30" placeholder="Digite sua senha." required />
+              <input id="inpconfirmsenhaResp" type="password" maxlength="30" placeholder="Confirme sua senha." required />
+              <button type="submit" class="btn-login">Cadastrar</button>
+            </form>
+            <p id="avisoCadastroResp" class="text"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+    crossorigin="anonymous"></script>
+
+  <script>
+    /* ---------- ELEMENTOS ---------- */
+    const loginView = document.getElementById("loginView");
+    const loginRespView = document.getElementById("loginResponsavelView");
+    const cadastroView = document.getElementById("cadastroView");
+    const cadastroRespView = document.getElementById("cadastroResponsavelView");
+
+    const toCadastro = document.getElementById("toCadastro");
+    const toLogin = document.getElementById("toLogin");
+
+    const avisoLogin = document.getElementById("avisoLogin");
+    const avisoLoginResp = document.getElementById("avisoLoginResp");
+    const avisoCadastro = document.getElementById("avisoCadastro");
+    const avisoCadastroResp = document.getElementById("avisoCadastroResp");
+
+    let usuarioRecemCadastradoID = null;
+
+    /* ---------- VIEW ---------- */
+    function hideAllViews() {
+      loginView.style.display = "none";
+      loginRespView.style.display = "none";
+      cadastroView.style.display = "none";
+      cadastroRespView.style.display = "none";
+    }
+
+    function renderModalView(path) {
+      hideAllViews();
+      switch (path) {
+        case "/login": loginView.style.display = "block"; break;
+        case "/login/responsavel": loginRespView.style.display = "block"; break;
+        case "/cadastro": cadastroView.style.display = "block"; break;
+        case "/cadastro/responsavel": cadastroRespView.style.display = "block"; break;
+        default: loginView.style.display = "block";
+      }
+    }
+
+    function showSection(sectionId) {
+      document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(sectionId).classList.add("active");
+    }
+
+    /* ---------- ROTAS SPA ---------- */
+    function navigate(path) {
+      history.pushState({}, "", path);
+      if (path === "/jogo") {
+        showSection("jogo");
+        const modal = bootstrap.Modal.getInstance(document.getElementById("staticBackdrop"));
+        if (modal) modal.hide();
+      } else {
+        showSection("home");
+        renderModalView(path);
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      if (window.location.pathname === "/jogo") {
+        showSection("jogo");
+      } else {
+        showSection("home");
+        renderModalView(window.location.pathname);
+      }
+    });
+
+    window.addEventListener("popstate", () => {
+      if (window.location.pathname === "/jogo") {
+        showSection("jogo");
+      } else {
+        showSection("home");
+        renderModalView(window.location.pathname);
+      }
+    });
+
+    toCadastro.onclick = e => { e.preventDefault(); navigate("/cadastro"); };
+    toLogin.onclick = e => { e.preventDefault(); navigate("/login"); };
+
+    /* ---------- CADASTRO USUÁRIO ---------- */
+    document.getElementById("formCadastro").onsubmit = async e => {
+      e.preventDefault();
+      const email = document.getElementById("inpgmailCadastro").value;
+      const senha = document.getElementById("inpsenhaCadastro").value;
+      const nome = document.getElementById("inpnome").value;
+      const idade = parseInt(document.getElementById("inpidade").value);
+      const confirmaSenha = document.getElementById("inpconfirmsenha").value;
+
+      if (senha.length < 8) { avisoCadastro.style.color = "red"; avisoCadastro.textContent = "Senha mínima 8 caracteres"; return; }
+      if (senha !== confirmaSenha) { avisoCadastro.style.color = "red"; avisoCadastro.textContent = "As senhas não coincidem!"; return; }
+
+      try {
+        const res = await fetch("/cadastro", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, senha, nome, idade }),
+        });
+        const data = await res.json();
+        if (!res.ok) { avisoCadastro.style.color = "red"; avisoCadastro.textContent = data.msg; return; }
+
+        avisoCadastro.style.color = "green";
+        avisoCadastro.textContent = "Usuário cadastrado com sucesso!";
+        usuarioRecemCadastradoID = data.usuario.id_user;
+
+        if (idade < 13) {
+          navigate("/cadastro/responsavel");
+        } else {
+          navigate("/jogo");
+        }
+      } catch {
+        avisoCadastro.style.color = "red"; avisoCadastro.textContent = "Erro ao cadastrar usuário";
+      }
+    };
+
+    /* ---------- CADASTRO RESPONSÁVEL ---------- */
+    document.getElementById("formCadastroResp").onsubmit = async e => {
+      e.preventDefault();
+      const email = document.getElementById("inpgmailCadastroResp").value;
+      const senha = document.getElementById("inpsenhaCadastroResp").value;
+      const nome = document.getElementById("inpnomeResp").value;
+      const confirmaSenha = document.getElementById("inpconfirmsenhaResp").value;
+
+      if (senha.length < 8) { avisoCadastroResp.style.color = "red"; avisoCadastroResp.textContent = "Senha mínima 8 caracteres"; return; }
+      if (senha !== confirmaSenha) { avisoCadastroResp.style.color = "red"; avisoCadastroResp.textContent = "As senhas não coincidem!"; return; }
+
+      try {
+        const res = await fetch("/cadastro/responsavel", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, senha, nome }),
+        });
+        const data = await res.json();
+        if (!res.ok) { avisoCadastroResp.style.color = "red"; avisoCadastroResp.textContent = data.msg; return; }
+
+        avisoCadastroResp.style.color = "green";
+        avisoCadastroResp.textContent = "Responsável cadastrado com sucesso!";
+
+        if (usuarioRecemCadastradoID) {
+          await fetch("/vincular", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idUsuario: usuarioRecemCadastradoID, idResponsavel: data.responsavel.id_resp })
+          });
+          avisoCadastroResp.textContent += " Vínculo criado com sucesso!";
+        }
+
+        navigate("/jogo");
+      } catch {
+        avisoCadastroResp.style.color = "red"; avisoCadastroResp.textContent = "Erro ao cadastrar responsável";
+      }
+    };
+
+    /* ---------- LOGIN USUÁRIO ---------- */
+    document.getElementById("formLogin").onsubmit = async e => {
+      e.preventDefault();
+      const email = document.getElementById("inpgmailLogin").value;
+      const senha = document.getElementById("inpsenhaLogin").value;
+      try {
+        const res = await fetch("/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, senha }),
+        });
+        const data = await res.json();
+        if (!res.ok) { avisoLogin.style.color = "red"; avisoLogin.textContent = data.msg; return; }
+        avisoLogin.style.color = "green"; avisoLogin.textContent = "Login realizado!";
+        navigate("/jogo");
+      } catch {
+        avisoLogin.style.color = "red"; avisoLogin.textContent = "Erro ao realizar login";
+      }
+    };
+
+    /* ---------- LOGIN RESPONSÁVEL ---------- */
+    document.getElementById("formLoginResp").onsubmit = async e => {
+      e.preventDefault();
+      const email = document.getElementById("inpgmailLoginResp").value;
+      const senha = document.getElementById("inpsenhaLoginResp").value;
+      try {
+        const res = await fetch("/login/responsavel", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, senha }),
+        });
+        const data = await res.json();
+        if (!res.ok) { avisoLoginResp.style.color = "red"; avisoLoginResp.textContent = data.msg; return; }
+        avisoLoginResp.style.color = "green"; avisoLoginResp.textContent = "Login do responsável realizado!";
+        navigate("/jogo");
+      } catch {
+        avisoLoginResp.style.color = "red"; avisoLoginResp.textContent = "Erro ao realizar login do responsável";
+      }
+    };
+  </script>
+</body>
+</html>

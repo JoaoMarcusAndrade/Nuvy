@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nuvy</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
+  <!-- Fonte personalizada -->
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap" rel="stylesheet" />
+  <!-- CSS customizado -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/conteudo.css" />
+  <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+  <!-- Parte de cima do site com links -->
+  <header>
+    <a href="#ajuda">Ajuda</a>
+    <a href="#contato">Contato</a>
+  </header>
+
+  <!-- Área principal da página inicial -->
+  <div id="home" class="container section active" style="display: block;">
+    <img src="img/NuvyPet.png" alt="Nuvem" class="cloud" draggable="false" />
+    <div class="text-box">
+      <h1 class="NuvyH1">Nuvy</h1>
+      <p class="NuvyP">
+        Nosso programa de ensino mistura o brincar com o aprendizado, visando
+        sempre o conforto do nosso público.
+      </p>
+      <!-- Botão para abrir o modal de login/cadastro -->
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Acessar
+      </button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content custom-modal">
+            <div class="modal-header custom-modal-header">
+              <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+              <!-- LOGIN USUÁRIO -->
+              <div id="loginView">
+                <h2 class="text-center mb-4">Login</h2>
+                <form id="formLogin">
+                  <input id="inpgmailLogin" type="email" placeholder="Digite seu E-mail." required />
+                  <input id="inpsenhaLogin" type="password" placeholder="Digite sua senha." required />
+                  <button type="submit" class="btn-login">Entrar</button>
+                </form>
+                <p class="signup-text">
+                  Não tem uma conta?
+                  <a href="#" id="toCadastro">cadastre-se</a>
+                </p>
+                <p id="avisoLogin" class="text"></p>
+              </div>
+
+              <!-- LOGIN RESPONSÁVEL -->
+              <div id="loginResponsavelView" style="display: none;">
+                <h2 class="text-center mb-4">Login Responsável</h2>
+                <form id="formLoginResp">
+                  <input id="inpgmailLoginResp" type="email" placeholder="E-mail do Responsável." required />
+                  <input id="inpsenhaLoginResp" type="password" placeholder="Digite sua senha." required />
+                  <button type="submit" class="btn-login">Entrar</button>
+                </form>
+                <p id="avisoLoginResp" class="text"></p>
+              </div>
+
+              <!-- CADASTRO USUÁRIO -->
+              <div id="cadastroView" style="display:none;">
+                <h2 class="text-center mb-4">Cadastro</h2>
+                <form id="formCadastro">
+                  <input id="inpnome" type="text" maxlength="40" placeholder="Digite seu Nome" />
+                  <input id="inpgmailCadastro" type="email" maxlength="100" placeholder="Digite seu E-mail." required />
+                  <input id="inpsenhaCadastro" type="password" maxlength="30" placeholder="Digite sua senha."
+                    required />
+                  <input id="inpconfirmsenha" type="password" maxlength="30" placeholder="Confirme sua senha."
+                    required />
+                  <input id="inpidade" type="number" min="1" max="120" placeholder="Digite sua idade" required />
+                  <button type="submit" class="btn-login">Cadastrar</button>
+                </form>
+                <p class="signup-text">
+                  Já tem uma conta?
+                  <a href="#" id="toLogin">voltar ao login</a>
+                </p>
+                <p id="avisoCadastro" class="text"></p>
+              </div>
+
+              <!-- CADASTRO RESPONSÁVEL -->
+              <div id="cadastroResponsavelView" style="display: none;">
+                <h2 class="text-center mb-4">Cadastro Responsável</h2>
+                <form id="formCadastroResp">
+                  <input id="inpnomeResp" type="text" maxlength="40" placeholder="Nome do Responsável" />
+                  <input id="inpgmailCadastroResp" type="email" maxlength="100" placeholder="E-mail do Responsável."
+                    required />
+                  <input id="inpsenhaCadastroResp" type="password" maxlength="30" placeholder="Digite sua senha."
+                    required />
+                  <input id="inpconfirmsenhaResp" type="password" maxlength="30" placeholder="Confirme sua senha."
+                    required />
+                  <button type="submit" class="btn-login">Cadastrar</button>
+                </form>
+                <p id="avisoCadastroResp" class="text"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /Modal -->
+    </div>
+  </div>
+
+  <!-- ==================== CONTEÚDO EDUCATIVO + JOGO ==================== -->
+  <div id="conteudo" class="section" style="display: none;">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar-left">
+        <img src="img/NuvyPet.png" alt="Logo Nuvy" class="logo">
+        <a href="#ajuda">Ajuda</a>
+        <a href="#contato">Contato</a>
+      </div>
+      <div class="navbar-right">
+        <img src="img/Login.png" width="55vh" alt="" style="margin-right: 30px;">
+      </div>
+    </nav>
+
+    <!-- Conteúdo educativo -->
+    <section class="educativo">
+      <h2>Conteúdo educativo</h2>
+      <div class="carrossel">
+        <div class="card">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+        </div>
+        <div class="card">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+        </div>
+        <div class="card">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+        </div>
+        <div class="card">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+        </div>
+        <div class="card">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+        </div>
+        <div class="card">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+        </div>
+        <div class="card">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+        </div>
+        <div class="card">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+        </div>
+        <div class="card">
+          <img src="img/Comp.jpg" alt="Vídeo educativo" id="videoscards">
+        </div>
+      </div>
+      <div class="barra"></div>
+    </section>
+
+    <!-- Área do jogo -->
+    <section class="jogo">
+      <h2>Divirta-se e aprenda</h2>
+      <div class="jogo-box">
+        <img src="img/controle.png" alt="Controle" class="game-icon">
+        <p>Aguarde enquanto carregamos o jogo...</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>© todos os direitos reservados - 2025</p>
+    </footer>
+  </div>
+  <!-- ==================================================================== -->
+
+  <!-- Scripts -->
+  <!-- PopperJS para Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    crossorigin="anonymous"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+  <script>
+    /* ---------- UTIL (MOSTRAR/ESCONDER SECTIONS) ---------- */
+    function showSectionById(idSelector) {
+      // todas as sections com class "section"
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(s => {
+        s.style.display = 'none';
+      });
+      const el = document.querySelector(idSelector);
+      if (el) el.style.display = 'block';
+    }
+
+    // Ao carregar, mostra #home por padrão, ou #conteudo se hash estiver definido
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash || '#home';
+      if (hash === '#conteudo') {
+        showSectionById('#conteudo');
+      } else {
+        showSectionById('#home');
+      }
+    });
+
+    // Se o usuário navegar com back/forward e o hash mudar, respeita
+    window.addEventListener('popstate', () => {
+      const hash = window.location.hash || '#home';
+      showSectionById(hash);
+    });
+  </script>
+
+  <script>
+    /* ---------- ELEMENTOS ---------- */
+    // Elementos das views
+    const loginView = document.getElementById("loginView");
+    const loginRespView = document.getElementById("loginResponsavelView");
+    const cadastroView = document.getElementById("cadastroView");
+    const cadastroRespView = document.getElementById("cadastroResponsavelView");
+
+    // Botões de navegação entre login/cadastro
+    const toCadastro = document.getElementById("toCadastro");
+    const toLogin = document.getElementById("toLogin");
+
+    // Elementos de aviso/erro
+    const avisoLogin = document.getElementById("avisoLogin");
+    const avisoLoginResp = document.getElementById("avisoLoginResp");
+    const avisoCadastro = document.getElementById("avisoCadastro");
+    const avisoCadastroResp = document.getElementById("avisoCadastroResp");
+
+    // Variável para guardar ID do usuário recém cadastrado
+    let usuarioRecemCadastradoID = null;
+
+    /* ---------- FUNÇÕES DE VIEW ---------- */
+    // Esconde todas as views do modal
+    function hideAllViews() {
+      loginView.style.display = "none";
+      loginRespView.style.display = "none";
+      cadastroView.style.display = "none";
+      cadastroRespView.style.display = "none";
+    }
+
+    // Renderiza a view correta de acordo com o caminho
+    function renderView(path) {
+      hideAllViews();
+      switch (path) {
+        case "/login":
+          loginView.style.display = "block"; break;
+        case "/login/responsavel":
+          loginRespView.style.display = "block"; break;
+        case "/cadastro":
+          cadastroView.style.display = "block"; break;
+        case "/cadastro/responsavel":
+          cadastroRespView.style.display = "block"; break;
+        default:
+          loginView.style.display = "block";
+      }
+    }
+
+    // Renderiza a view ao carregar a página e ao navegar pelo histórico
+    window.addEventListener("DOMContentLoaded", () => renderView(window.location.pathname));
+    window.addEventListener("popstate", () => renderView(window.location.pathname));
+
+    /* ---------- NAVEGAÇÃO ---------- */
+    // Troca para tela de cadastro
+    toCadastro.onclick = e => { e.preventDefault(); history.pushState({}, "", "/cadastro"); renderView("/cadastro"); };
+    // Troca para tela de login
+    toLogin.onclick = e => { e.preventDefault(); history.pushState({}, "", "/login"); renderView("/login"); };
+
+    /* ---------- CADASTRO USUÁRIO ---------- */
+    // Lógica de cadastro de usuário
+    document.getElementById("formCadastro").onsubmit = async e => {
+      e.preventDefault();
+      const email = document.getElementById("inpgmailCadastro").value;
+      const senha = document.getElementById("inpsenhaCadastro").value;
+      const nome = document.getElementById("inpnome").value;
+      const idade = parseInt(document.getElementById("inpidade").value);
+      const confirmaSenha = document.getElementById("inpconfirmsenha").value;
+
+      // Validação de senha
+      if (senha.length < 8) {
+        avisoCadastro.style.color = "red";
+        avisoCadastro.textContent = "Senha mínima 8 caracteres";
+        return;
+      }
+      if (senha !== confirmaSenha) {
+        avisoCadastro.style.color = "red";
+        avisoCadastro.textContent = "As senhas não coincidem!";
+        return;
+      }
+
+      // Envia dados para o backend
+      try {
+        const res = await fetch("/cadastro", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, senha, nome, idade }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          avisoCadastro.style.color = "red";
+          avisoCadastro.textContent = data.msg;
+          return;
+        }
+
+        avisoCadastro.style.color = "green";
+        avisoCadastro.textContent = "Usuário cadastrado com sucesso!";
+        usuarioRecemCadastradoID = data.usuario.ID_usuarios;
+
+        // Se for menor de idade, pede cadastro do responsável
+        if (idade < 18) {
+          history.pushState({}, "", "/cadastro/responsavel");
+          renderView("/cadastro/responsavel");
+        }
+      } catch (err) {
+        avisoCadastro.style.color = "red";
+        avisoCadastro.textContent = "Erro ao cadastrar usuário";
+      }
+    };
+
+    /* ---------- CADASTRO RESPONSÁVEL ---------- */
+    // Lógica de cadastro do responsável
+    document.getElementById("formCadastroResp").onsubmit = async e => {
+      e.preventDefault();
+      const email = document.getElementById("inpgmailCadastroResp").value;
+      const senha = document.getElementById("inpsenhaCadastroResp").value;
+      const nome = document.getElementById("inpnomeResp").value;
+      const confirmaSenha = document.getElementById("inpconfirmsenhaResp").value;
+
+      // Validação de senha
+      if (senha.length < 8) {
+        avisoCadastroResp.style.color = "red";
+        avisoCadastroResp.textContent = "Senha mínima 8 caracteres";
+        return;
+      }
+      if (senha !== confirmaSenha) {
+        avisoCadastroResp.style.color = "red";
+        avisoCadastroResp.textContent = "As senhas não coincidem!";
+        return;
+      }
+
+      // Envia dados para o backend
+      try {
+        const res = await fetch("/cadastro/responsavel", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, senha, nome }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          avisoCadastroResp.style.color = "red";
+          avisoCadastroResp.textContent = data.msg;
+          return;
+        }
+
+        avisoCadastroResp.style.color = "green";
+        avisoCadastroResp.textContent = "Responsável cadastrado com sucesso!";
+
+        // Cria vínculo entre usuário e responsável
+        if (usuarioRecemCadastradoID) {
+          await fetch("/vincular", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idUsuario: usuarioRecemCadastradoID, idResponsavel: data.responsavel.ID_responsaveis })
+          });
+          avisoCadastroResp.style.color = "green";
+          avisoCadastroResp.textContent += " Vínculo criado com sucesso!";
+        }
+      } catch (err) {
+        avisoCadastroResp.style.color = "red";
+        avisoCadastroResp.textContent = "Erro ao cadastrar responsável";
+      }
+    };
+
+    /* ---------- LOGIN USUÁRIO ---------- */
+    // Lógica de login do usuário
+    document.getElementById("formLogin").onsubmit = async e => {
+      e.preventDefault();
+      const email = document.getElementById("inpgmailLogin").value;
+      const senha = document.getElementById("inpsenhaLogin").value;
+
+      // Envia dados para o backend
+      try {
+        const res = await fetch("/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, senha }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          avisoLogin.style.color = "green";
+          avisoLogin.textContent = data.msg;
+          console.log("Usuário logado:", data.usuario);
+
+          // Fecha modal (Bootstrap)
+          try {
+            const modalEl = document.getElementById('staticBackdrop');
+            const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+            modal.hide();
+          } catch (err) {
+            console.warn('Não foi possível fechar o modal automaticamente:', err);
+          }
+
+          // Redireciona para a página do conteúdo/jogo
+          history.pushState({}, "", "#conteudo");
+          showSectionById('#conteudo');
+        } else {
+          avisoLogin.style.color = "red";
+          avisoLogin.textContent = data.msg;
+
+          // Se o erro indicar que precisa cadastrar responsável, vai para a tela de cadastro do responsável
+          if (data.requireResponsavel) {
+            history.pushState({}, "", "/cadastro/responsavel");
+            renderView("/cadastro/responsavel");
+          }
+        }
+      } catch (err) {
+        avisoLogin.style.color = "red";
+        avisoLogin.textContent = "Erro ao conectar com servidor";
+      }
+    };
+
+    /* ---------- LOGIN RESPONSÁVEL ---------- */
+    // Lógica de login do responsável
+    document.getElementById("formLoginResp").onsubmit = async e => {
+      e.preventDefault();
+      const email = document.getElementById("inpgmailLoginResp").value;
+      const senha = document.getElementById("inpsenhaLoginResp").value;
+
+      // Envia dados para o backend
+      try {
+        const res = await fetch("/login/responsavel", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, senha }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          avisoLoginResp.style.color = "green";
+          avisoLoginResp.textContent = data.msg;
+          console.log("Responsável logado:", data.responsavel);
+
+          // Fecha modal (Bootstrap)
+          try {
+            const modalEl = document.getElementById('staticBackdrop');
+            const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+            modal.hide();
+          } catch (err) {
+            console.warn('Não foi possível fechar o modal automaticamente:', err);
+          }
+
+          // Redireciona para a página do conteúdo/jogo
+          history.pushState({}, "", "#conteudo");
+          showSectionById('#conteudo');
+        } else {
+          avisoLoginResp.style.color = "red";
+          avisoLoginResp.textContent = data.msg;
+        }
+      } catch (err) {
+        avisoLoginResp.style.color = "red";
+        avisoLoginResp.textContent = "Erro ao conectar com servidor";
+      }
+    };
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('Service Worker registrado com sucesso:', registration.scope);
+          })
+          .catch(error => {
+            console.log('Falha ao registrar o Service Worker:', error);
+          });
+      });
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nuvy</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Fonte personalizada -->
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap" rel="stylesheet" />
+  <!-- CSS customizado -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/conteudo.css" />
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <!-- Parte de cima do site -->
+  <header>
+    <a href="#ajuda">Ajuda</a>
+    <a href="#contato">Contato</a>
+  </header>
+
+  <!-- ================= HOME ================= -->
+  <div id="home" class="container section active">
+    <img src="img/NuvyPet.png" alt="Nuvem" class="cloud" draggable="false" />
+    <div class="text-box">
+      <h1 class="NuvyH1">Nuvy</h1>
+      <p class="NuvyP">
+        Nosso programa de ensino mistura o brincar com o aprendizado, visando
+        sempre o conforto do nosso público.
+      </p>
+      <!-- Botão para abrir modal -->
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Acessar
+      </button>
+
+      <!-- Modal (login/cadastro) -->
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content custom-modal">
+            <div class="modal-header custom-modal-header">
+              <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <!-- As views de login/cadastro ficam iguais às do seu index.html original -->
+              <!-- ... (loginView, loginResponsavelView, cadastroView, cadastroResponsavelView) ... -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= JOGO ================= -->
+  <div id="jogo" class="section" style="display:none;">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar-left">
+        <img src="img/NuvyPet.png" alt="Logo Nuvy" class="logo">
+        <a href="#ajuda">Ajuda</a>
+        <a href="#contato">Contato</a>
+      </div>
+      <div class="navbar-right">
+        <img src="img/Login.png" width="55vh" alt="" style="margin-right: 30px;">
+      </div>
+    </nav>
+
+    <!-- Conteúdo educativo -->
+    <section class="educativo">
+      <h2>Conteúdo educativo</h2>
+      <div class="carrossel">
+        <div class="card"><img src="img/Comp.jpg" alt="Vídeo educativo"></div>
+        <div class="card"><img src="img/Comp.jpg" alt="Vídeo educativo"></div>
+        <div class="card"><img src="img/Comp.jpg" alt="Vídeo educativo"></div>
+        <div class="card"><img src="img/Comp.jpg" alt="Vídeo educativo"></div>
+        <div class="card"><img src="img/Comp.jpg" alt="Vídeo educativo"></div>
+      </div>
+      <div class="barra"></div>
+    </section>
+
+    <!-- Área do jogo -->
+    <section class="jogo">
+      <h2>Divirta-se e aprenda</h2>
+      <div class="jogo-box">
+        <img src="img/controle.png" alt="Controle" class="game-icon">
+        <p>Aguarde enquanto carregamos o jogo...</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>© todos os direitos reservados - 2025</p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"></script>
+
+  <script>
+    /* ---------- SPA CONTROLLER ---------- */
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'block';
+    }
+
+    // Detecta rota ao carregar
+    window.addEventListener("DOMContentLoaded", () => {
+      if (window.location.pathname === "/jogo") {
+        showSection("jogo");
+      } else {
+        showSection("home");
+      }
+    });
+
+    // Detecta voltar/avançar no navegador
+    window.addEventListener("popstate", () => {
+      if (window.location.pathname === "/jogo") {
+        showSection("jogo");
+      } else {
+        showSection("home");
+      }
+    });
+
+    /* ---------- LOGIN USUÁRIO ---------- */
+    document.getElementById("formLogin").onsubmit = async e => {
+      e.preventDefault();
+      const email = document.getElementById("inpgmailLogin").value;
+      const senha = document.getElementById("inpsenhaLogin").value;
+
+      try {
+        const res = await fetch("/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, senha }),
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          // Fecha modal
+          const modalEl = document.getElementById('staticBackdrop');
+          const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+          modal.hide();
+
+          // Redireciona para jogo (SPA)
+          history.pushState({}, "", "/jogo");
+          showSection("jogo");
+        } else {
+          avisoLogin.style.color = "red";
+          avisoLogin.textContent = data.msg;
+        }
+      } catch (err) {
+        avisoLogin.style.color = "red";
+        avisoLogin.textContent = "Erro de conexão";
+      }
+    };
+  </script>
+</body>
+</html>
