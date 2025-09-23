@@ -174,9 +174,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Inicializa eventos de logout
         initializeLogoutEvents();
         
-        // Inicializa eventos do modal de controle de pais
-        initializeControlePaisModal();
-        
         // verifica se há cookie válido no servidor
         const res = await fetch("/check-auth", { credentials: "include" });
         
@@ -243,43 +240,6 @@ function initializeLogoutEvents() {
         logoutBtnNav.addEventListener("click", async (e) => {
             e.preventDefault();
             await logoutUser();
-        });
-    }
-}
-
-// Configura eventos do modal de controle de pais
-function initializeControlePaisModal() {
-    // Habilitar campo de tempo quando o switch for ativado
-    const acessoLimitado = document.getElementById("acessoLimitado");
-    const limiteTempo = document.getElementById("limiteTempo");
-    const aplicarBtn = document.getElementById("aplicarControlePais");
-    
-    if (acessoLimitado && limiteTempo) {
-        acessoLimitado.addEventListener("change", function () {
-            limiteTempo.disabled = !this.checked;
-        });
-    }
-    
-    if (aplicarBtn) {
-        aplicarBtn.addEventListener("click", function () {
-            const acessoLimitado = document.getElementById("acessoLimitado").checked;
-            const limiteTempo = document.getElementById("limiteTempo").value;
-
-            if (acessoLimitado && !limiteTempo) {
-                alert("Por favor, defina um limite de tempo.");
-                return;
-            }
-
-            alert("Configurações aplicadas:\n" +
-                "Acesso limitado: " + (acessoLimitado ? "Sim" : "Não") +
-                "\nLimite de tempo: " + (limiteTempo || "Não definido"));
-                
-            // Fecha o modal após aplicar
-            const modalElement = document.getElementById("controlePaisModal");
-            if (modalElement) {
-                const modal = bootstrap.Modal.getInstance(modalElement);
-                if (modal) modal.hide();
-            }
         });
     }
 }
@@ -517,15 +477,6 @@ function initializeProfileSidebar() {
             closeProfileSidebar();
         }
     });
-    
-    // Inicializar link do controle de pais no sidebar
-    const controlePaisLink = document.querySelector('.sidebar-menu a[href="#controle-pais"]');
-    if (controlePaisLink) {
-        controlePaisLink.addEventListener("click", function (e) {
-            e.preventDefault();
-            openControlePaisModal();
-        });
-    }
 }
 
 function openProfileSidebar() {
@@ -540,7 +491,7 @@ function openProfileSidebar() {
         // Só mostra overlay se estiver na seção de jogos (DESKTOP)
         if (sidebarOverlay && window.innerWidth > 768 && jogosSection && jogosSection.classList.contains('active')) {
             sidebarOverlay.classList.add('active');
-            document.body.classList.add('sidebar-open');
+            document.body.style.overflow = 'hidden';
         }
         
         // Para mobile
@@ -561,39 +512,9 @@ function closeProfileSidebar() {
             sidebarOverlay.classList.remove('active');
         }
         
+        document.body.style.overflow = '';
         document.body.classList.remove('sidebar-open');
     }
-}
-
-function openControlePaisModal() {
-    // Fecha o sidebar do perfil primeiro
-    closeProfileSidebar();
-    
-    // Delay para o modal aparecer
-    setTimeout(() => {
-        const modalElement = document.getElementById("controlePaisModal");
-        if (modalElement) {
-            // Remove aria-hidden do modal para corrigir o problema de acessibilidade
-            modalElement.removeAttribute('aria-hidden');
-            modalElement.setAttribute('aria-modal', 'true');
-            
-            const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-            modal.show();
-            
-            // Configura evento para quando o modal for fechado
-            modalElement.addEventListener('hidden.bs.modal', function() {
-                // Restaura o aria-hidden quando o modal for fechado
-                modalElement.setAttribute('aria-hidden', 'true');
-                modalElement.removeAttribute('aria-modal');
-            });
-            
-            // Foca no primeiro elemento do modal para melhor UX
-            setTimeout(() => {
-                const primeiroInput = modalElement.querySelector('input, select, button');
-                if (primeiroInput) primeiroInput.focus();
-            }, 50);
-        }
-    }, 150);
 }
 
 function loadUserData() {
@@ -624,22 +545,51 @@ window.addEventListener('resize', function() {
     }
 });
 
-// Corrige o problema do aria-hidden nos modais do Bootstrap
+// Abrir modal quando clicar no link do menu - VERSÃO OTIMIZADA
 document.addEventListener('DOMContentLoaded', function() {
-    // Observa mudanças nos modais para corrigir problemas de acessibilidade
-    const modalElements = document.querySelectorAll('.modal');
+    const controlePaisLink = document.querySelector('a[href="#controle-pais"]');
     
-    modalElements.forEach(modal => {
-        modal.addEventListener('show.bs.modal', function() {
-            // Remove aria-hidden quando o modal é aberto
-            this.removeAttribute('aria-hidden');
-            this.setAttribute('aria-modal', 'true');
+    if (controlePaisLink) {
+        controlePaisLink.addEventListener("click", function (e) {
+            e.preventDefault();
+            
+            // Fecha o sidebar do perfil primeiro
+            closeProfileSidebar();
+            
+            // Delay reduzido para o modal aparecer mais rápido
+            setTimeout(() => {
+                const modalElement = document.getElementById("controlePaisModal");
+                if (modalElement) {
+                    const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+                    modal.show();
+                    
+                    // Foca no primeiro elemento do modal para melhor UX
+                    setTimeout(() => {
+                        const primeiroInput = modalElement.querySelector('input, select, button');
+                        if (primeiroInput) primeiroInput.focus();
+                    }, 50);
+                }
+            }, 150); // Reduzido de 300ms para 150ms
         });
-        
-        modal.addEventListener('hidden.bs.modal', function() {
-            // Restaura aria-hidden quando o modal é fechado
-            this.setAttribute('aria-hidden', 'true');
-            this.removeAttribute('aria-modal');
-        });
-    });
+    }
+});
+
+// Habilitar campo de tempo quando o switch for ativado
+document.getElementById("acessoLimitado").addEventListener("change", function () {
+  document.getElementById("limiteTempo").disabled = !this.checked;
+});
+
+// Botão aplicar
+document.getElementById("aplicarControlePais").addEventListener("click", function () {
+  const acessoLimitado = document.getElementById("acessoLimitado").checked;
+  const limiteTempo = document.getElementById("limiteTempo").value;
+
+  if (acessoLimitado && !limiteTempo) {
+    alert("Por favor, defina um limite de tempo.");
+    return;
+  }
+
+  alert("Configurações aplicadas:\n" +
+    "Acesso limitado: " + (acessoLimitado ? "Sim" : "Não") +
+    "\nLimite de tempo: " + (limiteTempo || "Não definido"));
 });
