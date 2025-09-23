@@ -1,3 +1,5 @@
+// game-integrated.js - Código completo do jogo com carregador integrado
+
 // Variáveis globais
 let totalSeconds = 5 * 60;
 let timer;
@@ -22,23 +24,21 @@ let pickupSound, dropSound, backgroundMusic, infoSound, levelUpSound, gameComple
 let isMusicPlaying = false;
 
 // Elementos DOM
-const timerElement = document.querySelector('.timer');
-const feedbackElement = document.getElementById('feedback');
-const restartButton = document.getElementById('restart-btn');
-const infoButton = document.getElementById('info-btn');
-const modalInfo = document.getElementById('info-modal');
-const levelCompleteModal = document.getElementById('level-complete-modal');
-const closeModalButton = document.getElementById('close-modal');
-const nextLevelButton = document.getElementById('next-level-btn');
-const xpTextElement = document.querySelector('.xp-text');
-const xpProgressElement = document.querySelector('.xp-progress');
-const currentLevelElement = document.getElementById('current-level');
-const levelCompleteMessage = document.getElementById('level-complete-message');
-const targetsContainer = document.querySelector('.targets-container');
-const draggablesContainer = document.querySelector('.draggables-container');
-
-// Adicione esta linha para selecionar o botão de música (junto com os outros elementos DOM)
-const musicButton = document.getElementById('music-btn');
+let timerElement;
+let feedbackElement;
+let restartButton;
+let infoButton;
+let modalInfo;
+let levelCompleteModal;
+let closeModalButton;
+let nextLevelButton;
+let xpTextElement;
+let xpProgressElement;
+let currentLevelElement;
+let levelCompleteMessage;
+let targetsContainer;
+let draggablesContainer;
+let musicButton;
 
 // Configurações dos níveis
 const levelConfigs = {
@@ -83,6 +83,205 @@ const levelConfigs = {
     ]
   }
 };
+
+// ==================== FUNÇÕES DO CARREGADOR ====================
+
+function initializeGame() {
+    const gameContainer = document.getElementById('game-container');
+    
+    if (!gameContainer) {
+        console.error('Container do jogo não encontrado');
+        return;
+    }
+
+    // Limpar container antes de iniciar
+    gameContainer.innerHTML = '';
+
+    // Criar a estrutura HTML do jogo com as classes CORRETAS do seu jogo
+    const gameHTML = `
+        <div class="game-container">
+            <!-- Nuvens decorativas -->
+            <div class="game-cloud game-cloud-1"></div>
+            <div class="game-cloud game-cloud-2"></div>
+            <div class="game-cloud game-cloud-3"></div>
+            
+            <!-- Cabeçalho do jogo -->
+            <div class="game-header">
+                <div class="game-title">Nuvy Game</div>
+                <div class="game-info-container">
+                    <div class="game-xp-container">
+                        <span class="xp-text">XP: 0/400</span>
+                        <div class="game-xp-bar">
+                            <div class="xp-progress"></div>
+                        </div>
+                    </div>
+                    <div class="timer">Tempo: 05:00</div>
+                </div>
+            </div>
+            
+            <!-- Instruções -->
+            <div class="game-instructions">
+                <div class="game-instructions-text">Arraste os itens para as nuvens da mesma cor!</div>
+            </div>
+            
+            <!-- Área de jogo -->
+            <div class="game-area">
+                <div class="targets-container">
+                    <!-- Áreas de destino serão geradas dinamicamente -->
+                </div>
+                <div class="draggables-container">
+                    <!-- Itens arrastáveis serão gerados dinamicamente -->
+                </div>
+            </div>
+            
+            <!-- Botões de ação -->
+            <button class="game-action-button game-info-button" id="info-btn">?</button>
+            <button class="game-action-button game-restart-button" id="restart-btn">Reiniciar</button>
+            <button class="game-action-button game-music-button" id="music-btn">🔊</button>
+            
+            <!-- Modal de informação -->
+            <div id="info-modal" class="game-modal">
+                <div class="game-modal-content">
+                    <h3 class="game-modal-title">Como Jogar</h3>
+                    <p class="game-modal-description">
+                        Arraste cada item para a nuvem correspondente!<br>
+                        Complete antes que o tempo acabe para ganhar XP.
+                    </p>
+                    <button class="game-modal-button" id="close-modal">Entendi!</button>
+                </div>
+            </div>
+            
+            <!-- Modal de nível completo -->
+            <div id="level-complete-modal" class="game-modal">
+                <div class="game-modal-content">
+                    <h3 class="game-modal-title">Parabéns! 🎉</h3>
+                    <p class="game-modal-description" id="level-complete-message">
+                        Você completou o nível 1!
+                    </p>
+                    <button class="game-modal-button" id="next-level-btn">Próximo Nível</button>
+                </div>
+            </div>
+            
+            <!-- Feedback -->
+            <div id="feedback" class="game-feedback"></div>
+
+            <!-- Elemento para mostrar o nível atual -->
+            <div id="current-level" style="display: none;">1</div>
+        </div>
+    `;
+
+    // Inserir a estrutura do jogo
+    gameContainer.innerHTML = gameHTML;
+
+    // Inicializar os elementos DOM após inserir o HTML
+    initializeDOMElements();
+    
+    // Aguardar um pouco para garantir que o DOM foi atualizado
+    setTimeout(() => {
+        // Verificar se as funções do jogo existem
+        if (typeof initGame === 'function') {
+            console.log('Inicializando o jogo...');
+            initGame();
+        } else {
+            console.error('Função initGame não encontrada. Verificando funções disponíveis:', Object.keys(window).filter(key => typeof window[key] === 'function'));
+            
+            // Tentar inicializar manualmente se as funções existirem
+            if (typeof loadLevel === 'function') {
+                console.log('Inicializando manualmente com loadLevel...');
+                loadLevel(1);
+            }
+        }
+    }, 100);
+}
+
+function initializeDOMElements() {
+    // Inicializar elementos DOM após criar a estrutura do jogo
+    timerElement = document.querySelector('.timer');
+    feedbackElement = document.getElementById('feedback');
+    restartButton = document.getElementById('restart-btn');
+    infoButton = document.getElementById('info-btn');
+    modalInfo = document.getElementById('info-modal');
+    levelCompleteModal = document.getElementById('level-complete-modal');
+    closeModalButton = document.getElementById('close-modal');
+    nextLevelButton = document.getElementById('next-level-btn');
+    xpTextElement = document.querySelector('.xp-text');
+    xpProgressElement = document.querySelector('.xp-progress');
+    currentLevelElement = document.getElementById('current-level');
+    levelCompleteMessage = document.getElementById('level-complete-message');
+    targetsContainer = document.querySelector('.targets-container');
+    draggablesContainer = document.querySelector('.draggables-container');
+    musicButton = document.getElementById('music-btn');
+}
+
+// Função para carregar o jogo quando a seção de jogos for aberta
+function loadGameWhenReady() {
+    // Verificar se estamos na seção de jogos
+    const jogosSection = document.getElementById('jogos-section');
+    
+    if (jogosSection && jogosSection.classList.contains('active')) {
+        console.log('Seção de jogos ativa - inicializando jogo');
+        initializeGame();
+    }
+}
+
+// Observar mudanças na seção ativa
+function observeSectionChanges() {
+    const sections = document.querySelectorAll('.section');
+    
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                const target = mutation.target;
+                if (target.id === 'jogos-section' && target.classList.contains('active')) {
+                    console.log('Seção de jogos tornou-se ativa');
+                    setTimeout(() => {
+                        initializeGame();
+                    }, 300);
+                }
+            }
+        });
+    });
+    
+    // Observar mudanças nas classes das seções
+    sections.forEach(section => {
+        observer.observe(section, { attributes: true, attributeFilter: ['class'] });
+    });
+}
+
+// Verificar se já estamos na seção de jogos ao carregar
+function checkInitialSection() {
+    const jogosSection = document.getElementById('jogos-section');
+    if (jogosSection && jogosSection.classList.contains('active')) {
+        console.log('Já na seção de jogos - inicializando...');
+        setTimeout(initializeGame, 500);
+    }
+}
+
+// Inicializar quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM carregado - verificando seção inicial');
+    
+    // Verificar seção inicial
+    setTimeout(checkInitialSection, 100);
+    
+    // Observar mudanças de seção
+    observeSectionChanges();
+    
+    // Também observar mudanças no URL/hash
+    window.addEventListener('hashchange', function() {
+        if (window.location.hash === '#jogos' || window.location.pathname.includes('jogos')) {
+            setTimeout(initializeGame, 300);
+        }
+    });
+});
+
+// Função para forçar reinicialização do jogo (útil para debugging)
+function reloadGame() {
+    console.log('Reinicializando jogo...');
+    initializeGame();
+}
+
+// ==================== FUNÇÕES DO JOGO ====================
 
 // Modifique a função loadSounds para usar MP3
 function loadSounds() {
@@ -835,16 +1034,13 @@ function shuffleArray(array) {
   return newArray;
 }
 
-// Iniciar o jogo quando a página carregar
-document.addEventListener('DOMContentLoaded', initGame);
-
 // Melhorias de acessibilidade para teclado
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
-    if (modalInfo.style.display === 'flex') {
+    if (modalInfo && modalInfo.style.display === 'flex') {
       modalInfo.style.display = 'none';
     }
-    if (levelCompleteModal.style.display === 'flex') {
+    if (levelCompleteModal && levelCompleteModal.style.display === 'flex') {
       levelCompleteModal.style.display = 'none';
     }
   }
@@ -893,3 +1089,10 @@ if (window.matchMedia('(prefers-contrast: high)').matches) {
   document.documentElement.style.setProperty('--primary-light', '#5d46c2');
   document.documentElement.style.setProperty('--primary-dark', '#3c2b7d');
 }
+
+// Exportar funções para uso global
+window.initializeGame = initializeGame;
+window.loadGameWhenReady = loadGameWhenReady;
+window.reloadGame = reloadGame;
+
+console.log('Jogo Nuvens Coloridas carregado com sucesso');

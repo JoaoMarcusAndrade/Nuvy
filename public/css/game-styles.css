@@ -726,3 +726,23 @@
     font-size: 11px !important;
   }
 }
+
+/* Garantir que o container do jogo tenha altura correta */
+#game-container.game-wrapper {
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+}
+
+/* Forçar que o jogo ocupe todo o espaço */
+.jogo-box {
+    position: relative;
+}
+
+.jogo-box #game-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}

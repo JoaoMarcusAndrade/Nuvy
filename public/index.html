@@ -66,8 +66,10 @@
     <!-- Área do jogo -->
     <section class="jogo">
       <h2>Divirta-se e aprenda</h2>
-      <div class="jogo-box" id="game-container">
-        <!-- O jogo será carregado aqui -->
+      <div class="jogo-box">
+        <div id="game-container" class="game-wrapper">
+          <!-- Estrutura do jogo será carregada aqui pelo JavaScript -->
+        </div>
       </div>
     </section>
 
@@ -152,7 +154,6 @@
               Não tem uma conta?
               <a href="#" id="toCadastroResp">cadastre-se</a>
             </p>
-            <p id="avisoLoginResp" class="text"></p>
             <p id="avisoLoginResp" class="text"></p>
           </div>
 
@@ -291,12 +292,14 @@ document.getElementById('videoModal').addEventListener('hidden.bs.modal', functi
   player.src = ''; // Para o vídeo
 });
 
-// Carregar vídeos ao abrir a página
-carregarVideos();
-</script>
+    // Carregar vídeos ao abrir a página
+    carregarVideos();
+  </script>
   <!-- ROTAS E ETC... -->
   <script src="js/main.js"></script>
   <!-- Script do jogo -->
   <script src="js/game-integrated.js"></script>
+  <!-- Carregador do jogo (DEVE VIR DEPOIS do jogo) -->
+  <script src="js/game-loader.js"></script>
 </body>
 </html>
