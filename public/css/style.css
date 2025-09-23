@@ -232,59 +232,31 @@ header a:hover {
   margin: 15px 0;
 }
 
-/* Garantir que a div do jogo tenha o tamanho correto */
 .jogo-box {
-    width: 100%;
-    height: 600px; /* Altura fixa para o jogo */
-    min-height: 500px;
-    background: transparent;
-    border-radius: 18px;
-    overflow: hidden;
-    position: relative;
-    margin: 20px 0;
+  background: #dcdcdc;
+  color: #6a40d6;
+  border-radius: 18px;
+  padding: 80px;
+  text-align: center;
+  box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Responsividade para o container do jogo */
-@media (max-width: 768px) {
-    .jogo-box {
-        height: 500px;
-        min-height: 400px;
-    }
+.game-icon {
+  width: 130px;
+  margin-bottom: 20px;
 }
 
-@media (max-width: 480px) {
-    .jogo-box {
-        height: 450px;
-        min-height: 350px;
-    }
+.jogo-box p {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
 }
 
-/* Garantir que o jogo se adapte a diferentes tamanhos de tela */
-#game-container {
-    width: 100%;
-    height: 100%;
-}
-
-/* Isolar o jogo do CSS global */
-#game-container * {
-    font-family: inherit !important;
-}
-
-/* Ajustes específicos para a seção de jogos quando ativa */
-#jogos-section.active .jogo-box {
-    animation: fadeInUp 0.5s ease-out;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 /* Footer FIXO */
 footer {
   background: #fff;
@@ -846,137 +818,4 @@ footer {
     transition: opacity 0.3s ease-in-out;
   }
 
-}
-
-/* ===== MODAL DE VÍDEO DO YOUTUBE ===== */
-.video-modal-content {
-  background: #fff;
-  border-radius: 15px;
-  border: none;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.video-modal-header {
-  background: #6a40d6;
-  color: white;
-  border-bottom: 2px solid #5a30c6;
-  border-radius: 15px 15px 0 0;
-  padding: 15px 20px;
-}
-
-.video-modal-header .modal-title {
-  font-weight: bold;
-  font-size: 20px;
-  margin: 0;
-}
-
-.video-modal-close {
-  background: none;
-  border: none;
-  font-size: 24px;
-  color: white;
-  opacity: 0.8;
-  transition: opacity 0.3s;
-}
-
-.video-modal-close:hover {
-  opacity: 1;
-}
-
-.video-modal-body {
-  padding: 0;
-  background: #000;
-}
-
-#videoPlayerContainer {
-  position: relative;
-  width: 100%;
-  padding-bottom: 56.25%; /* Proporção 16:9 */
-  height: 0;
-}
-
-#youtubePlayer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 0 0 15px 15px;
-}
-
-/* Ajustes para responsividade do modal de vídeo */
-@media (max-width: 768px) {
-  .video-modal-content {
-    margin: 20px;
-  }
-  
-  .video-modal-header {
-    padding: 12px 15px;
-  }
-  
-  .video-modal-header .modal-title {
-    font-size: 18px;
-  }
-}
-
-@media (max-width: 480px) {
-  .video-modal-content {
-    margin: 10px;
-  }
-  
-  #videoPlayerContainer {
-    padding-bottom: 60%; /* Ajuste para mobile */
-  }
-}
-
-/* Ajuste para o modal não ficar muito largo em telas grandes */
-@media (min-width: 1200px) {
-  .modal-lg {
-    max-width: 900px;
-  }
-}
-
-/* Estilos melhorados para os cards de vídeo */
-.video-card {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.video-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.video-card img {
-  width: 100%;
-  height: 100px;
-  object-fit: cover;
-}
-
-.video-card p {
-  padding: 10px;
-  margin: 0;
-  font-size: 14px;
-  color: #6a40d6;
-  font-weight: bold;
-  text-align: center;
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Ajustes responsivos para os cards de vídeo */
-@media (max-width: 768px) {
-  .video-card p {
-    font-size: 12px;
-    padding: 8px;
-  }
-  
-  .video-card img {
-    height: 80px;
-  }
 }
