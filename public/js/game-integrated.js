@@ -86,10 +86,10 @@ const levelConfigs = {
 
 // Modifique a função loadSounds para usar MP3
 function loadSounds() {
-  pickupSound = new Audio('som1.wav');
-  dropSound = new Audio('som2.wav');
-  backgroundMusic = new Audio('som3.wav');
-  infoSound = new Audio('som4.mp3');
+  pickupSound = new Audio('fx/som1.wav');
+  dropSound = new Audio('fx/som2.wav');
+  backgroundMusic = new Audio('fx/som3.wav');
+  infoSound = new Audio('fx/som4.mp3');
   
   // Configurar volumes
   pickupSound.volume = 0.7;
@@ -115,14 +115,14 @@ function loadSounds() {
 
 // Nova função para carregar sons de nível
 function loadLevelSounds() {
-  levelUpSound = new Audio(`som${4 + currentLevel}.mp3`);
+  levelUpSound = new Audio(`fx/som${4 + currentLevel}.mp3`);
   levelUpSound.volume = 0.7;
   levelUpSound.load();
 }
 
 // Nova função para carregar som de jogo completo
 function loadGameCompleteSound() {
-  gameCompleteSound = new Audio('som8.mp3');
+  gameCompleteSound = new Audio('fx/som8.mp3');
   gameCompleteSound.volume = 0.7;
   gameCompleteSound.load();
 }
