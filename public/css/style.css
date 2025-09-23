@@ -512,6 +512,147 @@ footer {
   pointer-events: none; /* Não interfere com cliques quando invisível */
 }
 
+/* ===== MODAL CONTROLE DE PAIS ===== */
+#controlePaisModal .modal-content {
+  background-color: #f7f2f6;
+  border-radius: 20px;
+  padding: 20px;
+  color: #6a40d6;
+  font-family: 'Baloo 2', cursive;
+}
+
+#controlePaisModal label {
+  font-weight: bold;
+  color: #6a40d6;
+}
+
+/* Estilo customizado do switch - CORRIGIDO */
+.form-check-input.custom-switch {
+  width: 60px !important;
+  height: 30px !important;
+  background-color: #ccc !important;
+  border-radius: 30px !important;
+  position: relative !important;
+  cursor: pointer !important;
+  border: none !important;
+  transition: background-color 0.3s !important;
+}
+
+.form-check-input.custom-switch:checked {
+  background-color: #6a40d6 !important;
+}
+
+.form-check-input.custom-switch:focus {
+  box-shadow: none !important;
+}
+
+/* Bolinha do switch */
+.form-check-input.custom-switch::before {
+  content: "" !important;
+  width: 26px !important;
+  height: 26px !important;
+  border-radius: 50% !important;
+  background: #fff !important;
+  position: absolute !important;
+  top: 2px !important;
+  left: 2px !important;
+  transition: transform 0.3s !important;
+}
+
+.form-check-input.custom-switch:checked::before {
+  transform: translateX(30px) !important;
+}
+
+/* Label do switch */
+.form-check-label {
+  color: #6a40d6 !important;
+  font-weight: bold !important;
+  margin-left: 10px !important;
+}
+
+/* ===== MODAL ACESSO BLOQUEADO ===== */
+#acessoBloqueadoModal .modal-content {
+  background-color: #f9f4ff;
+  border-radius: 20px;
+  text-align: center;
+  padding: 25px 20px;
+  border: 2px solid #6a40d6;
+  box-shadow: 0 0 20px rgba(106, 64, 214, 0.3);
+}
+
+#acessoBloqueadoModal .modal-header {
+  border-bottom: none;
+  justify-content: center;
+  padding-bottom: 0;
+  position: relative;
+}
+
+#acessoBloqueadoModal .modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #6a40d6;
+  width: 100%;
+  text-align: center;
+  font-family: 'Baloo 2', cursive;
+}
+
+#acessoBloqueadoModal img {
+  display: block;
+  margin: 15px auto 20px auto;
+}
+
+#senhaAcessoBloqueado {
+  border: 2px solid #c8aef0;
+  border-radius: 12px;
+  padding: 12px 15px;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  margin: 0 auto;
+  display: block;
+  background-color: #fff;
+  color: #6a40d6;
+  font-family: 'Baloo 2', cursive;
+}
+
+#senhaAcessoBloqueado:focus {
+  border-color: #6a40d6;
+  box-shadow: 0 0 6px rgba(106, 64, 214, 0.4);
+}
+
+#senhaAcessoBloqueado::placeholder {
+  color: #a992d6;
+}
+
+#btnEnviarAcesso {
+  background-color: #6a40d6;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 15px;
+  transition: 0.3s;
+  font-family: 'Baloo 2', cursive;
+}
+
+#btnEnviarAcesso:hover {
+  background-color: #8861e7;
+  transform: translateY(-2px);
+}
+
+#btnEnviarAcesso:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+#erroSenhaAcesso {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
 /* ========================= */
 /* RESPONSIVIDADE - CORREÇÕES APLICADAS */
 /* ========================= */
@@ -670,6 +811,12 @@ footer {
   .sidebar-overlay {
     display: none;
   }
+
+  /* Ajustes modais mobile */
+  .custom-modal {
+    width: 95% !important;
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 480px) {
@@ -796,6 +943,17 @@ footer {
     padding: 10px 12px;
     font-size: 14px;
   }
+
+  /* Modais mobile pequeno */
+  #acessoBloqueadoModal .modal-content,
+  #controlePaisModal .modal-content {
+    padding: 15px 10px;
+  }
+
+  #acessoBloqueadoModal img {
+    width: 60px;
+    margin: 10px auto 15px auto;
+  }
 }
 
 /* ===== OVERLAY DO SIDEBAR - CORRIGIDO ===== */
@@ -845,84 +1003,6 @@ footer {
     }
 }
 
-#controlePaisModal .modal-content {
-  background-color: #f7f2f6;
-  border-radius: 20px;
-  padding: 20px;
-  color: #6a40d6;
-  font-family: 'Baloo 2', cursive;
-}
-
-#controlePaisModal label {
-  font-weight: bold;
-  color: #6a40d6;
-}
-
-/* Estilo customizado do switch */
-.custom-switch {
-  width: 60px;
-  height: 30px;
-  background-color: #ccc;
-  border-radius: 30px;
-  position: relative;
-  appearance: none;
-  cursor: pointer;
-  outline: none;
-  transition: background-color 0.3s;
-}
-
-.custom-switch:checked {
-  background-color: #6a40d6;
-}
-
-.custom-switch::before {
-  content: "";
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: #fff;
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  transition: transform 0.3s;
-}
-
-.custom-switch:checked::before {
-  transform: translateX(30px);
-}
-
-/* Adicione ao seu CSS */
-
-.profile-sidebar:not(.active) {
-    right: -400px;
-}
-
-/* Para mobile */
-@media (max-width: 768px) {
-    .profile-sidebar:not(.active) {
-        top: -100vh;
-    }
-}
-
-.body.sidebar-open {
-    overflow: hidden;
-}
-
-/* Z-index corrigido */
-.profile-sidebar {
-    z-index: 2000; /* Sidebar acima do overlay */
-}
-
-.sidebar-overlay {
-    z-index: 1999; /* Overlay abaixo do sidebar mas acima do conteúdo */
-}
-
-/* Garante que o conteúdo da seção jogos fique abaixo */
-#jogos-section {
-    position: relative;
-    z-index: 1;
-}
-
 /* Área do jogo */
 .jogo {
   padding: 0px 90px 30px 90px;
@@ -956,8 +1036,6 @@ footer {
   border: none;
   overflow: hidden;
 }
-
-
 
 /* ========================= */
 /* RESPONSIVIDADE - CORREÇÕES APLICADAS */
@@ -1000,4 +1078,34 @@ footer {
     font-size: 12px;
     padding: 10px;
   }
+}
+
+.profile-sidebar:not(.active) {
+    right: -400px;
+}
+
+/* Para mobile */
+@media (max-width: 768px) {
+    .profile-sidebar:not(.active) {
+        top: -100vh;
+    }
+}
+
+.body.sidebar-open {
+    overflow: hidden;
+}
+
+/* Z-index corrigido */
+.profile-sidebar {
+    z-index: 2000; /* Sidebar acima do overlay */
+}
+
+.sidebar-overlay {
+    z-index: 1999; /* Overlay abaixo do sidebar mas acima do conteúdo */
+}
+
+/* Garante que o conteúdo da seção jogos fique abaixo */
+#jogos-section {
+    position: relative;
+    z-index: 1;
 }
