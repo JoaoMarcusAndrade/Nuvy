@@ -517,6 +517,27 @@ footer {
   color: #c82333 !important;
 }
 
+/* ===== OVERLAY DO SIDEBAR - CORRIGIDO ===== */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none; /* Não interfere com cliques quando invisível */
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto; /* Permite cliques quando visível */
+}
+
 /* ========================= */
 /* RESPONSIVIDADE - CORREÇÕES APLICADAS */
 /* ========================= */
@@ -803,53 +824,7 @@ footer {
   }
 }
 
-/* ===== OVERLAY DO SIDEBAR - CORRIGIDO ===== */
-/* Overlay só aparece quando estiver na seção de jogos */
-#jogos-section.active ~ .sidebar-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Overlay padrão (escondido) */
-.sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1999;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease-in-out;
-    pointer-events: auto; /* Permite interação */
-}
-
-/* Overlay ativo - SÓ na seção de jogos */
-#jogos-section.active ~ #sidebarOverlay.active,
-.body.sidebar-open #sidebarOverlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Garante que o overlay só aparece no desktop */
-@media (max-width: 768px) {
-    .sidebar-overlay {
-        display: none !important;
-    }
-}
-
-/* Para mobile não usar overlay */
-@media (max-width: 768px) {
-    .profile-sidebar {
-        z-index: 2000;
-    }
-    
-    .sidebar-overlay {
-        display: none;
-    }
-}
-
+/* ===== MODAL CONTROLE PAIS ===== */
 #controlePaisModal .modal-content {
   background-color: #f7f2f6;
   border-radius: 20px;
@@ -896,38 +871,31 @@ footer {
   transform: translateX(30px);
 }
 
-/* Adicione ao seu CSS */
-.sidebar-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.profile-sidebar:not(.active) {
-    right: -400px;
-}
-
-/* Para mobile */
-@media (max-width: 768px) {
-    .profile-sidebar:not(.active) {
-        top: -100vh;
-    }
-}
-
+/* Classes para controle de estado do body */
 .body.sidebar-open {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 /* Z-index corrigido */
 .profile-sidebar {
-    z-index: 2000; /* Sidebar acima do overlay */
+  z-index: 2000; /* Sidebar acima do overlay */
 }
 
 .sidebar-overlay {
-    z-index: 1999; /* Overlay abaixo do sidebar mas acima do conteúdo */
+  z-index: 1999; /* Overlay abaixo do sidebar mas acima do conteúdo */
 }
 
 /* Garante que o conteúdo da seção jogos fique abaixo */
 #jogos-section {
-    position: relative;
-    z-index: 1;
+  position: relative;
+  z-index: 1;
+}
+
+/* Corrige o problema do aria-hidden nos modais */
+.modal.fade:not(.show) {
+  display: none !important;
+}
+
+.modal.fade.show {
+  display: block !important;
 }
