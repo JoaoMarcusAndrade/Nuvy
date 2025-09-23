@@ -211,23 +211,20 @@
           </div>
         </div>
 
-        <!-- Linha com dois campos lado a lado -->
-        <div class="row">
-          <!-- Campo de Limite de Tempo por Sessão -->
-          <div class="col-md-6 mb-3">
-            <label for="limiteTempo" class="form-label">Limite por sessão (horas:minutos)</label>
-            <input type="time" class="form-control" id="limiteTempo" disabled>
-          </div>
+        <!-- Campo de Limite de Tempo por Sessão -->
+        <div class="mb-3">
+          <label for="limiteTempo" class="form-label">Limite por sessão (horas:minutos)</label>
+          <input type="time" class="form-control" id="limiteTempo" disabled>
+        </div>
 
-          <!-- Campo de Horário Máximo Diário -->
-          <div class="col-md-6 mb-3">
-            <label for="horarioMaximo" class="form-label">Horário máximo diário (até 10h)</label>
-            <div class="input-group">
-              <input type="number" class="form-control" id="horarioMaximo" min="0" max="10" step="0.5" placeholder="0.0" disabled>
-              <span class="input-group-text">horas</span>
-            </div>
-            <small class="form-text text-muted">Máximo 10 horas por dia</small>
+        <!-- Campo de Horário Máximo Diário -->
+        <div class="mb-3">
+          <label for="horarioMaximo" class="form-label">Horário máximo diário (até 10 horas)</label>
+          <div class="input-group">
+            <input type="number" class="form-control" id="horarioMaximo" min="0" max="10" step="0.5" placeholder="0.0" disabled>
+            <span class="input-group-text">horas</span>
           </div>
+          <small class="form-text text-muted">Máximo 10 horas por dia</small>
         </div>
 
         <!-- Botão Aplicar -->
