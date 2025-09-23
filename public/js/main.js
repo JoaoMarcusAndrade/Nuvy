@@ -361,12 +361,19 @@ function initializeControlePaisModal() {
             horarioMaximo.value = configSalva.horarioMaximoDiario;
         }
         
-        // Validação do horário máximo (não pode passar de 10)
+        // REMOVIDA a validação de máximo 10 horas
+        // horarioMaximo.addEventListener("input", function() {
+        //     if (this.value > 10) {
+        //         this.value = 10;
+        //         alert("O horário máximo não pode ultrapassar 10 horas.");
+        //     }
+        //     if (this.value < 0) {
+        //         this.value = 0;
+        //     }
+        // });
+        
+        // Validação básica para não permitir valores negativos
         horarioMaximo.addEventListener("input", function() {
-            if (this.value > 10) {
-                this.value = 10;
-                alert("O horário máximo não pode ultrapassar 10 horas.");
-            }
             if (this.value < 0) {
                 this.value = 0;
             }
@@ -392,10 +399,11 @@ function initializeControlePaisModal() {
                     return;
                 }
                 
-                if (horarioMaximoValue > 10) {
-                    alert("O horário máximo diário não pode ultrapassar 10 horas.");
-                    return;
-                }
+                // REMOVIDA a validação de máximo 10 horas
+                // if (horarioMaximoValue > 10) {
+                //     alert("O horário máximo diário não pode ultrapassar 10 horas.");
+                //     return;
+                // }
                 
                 if (horarioMaximoValue <= 0) {
                     alert("Por favor, defina um horário máximo diário válido.");
@@ -444,6 +452,91 @@ function initializeControlePaisModal() {
     }
 }
 
+// Atualize também a função de verificação de tempo para o controle diário
+let tempoTotalHoje = 0;
+let ultimoDiaVerificado = null;
+
+function iniciarControleTempo() {
+    // Para qualquer monitor anterior
+    pararControleTempo();
+    
+    // Recupera configurações do localStorage
+    const configControle = JSON.parse(localStorage.getItem('configControlePais') || '{}');
+    
+    // Verifica se é um novo dia
+    const hoje = new Date().toDateString();
+    if (ultimoDiaVerificado !== hoje) {
+        tempoTotalHoje = 0;
+        ultimoDiaVerificado = hoje;
+        console.log("Novo dia - contador reiniciado");
+    }
+    
+    if (configControle.ativo) {
+        tempoInicioSessao = Date.now();
+        tempoLimiteSessao = configControle.tempoLimite * 60 * 1000; // Converter para milissegundos
+        
+        console.log(`Controle de tempo ativado: ${configControle.tempoLimite} minutos por sessão, ${configControle.horarioMaximoDiario} horas máximo diário`);
+        console.log(`Tempo usado hoje: ${(tempoTotalHoje / 3600000).toFixed(2)} horas`);
+        
+        // Verifica se já atingiu o limite diário
+        if (configControle.horarioMaximoDiario && 
+            tempoTotalHoje >= configControle.horarioMaximoDiario * 3600000) {
+            alert("Você já atingiu o limite de tempo diário de " + configControle.horarioMaximoDiario + " horas.");
+            bloquearAcesso();
+            return;
+        }
+        
+        // Inicia o monitor
+        monitorTempo = setInterval(verificarTempo, 60000); // Verifica a cada minuto
+        
+        // Verifica imediatamente
+        setTimeout(verificarTempo, 1000);
+    }
+}
+
+function verificarTempo() {
+    if (!tempoInicioSessao || !tempoLimiteSessao) return;
+    
+    const tempoDecorrido = Date.now() - tempoInicioSessao;
+    const tempoRestante = tempoLimiteSessao - tempoDecorrido;
+    
+    // Atualiza o tempo total usado hoje
+    tempoTotalHoje += 60000; // Adiciona 1 minuto (intervalo de verificação)
+    
+    console.log(`Tempo restante na sessão: ${Math.round(tempoRestante / 60000)} minutos`);
+    console.log(`Tempo total usado hoje: ${(tempoTotalHoje / 3600000).toFixed(2)} horas`);
+    
+    // Verifica limites
+    const configControle = JSON.parse(localStorage.getItem('configControlePais') || '{}');
+    
+    // Verifica limite diário
+    if (configControle.horarioMaximoDiario && 
+        tempoTotalHoje >= configControle.horarioMaximoDiario * 3600000) {
+        alert("Você atingiu o limite diário de " + configControle.horarioMaximoDiario + " horas!");
+        bloquearAcesso();
+        return;
+    }
+    
+    // Verifica limite da sessão
+    if (tempoRestante <= 0) {
+        // Tempo esgotado - bloquear acesso
+        bloquearAcesso();
+    } else if (tempoRestante <= 300000) { // 5 minutos restantes
+        // Aviso de tempo prestes a acabar
+        mostrarAvisoTempo(tempoRestante);
+    }
+    
+    // Aviso quando estiver perto do limite diário (1 hora restante)
+    if (configControle.horarioMaximoDiario) {
+        const tempoRestanteDiario = (configControle.horarioMaximoDiario * 3600000) - tempoTotalHoje;
+        if (tempoRestanteDiario <= 3600000 && tempoRestanteDiario > 0) {
+            const minutosRestantes = Math.ceil(tempoRestanteDiario / 60000);
+            if (minutosRestantes % 30 === 0) { // Aviso a cada 30 minutos
+                alert(`Atenção! Você tem apenas ${Math.ceil(minutosRestantes/60)} hora(s) restante(s) de uso diário.`);
+            }
+        }
+    }
+}
 // Configura eventos do modal de acesso bloqueado
 function initializeAcessoBloqueadoModal() {
     const btnEnviarAcesso = document.getElementById("btnEnviarAcesso");

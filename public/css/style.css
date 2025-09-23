@@ -1121,6 +1121,7 @@ footer {
   border-left: none;
   color: #6a40d6;
   font-weight: bold;
+  border-radius: 0 8px 8px 0; /* Corrige a borda quebrada */
 }
 
 #controlePaisModal .form-control:disabled {
@@ -1136,7 +1137,7 @@ footer {
   color: #6a40d6 !important;
 }
 
-/* Estilo específico para o campo numérico */
+/* Estilo específico para o campo numérico - BORDA CORRIGIDA */
 #horarioMaximo {
   border: 2px solid #6a40d6;
   border-right: none;
@@ -1169,4 +1170,17 @@ footer {
 /* Espaçamento entre os campos */
 #controlePaisModal .mb-3 {
   margin-bottom: 1.5rem !important;
+}
+
+/* Garante que o input-group tenha borda contínua */
+#controlePaisModal .input-group {
+  border-radius: 8px;
+}
+
+#controlePaisModal .input-group .form-control {
+  border-right: none;
+}
+
+#controlePaisModal .input-group .input-group-text {
+  border-left: none;
 }
