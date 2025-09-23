@@ -892,10 +892,6 @@ footer {
 }
 
 /* Adicione ao seu CSS */
-.sidebar-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
 
 .profile-sidebar:not(.active) {
     right: -400px;
