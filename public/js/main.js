@@ -334,17 +334,21 @@ function initializeLogoutEvents() {
 
 // Configura eventos do modal de controle de pais
 function initializeControlePaisModal() {
-    // Habilitar campo de tempo quando o switch for ativado
+    // Habilitar campos quando o switch for ativado
     const acessoLimitado = document.getElementById("acessoLimitado");
     const limiteTempo = document.getElementById("limiteTempo");
+    const horarioMaximo = document.getElementById("horarioMaximo");
     const aplicarBtn = document.getElementById("aplicarControlePais");
     
     // Carrega configurações salvas
     const configSalva = JSON.parse(localStorage.getItem('configControlePais') || '{}');
-    if (acessoLimitado && limiteTempo) {
+    
+    if (acessoLimitado && limiteTempo && horarioMaximo) {
         acessoLimitado.checked = configSalva.ativo || false;
         limiteTempo.disabled = !acessoLimitado.checked;
+        horarioMaximo.disabled = !acessoLimitado.checked;
         
+        // Configurações salvas para limite de tempo
         if (configSalva.tempoLimite) {
             // Converte minutos para formato HH:MM
             const horas = Math.floor(configSalva.tempoLimite / 60);
@@ -352,8 +356,26 @@ function initializeControlePaisModal() {
             limiteTempo.value = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
         }
         
+        // Configurações salvas para horário máximo diário
+        if (configSalva.horarioMaximoDiario) {
+            horarioMaximo.value = configSalva.horarioMaximoDiario;
+        }
+        
+        // Validação do horário máximo (não pode passar de 10)
+        horarioMaximo.addEventListener("input", function() {
+            if (this.value > 10) {
+                this.value = 10;
+                alert("O horário máximo não pode ultrapassar 10 horas.");
+            }
+            if (this.value < 0) {
+                this.value = 0;
+            }
+        });
+        
+        // Habilitar/desabilitar campos quando o switch é alterado
         acessoLimitado.addEventListener("change", function () {
             limiteTempo.disabled = !this.checked;
+            horarioMaximo.disabled = !this.checked;
         });
     }
     
@@ -361,10 +383,24 @@ function initializeControlePaisModal() {
         aplicarBtn.addEventListener("click", function () {
             const acessoLimitado = document.getElementById("acessoLimitado").checked;
             const limiteTempoValue = document.getElementById("limiteTempo").value;
+            const horarioMaximoValue = parseFloat(document.getElementById("horarioMaximo").value) || 0;
 
-            if (acessoLimitado && !limiteTempoValue) {
-                alert("Por favor, defina um limite de tempo.");
-                return;
+            // Validações
+            if (acessoLimitado) {
+                if (!limiteTempoValue) {
+                    alert("Por favor, defina um limite de tempo por sessão.");
+                    return;
+                }
+                
+                if (horarioMaximoValue > 10) {
+                    alert("O horário máximo diário não pode ultrapassar 10 horas.");
+                    return;
+                }
+                
+                if (horarioMaximoValue <= 0) {
+                    alert("Por favor, defina um horário máximo diário válido.");
+                    return;
+                }
             }
 
             // Converte HH:MM para minutos
@@ -377,13 +413,21 @@ function initializeControlePaisModal() {
             // Salva configurações
             const config = {
                 ativo: acessoLimitado,
-                tempoLimite: tempoEmMinutos
+                tempoLimite: tempoEmMinutos,
+                horarioMaximoDiario: horarioMaximoValue
             };
             localStorage.setItem('configControlePais', JSON.stringify(config));
 
-            alert("Configurações aplicadas com sucesso!\n" +
-                "Acesso limitado: " + (acessoLimitado ? "Sim" : "Não") +
-                "\nLimite de tempo: " + (limiteTempoValue || "Não definido"));
+            // Mensagem de confirmação
+            let mensagem = "Configurações aplicadas com sucesso!\n";
+            mensagem += "Acesso limitado: " + (acessoLimitado ? "Sim" : "Não");
+            
+            if (acessoLimitado) {
+                mensagem += "\nLimite por sessão: " + limiteTempoValue;
+                mensagem += "\nHorário máximo diário: " + horarioMaximoValue + " horas";
+            }
+
+            alert(mensagem);
 
             // Reinicia o controle de tempo se estiver na seção de jogos
             if (jogosSection && jogosSection.classList.contains('active')) {

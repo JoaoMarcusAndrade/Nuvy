@@ -1109,3 +1109,73 @@ footer {
     position: relative;
     z-index: 1;
 }
+
+/* ===== ESTILOS PARA OS CAMPOS DO CONTROLE DE PAIS ===== */
+#controlePaisModal .row {
+  margin-left: -5px;
+  margin-right: -5px;
+}
+
+#controlePaisModal .col-md-6 {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#controlePaisModal .input-group {
+  margin-top: 5px;
+}
+
+#controlePaisModal .input-group-text {
+  background-color: #f7f2f6;
+  border: 2px solid #6a40d6;
+  border-left: none;
+  color: #6a40d6;
+  font-weight: bold;
+}
+
+#controlePaisModal .form-control:disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+#controlePaisModal .form-text {
+  font-size: 0.8rem;
+  margin-top: 5px;
+  display: block;
+}
+
+/* Estilo específico para o campo numérico */
+#horarioMaximo {
+  border: 2px solid #6a40d6;
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+}
+
+#horarioMaximo:focus {
+  border-color: #6a40d6;
+  box-shadow: 0 0 0 0.2rem rgba(106, 64, 214, 0.25);
+}
+
+/* Estilo para o campo de tempo */
+#limiteTempo {
+  border: 2px solid #6a40d6;
+  border-radius: 8px;
+}
+
+#limiteTempo:focus {
+  border-color: #6a40d6;
+  box-shadow: 0 0 0 0.2rem rgba(106, 64, 214, 0.25);
+}
+
+/* Responsividade para mobile */
+@media (max-width: 768px) {
+  #controlePaisModal .col-md-6 {
+    margin-bottom: 15px;
+  }
+  
+  #controlePaisModal .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}

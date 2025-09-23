@@ -192,37 +192,50 @@
     </div>
   </div>
 
-  <!-- Modal Controle de Pais -->
-  <div class="modal fade" id="controlePaisModal" tabindex="-1" aria-labelledby="controlePaisLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content custom-modal">
-        <div class="modal-header custom-modal-header">
-          <h5 class="modal-title" id="controlePaisLabel">Controle de Pais</h5>
-          <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-        </div>
-        <div class="modal-body">
-          
-          <!-- Switch de Acesso Limitado -->
-          <div class="mb-3">
-            <label class="form-label d-block">Tempo de acesso limitado</label>
-            <div class="form-check form-switch">
-              <input class="form-check-input custom-switch" type="checkbox" id="acessoLimitado">
-              <label class="form-check-label" for="acessoLimitado">Ativar</label>
-            </div>
+<!-- Modal Controle de Pais -->
+<div class="modal fade" id="controlePaisModal" tabindex="-1" aria-labelledby="controlePaisLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content custom-modal">
+      <div class="modal-header custom-modal-header">
+        <h5 class="modal-title" id="controlePaisLabel">Controle de Pais</h5>
+        <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Switch de Acesso Limitado -->
+        <div class="mb-3">
+          <label class="form-label d-block">Tempo de acesso limitado</label>
+          <div class="form-check form-switch">
+            <input class="form-check-input custom-switch" type="checkbox" id="acessoLimitado">
+            <label class="form-check-label" for="acessoLimitado">Ativar</label>
           </div>
+        </div>
 
-          <!-- Campo de Limite de Tempo -->
-          <div class="mb-3">
-            <label for="limiteTempo" class="form-label">Limite de tempo (horas:minutos)</label>
+        <!-- Linha com dois campos lado a lado -->
+        <div class="row">
+          <!-- Campo de Limite de Tempo por Sessão -->
+          <div class="col-md-6 mb-3">
+            <label for="limiteTempo" class="form-label">Limite por sessão (horas:minutos)</label>
             <input type="time" class="form-control" id="limiteTempo" disabled>
           </div>
 
-          <!-- Botão Aplicar -->
-          <button id="aplicarControlePais" class="btn-login w-100">Aplicar</button>
+          <!-- Campo de Horário Máximo Diário -->
+          <div class="col-md-6 mb-3">
+            <label for="horarioMaximo" class="form-label">Horário máximo diário (até 10h)</label>
+            <div class="input-group">
+              <input type="number" class="form-control" id="horarioMaximo" min="0" max="10" step="0.5" placeholder="0.0" disabled>
+              <span class="input-group-text">horas</span>
+            </div>
+            <small class="form-text text-muted">Máximo 10 horas por dia</small>
+          </div>
         </div>
+
+        <!-- Botão Aplicar -->
+        <button id="aplicarControlePais" class="btn-login w-100">Aplicar</button>
       </div>
     </div>
   </div>
+</div>
 
   <!-- Modal Acesso Bloqueado -->
   <div class="modal fade" id="acessoBloqueadoModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="acessoBloqueadoLabel" aria-hidden="true">
