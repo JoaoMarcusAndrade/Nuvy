@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Criar iframe para carregar o jogo - CORREÇÃO DO NOME DO ARQUIVO
     const gameIframe = document.createElement('iframe');
-    gameIframe.src = '/public/NuvyGame.html'; // NOME CORRIGIDO
+    gameIframe.src = '/NuvyGame.html'; // NOME CORRIGIDO
     gameIframe.style.width = '100%';
     gameIframe.style.height = '600px'; // Altura fixa inicial
     gameIframe.style.border = 'none';
