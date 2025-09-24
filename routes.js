@@ -217,6 +217,7 @@ router.post("/vincular", async (req, res) => {
 });
 
 router.post('/add-xp', async (req, res) => {
+  console.log(req.cookies)
   try {
     const userId = req.cookies.usuarioId; // ou de onde você pega o usuário logado
     const { XP_to_add } = req.body;
