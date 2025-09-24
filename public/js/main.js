@@ -775,8 +775,8 @@ async function loadUserData() {
         const userNameElement = document.getElementById('userName');
         const userXPElement = document.getElementById('userXP');
 
-        if (userNameElement) userNameElement.textContent = userData.nome || userData.name_user || 'Usuário';
-        if (userXPElement) userXPElement.textContent = userData.xp || userData.XP_user || 0;
+        if (userNameElement) userNameElement.textContent = userData.nome || 'Usuário';
+        if (userXPElement) userXPElement.textContent = userData.xp || 0;
 
         // Controle de pais só se menor de 14 anos
         const controlePaisLink = document.querySelector('.sidebar-menu a[href="#controle-pais"]');
