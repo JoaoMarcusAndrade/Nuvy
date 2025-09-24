@@ -282,7 +282,7 @@
 
     async function carregarVideos(termo = "Informática para crianças") {
       try {
-        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(termo)}&type=video&maxResults=1&key=${API_KEY}`;
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(termo)}&type=video&maxResults=12&key=${API_KEY}`;
 
         console.log('Tentando carregar vídeos...');
 
