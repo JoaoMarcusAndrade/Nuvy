@@ -242,11 +242,20 @@ router.post('/add-xp', async (req, res) => {
 });
 
 router.get('/api/usuario/me', checkAuthentication, async (req, res) => {
+  try{
     if (req.usuario) {
-        const { ID_usuarios, name_user, XP_user } = req.usuario;
-        return res.json({ id: ID_usuarios, nome: name_user, xp: XP_user });
+      const { ID_usuarios, name_user, XP_user } = req.usuario;
+      return res.json({
+        id: ID_usuarios,
+        nome: name_user,
+        xp: XP_user,
+        idade: idade          
+      });
     }
     res.status(401).json({ error: 'Não autenticado' });
+  } catch (error) {
+        res.status(500).json({ error: 'Erro ao buscar dados do usuário' });
+  }
 });
 
 // Ativar/Desativar controle dos pais
