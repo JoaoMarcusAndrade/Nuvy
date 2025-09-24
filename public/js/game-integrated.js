@@ -20,6 +20,7 @@ let pickupSound, dropSound, backgroundMusic, infoSound, levelUpSound, gameComple
 
 // Adicione esta variável global no início do arquivo
 let isMusicPlaying = false;
+let audioEnabled = false; // Nova variável para controlar se o áudio está liberado
 
 // Elementos DOM
 const timerElement = document.querySelector('.timer');
@@ -46,9 +47,9 @@ const levelConfigs = {
     title: "Nuvens Coloridas",
     description: "Arraste os itens para as nuvens da mesma cor!",
     targets: [
-      { type: "fotos", color: "#FF9E00", description: "Guarda nossas fotos e vídeos" },
+      { type: "fotos", color: "#ff6600ff", description: "Guarda nossas fotos e vídeos" },
       { type: "musica", color: "#4CAF50", description: "Guarda nossas músicas" },
-      { type: "jogos", color: "#2196F3", description: "Guarda nossos joguinhos" },
+      { type: "jogos", color: "#ff0055ff", description: "Guarda nossos joguinhos" },
       { type: "desenhos", color: "#cc27e9ff", description: "Guarda nossos desenhos" }
     ]
   },
@@ -57,9 +58,9 @@ const levelConfigs = {
     description: "Encontre a casa certa para cada item!",
     targets: [
       { type: "fotos", color: "#FF5722", description: "Fotos e lembranças" },
-      { type: "musica", color: "#b73a9cff", description: "Músicas divertidas" },
-      { type: "jogos", color: "#009688", description: "Jogos legais" },
-      { type: "desenhos", color: "#E91E63", description: "Desenhos criativos" }
+      { type: "musica", color: "#ff00c8ff", description: "Músicas divertidas" },
+      { type: "jogos", color: "#d8f000ff", description: "Jogos legais" },
+      { type: "desenhos", color: "#ff0055ff", description: "Desenhos criativos" }
     ]
   },
   3: {
@@ -68,7 +69,7 @@ const levelConfigs = {
     targets: [
       { type: "fotos", color: "#11ececff", description: "Fotos da família" },
       { type: "musica", color: "#FF9800", description: "Canções favoritas" },
-      { type: "jogos", color: "#4CAF50", description: "Jogos educativos" },
+      { type: "jogos", color: "#02f70aff", description: "Jogos educativos" },
       { type: "desenhos", color: "#F44336", description: "Artes coloridas" }
     ]
   },
@@ -77,9 +78,9 @@ const levelConfigs = {
     description: "Último desafio! Você consegue!",
     targets: [
       { type: "fotos", color: "#d3b015ff", description: "Memórias especiais" },
-      { type: "musica", color: "#22729bff", description: "Ritmos animados" },
-      { type: "jogos", color: "#e6e2e2ff", description: "Diversão garantida" },
-      { type: "desenhos", color: "#00BCD4", description: "Criatividade solta" }
+      { type: "musica", color: "#0ab821ff", description: "Ritmos animados" },
+      { type: "jogos", color: "#e40000ff", description: "Diversão garantida" },
+      { type: "desenhos", color: "#f700a4ff", description: "Criatividade solta" }
     ]
   }
 };
@@ -133,15 +134,24 @@ function toggleMusic() {
       backgroundMusic.pause();
       isMusicPlaying = false;
     } else {
+      // Garantir que seja uma ação direta do usuário
+      backgroundMusic.currentTime = 0;
+      
       const playPromise = backgroundMusic.play();
+      
       if (playPromise !== undefined) {
         playPromise
           .then(() => {
+            console.log("Música iniciada após interação do usuário");
             isMusicPlaying = true;
+            updateMusicButtonIcon();
           })
           .catch(error => {
-            console.log("Não foi possível iniciar a música:", error);
+            console.log("Erro ao reproduzir música:", error);
+            // Solicitar interação do usuário
+            showFeedback('Clique no botão de música novamente para ativar', 'error', 3000);
             isMusicPlaying = false;
+            updateMusicButtonIcon();
           });
       }
     }
@@ -163,34 +173,11 @@ function updateMusicButtonIcon() {
   }
 }
 
-// Modifique a função startBackgroundMusic
-function startBackgroundMusic() {
-  if (backgroundMusic) {
-    const playPromise = backgroundMusic.play();
-    
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          console.log("Música de fundo iniciada com sucesso");
-          isMusicPlaying = true;
-          updateMusicButtonIcon();
-        })
-        .catch(error => {
-          console.log("Reprodução automática impedida:", error);
-          isMusicPlaying = false;
-          updateMusicButtonIcon();
-        });
-    }
-  }
-}
-
-// Parar música de fundo
-function stopBackgroundMusic() {
-  if (backgroundMusic) {
-    backgroundMusic.pause();
-    backgroundMusic.currentTime = 0;
-    isMusicPlaying = false;
-    updateMusicButtonIcon();
+// Nova função para tocar sons de forma segura
+function playSound(sound) {
+  if (sound && audioEnabled) {
+    sound.currentTime = 0;
+    sound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
   }
 }
 
@@ -205,11 +192,8 @@ function initGame() {
   restartButton.addEventListener('click', restartGame);
   infoButton.addEventListener('click', () => {
     modalInfo.style.display = 'flex';
-    // Tocar som de informação
-    if (infoSound) {
-      infoSound.currentTime = 0;
-      infoSound.play().catch(e => console.log("Não foi possível tocar o som de informação: ", e));
-    }
+    // Tocar som de informação - AGORA COM INTERAÇÃO DO USUÁRIO
+    playSound(infoSound);
   });
   closeModalButton.addEventListener('click', () => {
     modalInfo.style.display = 'none';
@@ -227,10 +211,18 @@ function initGame() {
   // Iniciar contagem de tempo
   startTime = Date.now();
   
-  // Iniciar música de fundo
-  setTimeout(() => {
-    startBackgroundMusic();
-  }, 1000);
+  // REMOVER o autoplay automático - só tocar após interação do usuário
+  // Não iniciar música automaticamente no iframe
+  
+  // Adicionar um event listener global para capturar a primeira interação
+  document.addEventListener('click', function firstInteraction() {
+    // Remover este listener após a primeira interação
+    document.removeEventListener('click', firstInteraction);
+    
+    // Agora podemos tocar sons livremente
+    audioEnabled = true;
+    console.log("Interação do usuário detectada - áudio liberado");
+  }, { once: true });
 }
 
 // Carregar nível
@@ -345,10 +337,7 @@ function handleTouchStart(e) {
   activeDraggable = draggable;
   
   // Tocar som de pegar o elemento
-  if (pickupSound) {
-    pickupSound.currentTime = 0;
-    pickupSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
-  }
+  playSound(pickupSound);
   
   // Obter a posição atual do elemento (incluindo qualquer transformação)
   const rect = draggable.getBoundingClientRect();
@@ -439,7 +428,7 @@ function handleTouchEnd(e) {
       if (pickupSound) {
         pickupSound.currentTime = 0;
         pickupSound.playbackRate = 0.7; // Tom mais grave para indicar erro
-        pickupSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
+        playSound(pickupSound);
         // Restaurar a velocidade normal após tocar
         setTimeout(() => { pickupSound.playbackRate = 1.0; }, 300);
       }
@@ -473,10 +462,7 @@ function resetDraggablePosition(draggable) {
 
 function handleCorrectDrop(draggable, target) {
   // Tocar som de soltar/encaixar
-  if (dropSound) {
-    dropSound.currentTime = 0;
-    dropSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
-  }
+  playSound(dropSound);
   
   // Adicionar classe de correto
   target.classList.add('correct');
@@ -545,11 +531,8 @@ function handleDragStart(e) {
   e.dataTransfer.setData('text/plain', e.target.dataset.type);
   e.target.classList.add('dragging');
   
-  // Tocar som de pegar o elemento
-  if (pickupSound) {
-    pickupSound.currentTime = 0;
-    pickupSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
-  }
+  // Tocar som de pegar o elemento - AGORA SEMPRE APÓS INTERAÇÃO
+  playSound(pickupSound);
   
   // REMOVIDO COMPLETAMENTE: qualquer código relacionado a opacidade
   // Isso estava causando o problema de desaparecimento no mobile
@@ -576,10 +559,7 @@ function handleDrop(e) {
   
   if (draggedType === targetType) {
     // Tocar som de soltar/encaixar
-    if (dropSound) {
-      dropSound.currentTime = 0;
-      dropSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
-    }
+    playSound(dropSound);
     
     // Acertou
     const draggedElement = document.querySelector(`.draggable[data-type="${draggedType}"]`);
@@ -625,7 +605,7 @@ function handleDrop(e) {
     if (pickupSound) {
       pickupSound.currentTime = 0;
       pickupSound.playbackRate = 0.7; // Tom mais grave para indicar erro
-      pickupSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
+      playSound(pickupSound);
       // Restaurar a velocidade normal após tocar
       setTimeout(() => { pickupSound.playbackRate = 1.0; }, 300);
     }
@@ -658,10 +638,7 @@ function finishLevel() {
   clearInterval(timer);
   
   // Tocar som de conclusão de nível
-  if (levelUpSound) {
-    levelUpSound.currentTime = 0;
-    levelUpSound.play().catch(e => console.log("Não foi possível tocar o som de nível: ", e));
-  }
+  playSound(levelUpSound);
   
   // Criar efeito de confete
   createConfetti();
@@ -696,10 +673,7 @@ function nextLevel() {
     restartButton.style.display = 'none';
   } else {
     // Tocar som de jogo completo
-    if (gameCompleteSound) {
-      gameCompleteSound.currentTime = 0;
-      gameCompleteSound.play().catch(e => console.log("Não foi possível tocar o som de jogo completo: ", e));
-    }
+    playSound(gameCompleteSound);
     
     // Jogo completo - usar o novo modal
     levelCompleteModal.style.display = 'none';
