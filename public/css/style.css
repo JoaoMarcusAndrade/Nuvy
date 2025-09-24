@@ -265,7 +265,8 @@ header a:hover {
   display: inline-block;
 }
 
-.NuvyH1::after {
+/* REMOVIDO: Efeito de linha branca embaixo do h1 */
+/* .NuvyH1::after {
     content: '';
     position: absolute;
     bottom: -10px;
@@ -276,7 +277,7 @@ header a:hover {
     background: linear-gradient(90deg, transparent, #ffffff, transparent);
     border-radius: 2px;
     animation: pulse 2s ease-in-out infinite;
-}
+} */
 
 .NuvyP {
   font-size: 26px;
@@ -285,40 +286,24 @@ header a:hover {
   pointer-events: none;
 }
 
-/* Botão principal com gradiente animado */
+/* Botão principal SIMPLIFICADO */
 .btn {
   align-self: center;  
   padding: 8px 40px;
-  color: white;
+  background: white;
+  color: #6a40d6;
   border-radius: 30px;
   font-size: 22px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(106, 64, 214, 0.3);
   border: none;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(45deg, #6a40d6, #8861e7, #a992d6, #6a40d6);
-  background-size: 400% 400%;
-  animation: gradientShift 3s ease infinite;
-}
-
-.btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
-}
-
-.btn:hover::before {
-    left: 100%;
 }
 
 .btn:hover {
+  background: #0a58ca;
+  color: #ddd;
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(106, 64, 214, 0.4);
 }
@@ -326,30 +311,6 @@ header a:hover {
 .btn:active {
   transform: scale(0.95);
   transition: transform 0.1s;
-}
-
-/* Efeito de onda nos botões */
-.wave-effect {
-    position: relative;
-    overflow: hidden;
-}
-
-.wave-effect::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5px;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.5);
-    opacity: 0;
-    border-radius: 100%;
-    transform: scale(1) translate(-50%, -50%);
-    transform-origin: 0 0;
-}
-
-.wave-effect:focus:not(:active)::after {
-    animation: wave 0.6s ease-out;
 }
 
 /* Seções do SPA (Single Page Application) */
@@ -625,7 +586,7 @@ footer:hover {
 
 /* ===== Estilos Customizados do Modal ===== */
 
-/* Estilo customizado do modal */
+/* Estilo customizado do modal SEM INCLINAÇÃO */
 .custom-modal {
   background-color: #f7f2f6;
   border-radius: 20px;
@@ -635,13 +596,14 @@ footer:hover {
   font-family: 'Baloo 2', cursive;
   box-shadow: 0 0 15px rgba(106, 64, 214, 0.3);
   animation: fadeInUp 0.5s ease-out;
-  transform: perspective(1000px) rotateX(5deg);
+  /* REMOVIDO: transform: perspective(1000px) rotateX(5deg); */
   transition: transform 0.3s ease;
 }
 
-.custom-modal.show {
+/* REMOVIDO: Efeito de inclinação no modal */
+/* .custom-modal.show {
     transform: perspective(1000px) rotateX(0deg);
-}
+} */
 
 /* Header do modal */
 .custom-modal-header {
@@ -719,10 +681,10 @@ footer:hover {
   border-color: #8861e7;
   background-color: white;
   transform: scale(1.02);
-  box-shadow: 0 0 0 3px rgba(106, 64, 214, 0.1), 0 0 20px rgba(106, 64, 214, 0.3);
+  box-shadow: 0 0 0 3px rgba(106, 64, 214, 0.1);
 }
 
-/* Botão Entrar */
+/* Botão Entrar SIMPLIFICADO */
 .btn-login {
   width: 200px;
   margin: 0 auto 20px auto;
@@ -738,23 +700,6 @@ footer:hover {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(106, 64, 214, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-login::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
-}
-
-.btn-login:hover::before {
-    left: 100%;
 }
 
 .btn-login:hover {
@@ -1090,23 +1035,6 @@ footer:hover {
   transition: all 0.3s ease;
   font-family: 'Baloo 2', cursive;
   box-shadow: 0 4px 15px rgba(106, 64, 214, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-#btnEnviarAcesso::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
-}
-
-#btnEnviarAcesso:hover::before {
-    left: 100%;
 }
 
 #btnEnviarAcesso:hover {
