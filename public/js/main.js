@@ -89,11 +89,11 @@ function showJogosSection() {
         console.error("Elementos da seção não encontrados");
         return;
     }
-    
+
     homeSection.classList.remove("active");
     homeSection.style.display = "none";
     if (mainHeader) mainHeader.style.display = "none";
-    
+
     jogosSection.classList.add("active");
     jogosSection.style.display = "flex";
 
@@ -110,11 +110,11 @@ function showJogosSection() {
     }
 
     // Forçar redimensionamento para corrigir layout
-    setTimeout(() => { 
-        window.dispatchEvent(new Event('resize')); 
+    setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
         window.scrollTo(0, 0);
     }, 50);
-    
+
     // Inicializa o sidebar após carregar a seção de jogos
     setTimeout(initializeProfileSidebar, 100);
 }
@@ -122,16 +122,16 @@ function showJogosSection() {
 // Mostra a seção home e esconde a de jogos
 function showHomeSection() {
     if (!homeSection || !jogosSection) return;
-    
+
     // Para o monitor de tempo
     pararControleTempo();
-    
+
     jogosSection.classList.remove("active");
     jogosSection.style.display = "none";
-    
+
     homeSection.classList.add("active");
     homeSection.style.display = "flex";
-    
+
     if (mainHeader) mainHeader.style.display = "block";
     window.scrollTo(0, 0);
 }
@@ -151,19 +151,19 @@ function closeModal() {
 function iniciarControleTempo() {
     // Para qualquer monitor anterior
     pararControleTempo();
-    
+
     // Recupera configurações do localStorage
     const configControle = JSON.parse(localStorage.getItem('configControlePais') || '{}');
-    
+
     if (configControle.ativo && configControle.tempoLimite) {
         tempoInicioSessao = Date.now();
         tempoLimiteSessao = configControle.tempoLimite * 60 * 1000; // Converter para milissegundos
-        
+
         console.log(`Controle de tempo ativado: ${configControle.tempoLimite} minutos`);
-        
+
         // Inicia o monitor
         monitorTempo = setInterval(verificarTempo, 60000); // Verifica a cada minuto
-        
+
         // Verifica imediatamente
         setTimeout(verificarTempo, 1000);
     }
@@ -178,32 +178,17 @@ function pararControleTempo() {
     tempoLimiteSessao = null;
 }
 
-function verificarTempo() {
-    if (!tempoInicioSessao || !tempoLimiteSessao) return;
-    
-    const tempoDecorrido = Date.now() - tempoInicioSessao;
-    const tempoRestante = tempoLimiteSessao - tempoDecorrido;
-    
-    console.log(`Tempo restante: ${Math.round(tempoRestante / 60000)} minutos`);
-    
-    if (tempoRestante <= 0) {
-        // Tempo esgotado - bloquear acesso
-        bloquearAcesso();
-    } else if (tempoRestante <= 300000) { // 5 minutos restantes
-        // Aviso de tempo prestes a acabar
-        mostrarAvisoTempo(tempoRestante);
-    }
-}
+
 
 function bloquearAcesso() {
     pararControleTempo();
-    
+
     // Mostra modal de acesso bloqueado
     const modalElement = document.getElementById("acessoBloqueadoModal");
     if (modalElement) {
         const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
         modal.show();
-        
+
         // Limpa campo de senha
         document.getElementById("senhaAcessoBloqueado").value = "";
         document.getElementById("erroSenhaAcesso").style.display = "none";
@@ -220,23 +205,23 @@ async function logoutUser() {
     try {
         // Para o controle de tempo
         pararControleTempo();
-        
+
         // faz o logout no servidor e limpa cookies
         await fetch("/logout", { method: "POST", credentials: "include" });
-        
+
         // Limpa os dados do localStorage
         localStorage.removeItem('userData');
         localStorage.removeItem('userXP');
         localStorage.removeItem("idUsuarioParaVinculo");
-        
+
         // volta para a tela inicial/login
         showHomeSection();
         history.pushState({}, "", "/login");
         renderView("/login");
-        
+
         // Fecha o modal se estiver aberto
         closeModal();
-        
+
         console.log("Logout realizado com sucesso");
     } catch (error) {
         console.error("Erro ao fazer logout:", error);
@@ -247,26 +232,45 @@ async function logoutUser() {
     }
 }
 
+async function checarBloqueio(idUsuario) {
+    const resp = await fetch(`/api/controle/status/${idUsuario}`);
+    const dados = await resp.json();
+
+    if (dados.limitado) {
+        // Mostra modal de bloqueio
+        const modal = new bootstrap.Modal(document.getElementById('acessoBloqueadoModal'));
+        modal.show();
+    }
+}
+
+// Chama a cada X segundos para checar se deve bloquear
+setInterval(() => {
+    // pega id do usuário do cookie ou localStorage
+    const idUsuario = localStorage.getItem('idUsuario');
+    if (idUsuario) checarBloqueio(idUsuario);
+}, 15000); // a cada 15s
+
+
 /* ---------- INICIALIZAÇÃO ---------- */
 document.addEventListener("DOMContentLoaded", async () => {
     try {
         // Inicializa navegação
         initializeNavigation();
-        
+
         // Inicializa eventos de logout
         initializeLogoutEvents();
-        
+
         // Inicializa eventos do modal de controle de pais
         initializeControlePaisModal();
-        
+
         // Inicializa eventos do modal de acesso bloqueado
         initializeAcessoBloqueadoModal();
-        
+
         // verifica se há cookie válido no servidor
         const res = await fetch("/check-auth", { credentials: "include" });
-        
+
         if (!res.ok) throw new Error('Erro na verificação de autenticação');
-        
+
         const data = await res.json();
 
         if (data.authenticated) {
@@ -287,18 +291,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 function initializeNavigation() {
     // NAVEGAÇÃO PRINCIPAL
     if (toCadastro) {
-        toCadastro.onclick = e => { 
-            e.preventDefault(); 
-            history.pushState({}, "", "/cadastro"); 
-            renderView("/cadastro"); 
+        toCadastro.onclick = e => {
+            e.preventDefault();
+            history.pushState({}, "", "/cadastro");
+            renderView("/cadastro");
         };
     }
-    
+
     if (toLogin) {
-        toLogin.onclick = e => { 
-            e.preventDefault(); 
-            history.pushState({}, "", "/login"); 
-            renderView("/login"); 
+        toLogin.onclick = e => {
+            e.preventDefault();
+            history.pushState({}, "", "/login");
+            renderView("/login");
         };
     }
 
@@ -332,211 +336,92 @@ function initializeLogoutEvents() {
     }
 }
 
-// Configura eventos do modal de controle de pais
-function initializeControlePaisModal() {
-    // Habilitar campos quando o switch for ativado
-    const acessoLimitado = document.getElementById("acessoLimitado");
-    const limiteTempo = document.getElementById("limiteTempo");
-    const horarioMaximo = document.getElementById("horarioMaximo");
-    const aplicarBtn = document.getElementById("aplicarControlePais");
-    
-    // Carrega configurações salvas
-    const configSalva = JSON.parse(localStorage.getItem('configControlePais') || '{}');
-    
-    if (acessoLimitado && limiteTempo && horarioMaximo) {
-        acessoLimitado.checked = configSalva.ativo || false;
-        limiteTempo.disabled = !acessoLimitado.checked;
-        horarioMaximo.disabled = !acessoLimitado.checked;
-        
-        // Configurações salvas para limite de tempo
-        if (configSalva.tempoLimite) {
-            // Converte minutos para formato HH:MM
-            const horas = Math.floor(configSalva.tempoLimite / 60);
-            const minutos = configSalva.tempoLimite % 60;
-            limiteTempo.value = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
-        }
-        
-        // Configurações salvas para horário máximo diário
-        if (configSalva.horarioMaximoDiario) {
-            horarioMaximo.value = configSalva.horarioMaximoDiario;
-        }
-        
-        // REMOVIDA a validação de máximo 10 horas
-        // horarioMaximo.addEventListener("input", function() {
-        //     if (this.value > 10) {
-        //         this.value = 10;
-        //         alert("O horário máximo não pode ultrapassar 10 horas.");
-        //     }
-        //     if (this.value < 0) {
-        //         this.value = 0;
-        //     }
-        // });
-        
-        // Validação básica para não permitir valores negativos
-        horarioMaximo.addEventListener("input", function() {
-            if (this.value < 0) {
-                this.value = 0;
-            }
-        });
-        
-        // Habilitar/desabilitar campos quando o switch é alterado
-        acessoLimitado.addEventListener("change", function () {
-            limiteTempo.disabled = !this.checked;
-            horarioMaximo.disabled = !this.checked;
-        });
-    }
-    
-    if (aplicarBtn) {
-        aplicarBtn.addEventListener("click", function () {
-            const acessoLimitado = document.getElementById("acessoLimitado").checked;
-            const limiteTempoValue = document.getElementById("limiteTempo").value;
-            const horarioMaximoValue = parseFloat(document.getElementById("horarioMaximo").value) || 0;
+async function iniciarControleTempo() {
+    try {
+        const res = await fetch('/api/usuario/controle', { credentials: 'include' });
+        const configControle = await res.json();
 
-            // Validações
-            if (acessoLimitado) {
-                if (!limiteTempoValue) {
-                    alert("Por favor, defina um limite de tempo por sessão.");
-                    return;
-                }
-                
-                // REMOVIDA a validação de máximo 10 horas
-                // if (horarioMaximoValue > 10) {
-                //     alert("O horário máximo diário não pode ultrapassar 10 horas.");
-                //     return;
-                // }
-                
-                if (horarioMaximoValue <= 0) {
-                    alert("Por favor, defina um horário máximo diário válido.");
-                    return;
-                }
-            }
+        if (!configControle.limitado) return; // sem controle, nada a fazer
 
-            // Converte HH:MM para minutos
-            let tempoEmMinutos = 0;
-            if (acessoLimitado && limiteTempoValue) {
-                const [horas, minutos] = limiteTempoValue.split(':').map(Number);
-                tempoEmMinutos = horas * 60 + minutos;
-            }
-
-            // Salva configurações
-            const config = {
-                ativo: acessoLimitado,
-                tempoLimite: tempoEmMinutos,
-                horarioMaximoDiario: horarioMaximoValue
-            };
-            localStorage.setItem('configControlePais', JSON.stringify(config));
-
-            // Mensagem de confirmação
-            let mensagem = "Configurações aplicadas com sucesso!\n";
-            mensagem += "Acesso limitado: " + (acessoLimitado ? "Sim" : "Não");
-            
-            if (acessoLimitado) {
-                mensagem += "\nLimite por sessão: " + limiteTempoValue;
-                mensagem += "\nHorário máximo diário: " + horarioMaximoValue + " horas";
-            }
-
-            alert(mensagem);
-
-            // Reinicia o controle de tempo se estiver na seção de jogos
-            if (jogosSection && jogosSection.classList.contains('active')) {
-                iniciarControleTempo();
-            }
-                
-            // Fecha o modal após aplicar
-            const modalElement = document.getElementById("controlePaisModal");
-            if (modalElement) {
-                const modal = bootstrap.Modal.getInstance(modalElement);
-                if (modal) modal.hide();
-            }
-        });
-    }
-}
-
-// Atualize também a função de verificação de tempo para o controle diário
-let tempoTotalHoje = 0;
-let ultimoDiaVerificado = null;
-
-function iniciarControleTempo() {
-    // Para qualquer monitor anterior
-    pararControleTempo();
-    
-    // Recupera configurações do localStorage
-    const configControle = JSON.parse(localStorage.getItem('configControlePais') || '{}');
-    
-    // Verifica se é um novo dia
-    const hoje = new Date().toDateString();
-    if (ultimoDiaVerificado !== hoje) {
-        tempoTotalHoje = 0;
-        ultimoDiaVerificado = hoje;
-        console.log("Novo dia - contador reiniciado");
-    }
-    
-    if (configControle.ativo) {
         tempoInicioSessao = Date.now();
-        tempoLimiteSessao = configControle.tempoLimite * 60 * 1000; // Converter para milissegundos
-        
-        console.log(`Controle de tempo ativado: ${configControle.tempoLimite} minutos por sessão, ${configControle.horarioMaximoDiario} horas máximo diário`);
-        console.log(`Tempo usado hoje: ${(tempoTotalHoje / 3600000).toFixed(2)} horas`);
-        
-        // Verifica se já atingiu o limite diário
-        if (configControle.horarioMaximoDiario && 
-            tempoTotalHoje >= configControle.horarioMaximoDiario * 3600000) {
-            alert("Você já atingiu o limite de tempo diário de " + configControle.horarioMaximoDiario + " horas.");
-            bloquearAcesso();
-            return;
-        }
-        
-        // Inicia o monitor
-        monitorTempo = setInterval(verificarTempo, 60000); // Verifica a cada minuto
-        
-        // Verifica imediatamente
-        setTimeout(verificarTempo, 1000);
+        tempoLimiteSessao = configControle.tempoTela ? configControle.tempoTela * 60000 : null;
+
+        monitorTempo = setInterval(async () => {
+            verificarTempo(configControle);
+        }, 60000);
+
+        setTimeout(() => verificarTempo(configControle), 1000);
+
+    } catch (err) {
+        console.error('Erro ao carregar controle do usuário:', err);
     }
 }
 
-function verificarTempo() {
-    if (!tempoInicioSessao || !tempoLimiteSessao) return;
-    
+function verificarTempo(configControle) {
     const tempoDecorrido = Date.now() - tempoInicioSessao;
-    const tempoRestante = tempoLimiteSessao - tempoDecorrido;
-    
-    // Atualiza o tempo total usado hoje
-    tempoTotalHoje += 60000; // Adiciona 1 minuto (intervalo de verificação)
-    
-    console.log(`Tempo restante na sessão: ${Math.round(tempoRestante / 60000)} minutos`);
-    console.log(`Tempo total usado hoje: ${(tempoTotalHoje / 3600000).toFixed(2)} horas`);
-    
-    // Verifica limites
-    const configControle = JSON.parse(localStorage.getItem('configControlePais') || '{}');
-    
-    // Verifica limite diário
-    if (configControle.horarioMaximoDiario && 
-        tempoTotalHoje >= configControle.horarioMaximoDiario * 3600000) {
-        alert("Você atingiu o limite diário de " + configControle.horarioMaximoDiario + " horas!");
+    const tempoRestante = tempoLimiteSessao ? tempoLimiteSessao - tempoDecorrido : null;
+
+    // Limite de sessão
+    if (tempoLimiteSessao && tempoRestante <= 0) {
         bloquearAcesso();
         return;
     }
-    
-    // Verifica limite da sessão
-    if (tempoRestante <= 0) {
-        // Tempo esgotado - bloquear acesso
+
+    // Limite diário
+    const agora = new Date();
+    const horaLimite = configControle.horaLimite ? new Date(agora.toDateString() + ' ' + configControle.horaLimite) : null;
+
+    if (horaLimite && agora >= horaLimite) {
         bloquearAcesso();
-    } else if (tempoRestante <= 300000) { // 5 minutos restantes
-        // Aviso de tempo prestes a acabar
+        return;
+    }
+
+    // Avisos
+    if (tempoRestante && tempoRestante <= 300000) mostrarAvisoTempo(tempoRestante);
+}
+
+function verificarTempo() {
+    if (!tempoInicioSessao) return;
+
+    const configControle = JSON.parse(localStorage.getItem('configControlePais') || '{}');
+
+    // Tempo decorrido desde o início da sessão
+    const tempoDecorrido = Date.now() - tempoInicioSessao;
+    const tempoRestante = tempoLimiteSessao ? tempoLimiteSessao - tempoDecorrido : null;
+
+    // Atualiza o tempo total usado hoje
+    tempoTotalHoje += 60000; // Adiciona 1 minuto (intervalo de verificação)
+
+    // Verifica limite diário
+    if (configControle.horarioMaximoDiario && tempoTotalHoje >= configControle.horarioMaximoDiario * 3600000) {
+        alert(`Você atingiu o limite diário de ${configControle.horarioMaximoDiario} horas!`);
+        bloquearAcesso();
+        return;
+    }
+
+    // Verifica limite da sessão
+    if (tempoLimiteSessao && tempoRestante <= 0) {
+        bloquearAcesso();
+        return;
+    } else if (tempoRestante && tempoRestante <= 300000) { // 5 minutos restantes
         mostrarAvisoTempo(tempoRestante);
     }
-    
+
     // Aviso quando estiver perto do limite diário (1 hora restante)
     if (configControle.horarioMaximoDiario) {
         const tempoRestanteDiario = (configControle.horarioMaximoDiario * 3600000) - tempoTotalHoje;
         if (tempoRestanteDiario <= 3600000 && tempoRestanteDiario > 0) {
             const minutosRestantes = Math.ceil(tempoRestanteDiario / 60000);
             if (minutosRestantes % 30 === 0) { // Aviso a cada 30 minutos
-                alert(`Atenção! Você tem apenas ${Math.ceil(minutosRestantes/60)} hora(s) restante(s) de uso diário.`);
+                alert(`Atenção! Você tem apenas ${Math.ceil(minutosRestantes / 60)} hora(s) restante(s) de uso diário.`);
             }
         }
     }
+
+    console.log(`Tempo restante na sessão: ${tempoRestante ? Math.round(tempoRestante / 60000) : '∞'} minutos`);
+    console.log(`Tempo total usado hoje: ${(tempoTotalHoje / 3600000).toFixed(2)} horas`);
 }
+
 // Configura eventos do modal de acesso bloqueado
 function initializeAcessoBloqueadoModal() {
     const btnEnviarAcesso = document.getElementById("btnEnviarAcesso");
@@ -544,35 +429,50 @@ function initializeAcessoBloqueadoModal() {
     const erroSenhaAcesso = document.getElementById("erroSenhaAcesso");
 
     if (btnEnviarAcesso && senhaAcessoBloqueado) {
-        btnEnviarAcesso.addEventListener("click", function() {
-            const senhaDigitada = senhaAcessoBloqueado.value;
-            
-            if (!senhaDigitada) {
-                erroSenhaAcesso.textContent = "Por favor, digite a senha.";
-                erroSenhaAcesso.style.display = "block";
-                return;
-            }
+        btnEnviarAcesso.addEventListener("click", async () => {
+            const senha = senhaAcessoBloqueado.value;
+            const idUsuario = localStorage.getItem("idUsuario");
 
-            // Aqui você deve verificar a senha do responsável
-            // Por enquanto, vou simular uma verificação
-            verificarSenhaResponsavel(senhaDigitada);
+            try {
+                const resp = await fetch("/api/controle/desbloquear", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ idUsuario, senhaResponsavel: senha })
+                });
+
+                const dados = await resp.json();
+
+                if (resp.ok) {
+                    // Fecha modal e libera acesso
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('acessoBloqueadoModal'));
+                    modal.hide();
+                    erroSenhaAcesso.style.display = 'none';
+                    alert("Acesso liberado!");
+                } else {
+                    erroSenhaAcesso.style.display = 'block';
+                    erroSenhaAcesso.textContent = dados.msg || "Senha incorreta";
+                }
+            } catch (err) {
+                console.error(err);
+                erroSenhaAcesso.style.display = 'block';
+                erroSenhaAcesso.textContent = "Erro ao conectar com servidor";
+            }
         });
 
         // Permitir enviar com Enter
-        senhaAcessoBloqueado.addEventListener("keypress", function(e) {
-            if (e.key === "Enter") {
-                btnEnviarAcesso.click();
-            }
+        senhaAcessoBloqueado.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") btnEnviarAcesso.click();
         });
     }
 }
 
+
 function verificarSenhaResponsavel(senhaDigitada) {
     // Simulação - você deve integrar com seu backend
     // Por enquanto, vou usar uma verificação simples
-    
+
     const senhaCorreta = "senha123"; // Substitua pela verificação real
-    
+
     if (senhaDigitada === senhaCorreta) {
         // Senha correta - reinicia o tempo
         const configControle = JSON.parse(localStorage.getItem('configControlePais') || '{}');
@@ -580,14 +480,14 @@ function verificarSenhaResponsavel(senhaDigitada) {
             tempoInicioSessao = Date.now();
             iniciarControleTempo();
         }
-        
+
         // Fecha o modal
         const modalElement = document.getElementById("acessoBloqueadoModal");
         if (modalElement) {
             const modal = bootstrap.Modal.getInstance(modalElement);
             if (modal) modal.hide();
         }
-        
+
         alert("Acesso liberado! O tempo foi reiniciado.");
     } else {
         // Senha incorreta
@@ -802,35 +702,35 @@ function initializeProfileSidebar() {
     const closeSidebar = document.getElementById('closeSidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     const sidebarLogout = document.getElementById('logoutBtnSidebar');
-    
+
     if (profilePic) {
         profilePic.addEventListener('click', openProfileSidebar);
     }
-    
+
     if (closeSidebar) {
         closeSidebar.addEventListener('click', closeProfileSidebar);
     }
-    
+
     if (sidebarOverlay) {
         sidebarOverlay.addEventListener('click', closeProfileSidebar);
     }
-    
+
     if (sidebarLogout) {
-        sidebarLogout.addEventListener('click', function(e) {
+        sidebarLogout.addEventListener('click', function (e) {
             e.preventDefault();
             closeProfileSidebar();
             setTimeout(logoutUser, 300);
         });
     }
-    
+
     // Fechar sidebar com ESC
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         const profileSidebar = document.getElementById('profileSidebar');
         if (e.key === 'Escape' && profileSidebar && profileSidebar.classList.contains('active')) {
             closeProfileSidebar();
         }
     });
-    
+
     // Inicializar link do controle de pais no sidebar
     const controlePaisLink = document.querySelector('.sidebar-menu a[href="#controle-pais"]');
     if (controlePaisLink) {
@@ -845,17 +745,17 @@ function openProfileSidebar() {
     const profileSidebar = document.getElementById('profileSidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     const jogosSection = document.getElementById('jogos-section');
-    
+
     if (profileSidebar) {
         loadUserData();
         profileSidebar.classList.add('active');
-        
+
         // Só mostra overlay se estiver na seção de jogos (DESKTOP)
         if (sidebarOverlay && window.innerWidth > 768 && jogosSection && jogosSection.classList.contains('active')) {
             sidebarOverlay.classList.add('active');
             document.body.classList.add('sidebar-open');
         }
-        
+
         // Para mobile
         if (window.innerWidth <= 768) {
             document.body.classList.add('sidebar-open');
@@ -866,14 +766,14 @@ function openProfileSidebar() {
 function closeProfileSidebar() {
     const profileSidebar = document.getElementById('profileSidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
-    
+
     if (profileSidebar) {
         profileSidebar.classList.remove('active');
-        
+
         if (sidebarOverlay) {
             sidebarOverlay.classList.remove('active');
         }
-        
+
         document.body.classList.remove('sidebar-open');
     }
 }
@@ -881,14 +781,14 @@ function closeProfileSidebar() {
 function openControlePaisModal() {
     // Fecha o sidebar do perfil primeiro
     closeProfileSidebar();
-    
+
     // Delay para o modal aparecer
     setTimeout(() => {
         const modalElement = document.getElementById("controlePaisModal");
         if (modalElement) {
             const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
             modal.show();
-            
+
             // Foca no primeiro elemento do modal para melhor UX
             setTimeout(() => {
                 const primeiroInput = modalElement.querySelector('input, select, button');
@@ -898,23 +798,59 @@ function openControlePaisModal() {
     }, 150);
 }
 
-function loadUserData() {
-    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-    const userNameElement = document.getElementById('userName');
-    const userXPElement = document.getElementById('userXP');
-    
-    if (userNameElement) {
-        userNameElement.textContent = userData.nome || 'Usuário';
+async function loadUserData() {
+    try {
+        const res = await fetch('/api/usuario/me', { credentials: 'include' });
+        if (!res.ok) throw new Error('Erro ao carregar dados do usuário');
+
+        const userData = await res.json();
+
+        const userNameElement = document.getElementById('userName');
+        const userXPElement = document.getElementById('userXP');
+
+        if (userNameElement) userNameElement.textContent = userData.nome || 'Usuário';
+        if (userXPElement) userXPElement.textContent = userData.xp || 0;
+
+    } catch (err) {
+        console.error('Falha ao carregar dados do usuário:', err);
     }
-    
-    if (userXPElement) {
-        const userXP = localStorage.getItem('userXP') || '0';
-        userXPElement.textContent = userXP;
+
+    // Controle de pais só se menor de 14 anos
+    const controlePaisLink = document.querySelector('.sidebar-menu a[href="#controle-pais"]');
+    if (controlePaisLink) {
+        if (userData.idade >= 14) {
+            controlePaisLink.style.display = 'none';
+        } else {
+            controlePaisLink.style.display = 'block';
+        }
     }
 }
 
+async function atualizarXP(novoXP) {
+    try {
+        const res = await fetch('/api/usuario/update-xp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ xp: novoXP }),
+            credentials: 'include' // garante que o cookie de sessão seja enviado
+        });
+
+        if (!res.ok) throw new Error('Erro ao atualizar XP no servidor');
+
+        const data = await res.json();
+
+        // Atualiza a sidebar
+        const userXPElement = document.getElementById('userXP');
+        if (userXPElement) userXPElement.textContent = data.xp;
+
+    } catch (err) {
+        console.error('Falha ao atualizar XP:', err);
+    }
+}
+
+
 // Redimensionamento da janela
-window.addEventListener('resize', function() {
+window.addEventListener('resize', function () {
     const profileSidebar = document.getElementById('profileSidebar');
     if (profileSidebar && profileSidebar.classList.contains('active')) {
         const sidebarOverlay = document.getElementById('sidebarOverlay');

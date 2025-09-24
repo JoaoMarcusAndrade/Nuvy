@@ -216,6 +216,66 @@ router.post("/vincular", async (req, res) => {
   }
 });
 
+// Ativar/Desativar controle dos pais
+router.post("/api/controle/limitar", async (req, res) => {
+  try {
+    const { idUsuario, idResponsavel, limitado, tempoTela } = req.body;
+    const controle = await Controle.findOne({ where: { ID_usuarios: idUsuario, ID_responsaveis: idResponsavel } });
+    if (!controle) return res.status(404).json({ msg: "Controle não encontrado" });
+
+    controle.limitado = limitado;
+    controle.tempoTela = tempoTela || 0; // em minutos
+    await controle.save();
+
+    res.json({ msg: "Controle atualizado", controle });
+  } catch (err) {
+    res.status(500).json({ msg: "Erro ao atualizar controle", erro: err.message });
+  }
+});
+
+// Verificar se usuário está bloqueado
+router.get("/api/controle/status/:idUsuario", async (req, res) => {
+  try {
+    const controle = await Controle.findOne({ where: { ID_usuarios: req.params.idUsuario } });
+    if (!controle) return res.json({ limitado: false });
+
+    res.json({
+      limitado: controle.limitado,
+      tempoTela: controle.tempoTela
+    });
+  } catch (err) {
+    res.status(500).json({ msg: "Erro ao checar status", erro: err.message });
+  }
+});
+
+// Desbloquear por senha do responsável (30 min)
+router.post("/api/controle/desbloquear", async (req, res) => {
+  try {
+    const { idUsuario, senhaResponsavel } = req.body;
+    // Busca o controle + responsável
+    const controle = await Controle.findOne({ where: { ID_usuarios: idUsuario } });
+    if (!controle) return res.status(404).json({ msg: "Controle não encontrado" });
+
+    const responsavel = await Responsaveis.findByPk(controle.ID_responsaveis);
+    if (!responsavel || responsavel.password_resp !== senhaResponsavel) {
+      return res.status(401).json({ msg: "Senha incorreta" });
+    }
+
+    // Libera temporariamente
+    controle.limitado = false;
+    await controle.save();
+
+    // Seta um timer para reativar depois de 30 min (se quiser server-side)
+    setTimeout(async () => {
+      controle.limitado = true;
+      await controle.save();
+    }, 30 * 60 * 1000);
+
+    res.json({ msg: "Usuário liberado por 30 minutos" });
+  } catch (err) {
+    res.status(500).json({ msg: "Erro ao desbloquear", erro: err.message });
+  }
+});
 
 // ---------- LOGOUT ----------
 router.post('/logout', (req, res) => {
