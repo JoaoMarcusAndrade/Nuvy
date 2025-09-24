@@ -707,20 +707,25 @@ function openProfileSidebar() {
     const jogosSection = document.getElementById('jogos-section');
 
     if (profileSidebar) {
-        loadUserData();
+        // Garantir que os dados são carregados ANTES de mostrar o sidebar
+        loadUserData().then(() => {
+            profileSidebar.classList.add('active');
 
-        profileSidebar.classList.add('active');
+            // Resto do código...
+            if (sidebarOverlay && window.innerWidth > 768 && jogosSection && jogosSection.classList.contains('active')) {
+                sidebarOverlay.classList.add('active');
+                document.body.classList.add('sidebar-open');
+            }
 
-        // Overlay desktop
-        if (sidebarOverlay && window.innerWidth > 768 && jogosSection && jogosSection.classList.contains('active')) {
-            sidebarOverlay.classList.add('active');
-            document.body.classList.add('sidebar-open');
-        }
-
-        // Mobile
-        if (window.innerWidth <= 768) {
-            document.body.classList.add('sidebar-open');
-        }
+            if (window.innerWidth <= 768) {
+                document.body.classList.add('sidebar-open');
+            }
+        }).catch(error => {
+            console.error('Erro ao carregar dados do usuário:', error);
+            // Mostrar sidebar mesmo com erro, mas com valores padrão
+            profileSidebar.classList.add('active');
+            // ... resto do código
+        });
     }
 }
 
@@ -770,21 +775,28 @@ async function loadUserData() {
         const userNameElement = document.getElementById('userName');
         const userXPElement = document.getElementById('userXP');
 
-        if (userNameElement) userNameElement.textContent = userData.name_user || 'Usuário';
-        if (userXPElement) userXPElement.textContent = userData.XP_user || 0;
+        if (userNameElement) userNameElement.textContent = userData.nome || userData.name_user || 'Usuário';
+        if (userXPElement) userXPElement.textContent = userData.xp || userData.XP_user || 0;
+
+        // Controle de pais só se menor de 14 anos
+        const controlePaisLink = document.querySelector('.sidebar-menu a[href="#controle-pais"]');
+        if (controlePaisLink) {
+            // Usar a idade do userData se disponível, caso contrário assumir menor idade para segurança
+            const idade = userData.idade || 13;
+            if (idade >= 14) {
+                controlePaisLink.style.display = 'none';
+            } else {
+                controlePaisLink.style.display = 'block';
+            }
+        }
 
     } catch (err) {
         console.error('Falha ao carregar dados do usuário:', err);
-    }
-
-    // Controle de pais só se menor de 14 anos
-    const controlePaisLink = document.querySelector('.sidebar-menu a[href="#controle-pais"]');
-    if (controlePaisLink) {
-        if (userData.idade >= 14) {
-            controlePaisLink.style.display = 'none';
-        } else {
-            controlePaisLink.style.display = 'block';
-        }
+        // Definir valores padrão em caso de erro
+        const userNameElement = document.getElementById('userName');
+        const userXPElement = document.getElementById('userXP');
+        if (userNameElement) userNameElement.textContent = 'Usuário';
+        if (userXPElement) userXPElement.textContent = '0';
     }
 }
 
