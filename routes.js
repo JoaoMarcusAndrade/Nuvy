@@ -218,7 +218,7 @@ router.post("/vincular", async (req, res) => {
 
 router.post('/add-xp', async (req, res) => {
   try {
-    const userId = req.session.userId; // ou de onde você pega o usuário logado
+    const userId = req.cookies.usuarioId; // ou de onde você pega o usuário logado
     const { XP_to_add } = req.body;
 
     if (!userId || !XP_to_add) return res.status(400).json({ error: 'Dados inválidos' });
@@ -228,7 +228,7 @@ router.post('/add-xp', async (req, res) => {
     if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
 
     // Atualizar XP
-    user.XP_user += XP_to_add;
+    user.XP_user += Number(XP_to_add);
     await user.save();
 
     // Retornar XP atualizado
