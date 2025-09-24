@@ -1185,3 +1185,57 @@ footer {
 #controlePaisModal .input-group .input-group-text {
   border-left: none;
 }
+
+/* === ANIMAÇÕES E EFEITOS VISUAIS === */
+
+/* Animações de entrada */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Aplicar animações */
+#home.active { animation: fadeInUp 0.8s ease-out; }
+.cloud { animation: float 3s ease-in-out infinite; }
+
+/* Efeitos hover melhorados */
+.btn-primary {
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(106, 64, 214, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(106, 64, 214, 0.4);
+}
+
+.card {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: #6a40d6;
+}
+
+/* Background animado sutil */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: radial-gradient(circle at 20% 80%, rgba(120, 80, 220, 0.1) 0%, transparent 50%);
+    z-index: -1;
+    animation: backgroundShift 10s ease-in-out infinite;
+}
+
+@keyframes backgroundShift {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
