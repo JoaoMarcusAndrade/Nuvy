@@ -48,8 +48,8 @@ const levelConfigs = {
     targets: [
       { type: "fotos", color: "#FF9E00", description: "Guarda nossas fotos e vídeos" },
       { type: "musica", color: "#4CAF50", description: "Guarda nossas músicas" },
-      { type: "jogos", color: "#f32167ff", description: "Guarda nossos joguinhos" },
-      { type: "desenhos", color: "#cc27e9ff", description: "Guarda nossos desenhos" }
+      { type: "jogos", color: "#ff00bfff", description: "Guarda nossos joguinhos" },
+      { type: "desenhos", color: "#d900ffff", description: "Guarda nossos desenhos" }
     ]
   },
   2: {
@@ -85,13 +85,11 @@ const levelConfigs = {
 };
 
 // Modifique a função loadSounds para usar MP3
-// CORREÇÃO - Atualize a função loadSounds():
 function loadSounds() {
-
-  pickupSound = new Audio('./fx/som1.wav');
-  dropSound = new Audio('./fx/som2.wav');
-  backgroundMusic = new Audio('./fx/som3.wav');
-  infoSound = new Audio('./fx/som4.mp3');
+  pickupSound = new Audio('fx/som1.wav');
+  dropSound = new Audio('fx/som2.wav');
+  backgroundMusic = new Audio('fx/som3.wav');
+  infoSound = new Audio('fx/som4.mp3');
   
   // Configurar volumes
   pickupSound.volume = 0.7;
@@ -117,29 +115,14 @@ function loadSounds() {
 
 // Nova função para carregar sons de nível
 function loadLevelSounds() {
-  levelUpSound = new Audio(`./fx/som${4 + currentLevel}.mp3`);
+  levelUpSound = new Audio(`fx/som${4 + currentLevel}.mp3`);
   levelUpSound.volume = 0.7;
   levelUpSound.load();
 }
 
-// Adicione esta função após a função loadSounds()
-function handleAutoplayPolicy() {
-  // Tentar reproduzir um som simples para desbloquear o autoplay
-  const unlockSound = new Audio('./fx/som1.wav');
-  unlockSound.volume = 0.01; // Quase mudo
-  
-  document.addEventListener('click', function unlockAudio() {
-    unlockSound.play().then(() => {
-      console.log("Áudio desbloqueado!");
-      document.removeEventListener('click', unlockAudio);
-    }).catch(error => {
-      console.log("Aguardando interação do usuário para desbloquear áudio...");
-    });
-  }, { once: true });
-}
-
+// Nova função para carregar som de jogo completo
 function loadGameCompleteSound() {
-  gameCompleteSound = new Audio('./fx/som8.mp3');
+  gameCompleteSound = new Audio('fx/som8.mp3');
   gameCompleteSound.volume = 0.7;
   gameCompleteSound.load();
 }
@@ -213,11 +196,9 @@ function stopBackgroundMusic() {
 
 // Modifique a função initGame para adicionar o event listener do botão de música
 function initGame() {
-  loadSounds();
-  loadLevelSounds();
-  loadGameCompleteSound();
-  handleAutoplayPolicy(); // ADICIONE ESTA LINHA
-  
+  loadSounds(); // Carregar os sons
+  loadLevelSounds(); // Carregar sons de nível
+  loadGameCompleteSound(); // Carregar som de jogo completo
   loadLevel(currentLevel);
   
   // Configurar botões
@@ -555,7 +536,6 @@ function getItemIcon(type) {
 }
 
 // Funções de arrastar e soltar - CORREÇÃO COMPLETA
-// Exemplo de correção na função handleDragStart():
 function handleDragStart(e) {
   if (gameFinished) {
     e.preventDefault();
@@ -565,15 +545,14 @@ function handleDragStart(e) {
   e.dataTransfer.setData('text/plain', e.target.dataset.type);
   e.target.classList.add('dragging');
   
-  // Tocar som de pegar o elemento - COM MELHOR TRATAMENTO DE ERRO
+  // Tocar som de pegar o elemento
   if (pickupSound) {
     pickupSound.currentTime = 0;
-    pickupSound.play().catch(error => {
-      console.log("Não foi possível tocar o som. Tentando desbloquear áudio...");
-      // Tentar desbloquear o áudio com uma interação
-      handleAutoplayPolicy();
-    });
+    pickupSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
   }
+  
+  // REMOVIDO COMPLETAMENTE: qualquer código relacionado a opacidade
+  // Isso estava causando o problema de desaparecimento no mobile
 }
 
 function handleDragEnd(e) {
