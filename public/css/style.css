@@ -100,7 +100,8 @@ header a:hover {
 }
 
 .btn:hover {
-  background: #ddd;
+  background: #6a40d6;
+  color: #ddd;
 }
 
 /* Seções do SPA (Single Page Application) */
