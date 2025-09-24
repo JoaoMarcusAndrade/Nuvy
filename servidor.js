@@ -13,7 +13,7 @@ const __dirname = path.dirname(__filename);
 
 
 app.use(cors({
-  origin: 'https://nuvy-1.onrender.com',
+  origin: ['https://nuvy-1.onrender.com', 'http://localhost:3000'],
   credentials: true
 }));
 app.use(cookieParser());

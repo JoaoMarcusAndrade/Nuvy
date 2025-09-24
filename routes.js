@@ -244,7 +244,7 @@ router.post('/add-xp', async (req, res) => {
 router.get('/api/usuario/me', checkAuthentication, async (req, res) => {
   try{
     if (req.usuario) {
-      const { ID_usuarios, name_user, XP_user } = req.usuario;
+      const { ID_usuarios, name_user, XP_user, idade } = req.usuario;
       return res.json({
         id: ID_usuarios,
         nome: name_user,
@@ -293,6 +293,43 @@ router.post("/api/controle/atualizar", async (req, res) => {
     res.json({ tempoTela: controle.tempoTela, limitado: controle.limitado });
   } catch (err) {
     res.status(500).json({ msg: "Erro ao atualizar tempo de tela", erro: err.message });
+  }
+});
+
+// ADICIONAR em routes.js
+router.get('/api/usuario/controle', checkAuthentication, async (req, res) => {
+  try {
+    if (req.usuario) {
+      const controle = await Controle.findOne({ 
+        where: { ID_usuarios: req.usuario.ID_usuarios } 
+      });
+      
+      return res.json({
+        ativo: controle?.limitado || false,
+        tempoLimite: controle?.tempoTela || null,
+        horarioMaximoDiario: controle?.horaLimite || null
+      });
+    }
+    res.status(401).json({ error: 'Não autenticado' });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao buscar configurações' });
+  }
+});
+
+// ADICIONAR em routes.js
+router.post('/api/usuario/update-xp', checkAuthentication, async (req, res) => {
+  try {
+    const { xp } = req.body;
+    const usuario = req.usuario;
+    
+    if (!usuario) return res.status(401).json({ error: 'Não autenticado' });
+    
+    usuario.XP_user = parseInt(xp);
+    await usuario.save();
+    
+    res.json({ xp: usuario.XP_user });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao atualizar XP' });
   }
 });
 
