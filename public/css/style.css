@@ -1,6 +1,37 @@
 /* Importar fonte Baloo 2 para o estilo do modal */
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
 
+/* === ANIMAÇÕES E EFEITOS VISUAIS === */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% { 
+        transform: translateY(0); 
+    }
+    50% { 
+        transform: translateY(-10px); 
+    }
+}
+
+@keyframes loading {
+    0% { 
+        background-position: 200% 0; 
+    }
+    100% { 
+        background-position: -200% 0; 
+    }
+}
+
+/* === ESTILOS GERAIS === */
 /* Estilos gerais do corpo da página */
 body {
   margin: 0;
@@ -11,6 +42,25 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+/* Scrollbar customizada */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #6a40d6, #8861e7);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #8861e7, #a992d6);
 }
 
 /* Garantir que o HTML também ocupe 100% da altura */
@@ -32,7 +82,7 @@ header a {
   text-decoration: none;
   color: white;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.3s ease;
   font-size: 20px;
   font-family: "Comic Sans MS", sans-serif;
   letter-spacing: 2px;
@@ -41,6 +91,7 @@ header a {
 
 header a:hover {
   opacity: 0.7;
+  transform: translateY(-2px);
 }
 
 /* Container principal da página */
@@ -57,6 +108,7 @@ header a:hover {
 .cloud {
   width: 450px;
   height: 265px;
+  animation: float 3s ease-in-out infinite;
 }
 
 /* Caixa de texto principal */
@@ -72,11 +124,20 @@ header a:hover {
   display: flex;
 }
 
+#home.active {
+  animation: fadeInUp 0.8s ease-out;
+}
+
 .NuvyH1 {
   font-family: 'Bagel Fat One', cursive; 
   font-size: 120px;
   margin: 0;
   pointer-events: none;
+  background: linear-gradient(45deg, #ffffff, #e0d6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .NuvyP {
@@ -96,22 +157,36 @@ header a:hover {
   font-size: 22px;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(106, 64, 214, 0.3);
+  border: none;
 }
 
 .btn:hover {
   background: #0a58ca;
   color: #ddd;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(106, 64, 214, 0.4);
+}
+
+.btn:active {
+  transform: scale(0.95);
+  transition: transform 0.1s;
 }
 
 /* Seções do SPA (Single Page Application) */
 .section {
   display: none;
-  flex: 1; /* Adicionado para preencher o espaço */
+  flex: 1;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.5s ease-in-out;
 }
 
 .section.active {
   display: flex;
+  opacity: 1;
+  transform: translateX(0);
 }
 
 /* ===== ESTILOS ESPECÍFICOS DA ÁREA DE JOGOS ===== */
@@ -133,6 +208,11 @@ header a:hover {
 .logo {
   height: 40px;
   margin-right: 20px;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
 }
 
 .navbar-left {
@@ -146,6 +226,12 @@ header a:hover {
   font-weight: bold;
   font-size: 18px;
   text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.navbar-left a:hover {
+  transform: translateY(-2px);
+  color: #8861e7;
 }
 
 .navbar-right {
@@ -196,13 +282,27 @@ header a:hover {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  border: 2px solid transparent;
+  border-radius: 8px;
 }
 
 .card img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+  border-color: #6a40d6;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.card:hover img {
+  transform: scale(1.1);
 }
 
 .img{
@@ -210,10 +310,11 @@ header a:hover {
   width: 30px;
   margin-right:10px ;
   cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
-.card:hover {
-  transform: scale(1.02);
+.img:hover {
+  transform: scale(1.1);
 }
 
 .barra {
@@ -230,6 +331,11 @@ header a:hover {
 .game-icon {
   width: 130px;
   margin-bottom: 20px;
+  transition: transform 0.3s ease;
+}
+
+.game-icon:hover {
+  transform: scale(1.1);
 }
 
 .jogo-box p {
@@ -245,10 +351,15 @@ footer {
   text-align: center;
   padding: 12px;
   font-weight: bold;
-  bottom: 0; /* Fixa na parte inferior */
+  bottom: 0;
   left: 0;
   width: 100%;
-  z-index: 1000; /* Garante que fique acima de outros elementos */
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+footer:hover {
+  background: #f8f5ff;
 }
 
 /* ===== Estilos Customizados do Modal ===== */
@@ -262,6 +373,7 @@ footer {
   color: #6a40d6;
   font-family: 'Baloo 2', cursive;
   box-shadow: 0 0 15px rgba(106, 64, 214, 0.3);
+  animation: fadeInUp 0.5s ease-out;
 }
 
 /* Header do modal */
@@ -294,6 +406,12 @@ footer {
   cursor: pointer;
   opacity: 1;
   padding: 0;
+  transition: all 0.3s ease;
+}
+
+.custom-btn-close:hover {
+  transform: scale(1.1);
+  color: #8861e7;
 }
 
 /* Usar X personalizado para fechar */
@@ -306,6 +424,7 @@ footer {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
 }
 
 /* Inputs do modal */
@@ -320,7 +439,7 @@ footer {
   font-family: 'Baloo 2', cursive;
   outline: none;
   background-color: #f7f2f6;
-  transition: border-color 0.3s;
+  transition: all 0.3s ease;
 }
 
 .modal-body input::placeholder {
@@ -332,6 +451,8 @@ footer {
 .modal-body input:focus {
   border-color: #8861e7;
   background-color: white;
+  transform: scale(1.02);
+  box-shadow: 0 0 0 3px rgba(106, 64, 214, 0.1);
 }
 
 /* Botão Entrar */
@@ -348,11 +469,18 @@ footer {
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(106, 64, 214, 0.3);
 }
 
 .btn-login:hover {
   background-color: #8861e7;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(106, 64, 214, 0.4);
+}
+
+.btn-login:active {
+  transform: scale(0.95);
 }
 
 /* Texto de cadastro */
@@ -370,38 +498,43 @@ footer {
   text-decoration: underline;
   cursor: pointer;
   margin-left: 4px;
+  transition: all 0.3s ease;
 }
 
 .signup-text a:hover {
   color: #8861e7;
+  transform: translateY(-2px);
 }
 
 /* Botão Voltar */
 .btn-outline-secondary {
   border-color: #6a40d6;
   color: #6a40d6;
+  transition: all 0.3s ease;
 }
 
 .btn-outline-secondary:hover {
   background-color: #6a40d6;
   color: white;
+  transform: translateY(-2px);
 }
 
 /* ===== SIDEBAR DO PERFIL ===== */
 .profile-sidebar {
   position: fixed;
   top: 0;
-  right: -400px; /* Alterado para direita */
+  right: -400px;
   width: 350px;
   height: 100vh;
   background: #fff;
   z-index: 2000;
-  transition: right 0.3s ease-in-out; /* Alterado para right */
-  box-shadow: -2px 0 15px rgba(0, 0, 0, 0.3); /* Sombra na esquerda */
+  transition: right 0.3s ease-in-out;
+  box-shadow: -2px 0 15px rgba(0, 0, 0, 0.3);
 }
 
 .profile-sidebar.active {
-  right: 0; /* Alterado para direita */
+  right: 0;
+  animation: fadeInUp 0.3s ease-out;
 }
 
 .sidebar-content {
@@ -413,7 +546,7 @@ footer {
 
 .sidebar-header {
   padding: 15px 20px;
-  text-align: left; /* Alterado para esquerda */
+  text-align: left;
   border-bottom: 1px solid #eee;
 }
 
@@ -427,10 +560,12 @@ footer {
   width: 30px;
   height: 30px;
   line-height: 1;
+  transition: all 0.3s ease;
 }
 
 .close-sidebar:hover {
   color: #8861e7;
+  transform: scale(1.1);
 }
 
 .user-profile {
@@ -438,6 +573,11 @@ footer {
   align-items: center;
   padding: 30px 20px;
   border-bottom: 1px solid #eee;
+  transition: all 0.3s ease;
+}
+
+.user-profile:hover {
+  background-color: #f8f5ff;
 }
 
 .profile-pic {
@@ -446,6 +586,12 @@ footer {
   border-radius: 50%;
   margin-right: 15px;
   border: 3px solid #6a40d6;
+  transition: all 0.3s ease;
+}
+
+.profile-pic:hover {
+  transform: scale(1.05);
+  border-color: #8861e7;
 }
 
 .user-info h3 {
@@ -474,19 +620,30 @@ footer {
   color: #6a40d6;
   font-size: 18px;
   font-weight: bold;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
   border-bottom: 1px solid #f0f0f0;
 }
 
 .menu-item:hover {
   background-color: #f8f5ff;
   color: #8861e7;
+  transform: translateX(5px);
+}
+
+.menu-item:active {
+  transform: translateX(10px);
+  transition: transform 0.1s;
 }
 
 .menu-icon {
   width: 24px;
   height: 24px;
   margin-right: 15px;
+  transition: transform 0.3s ease;
+}
+
+.menu-item:hover .menu-icon {
+  transform: scale(1.1);
 }
 
 .logout-btn {
@@ -510,7 +667,7 @@ footer {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease-in-out;
-  pointer-events: none; /* Não interfere com cliques quando invisível */
+  pointer-events: none;
 }
 
 /* ===== MODAL CONTROLE DE PAIS ===== */
@@ -520,6 +677,7 @@ footer {
   padding: 20px;
   color: #6a40d6;
   font-family: 'Baloo 2', cursive;
+  animation: fadeInUp 0.5s ease-out;
 }
 
 #controlePaisModal label {
@@ -536,11 +694,13 @@ footer {
   position: relative !important;
   cursor: pointer !important;
   border: none !important;
-  transition: background-color 0.3s !important;
+  transition: all 0.3s ease !important;
+  background-image: linear-gradient(to right, #ccc, #ccc) !important;
 }
 
 .form-check-input.custom-switch:checked {
   background-color: #6a40d6 !important;
+  background-image: linear-gradient(to right, #6a40d6, #8861e7) !important;
 }
 
 .form-check-input.custom-switch:focus {
@@ -557,7 +717,7 @@ footer {
   position: absolute !important;
   top: 2px !important;
   left: 2px !important;
-  transition: transform 0.3s !important;
+  transition: transform 0.3s ease !important;
 }
 
 .form-check-input.custom-switch:checked::before {
@@ -579,6 +739,7 @@ footer {
   padding: 25px 20px;
   border: 2px solid #6a40d6;
   box-shadow: 0 0 20px rgba(106, 64, 214, 0.3);
+  animation: fadeInUp 0.5s ease-out;
 }
 
 #acessoBloqueadoModal .modal-header {
@@ -600,6 +761,11 @@ footer {
 #acessoBloqueadoModal img {
   display: block;
   margin: 15px auto 20px auto;
+  transition: transform 0.3s ease;
+}
+
+#acessoBloqueadoModal img:hover {
+  transform: scale(1.1);
 }
 
 #senhaAcessoBloqueado {
@@ -614,11 +780,13 @@ footer {
   background-color: #fff;
   color: #6a40d6;
   font-family: 'Baloo 2', cursive;
+  transition: all 0.3s ease;
 }
 
 #senhaAcessoBloqueado:focus {
   border-color: #6a40d6;
   box-shadow: 0 0 6px rgba(106, 64, 214, 0.4);
+  transform: scale(1.02);
 }
 
 #senhaAcessoBloqueado::placeholder {
@@ -634,24 +802,77 @@ footer {
   font-size: 1.1rem;
   font-weight: bold;
   margin-top: 15px;
-  transition: 0.3s;
+  transition: all 0.3s ease;
   font-family: 'Baloo 2', cursive;
+  box-shadow: 0 4px 15px rgba(106, 64, 214, 0.3);
 }
 
 #btnEnviarAcesso:hover {
   background-color: #8861e7;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(106, 64, 214, 0.4);
+}
+
+#btnEnviarAcesso:active {
+  transform: scale(0.95);
 }
 
 #btnEnviarAcesso:disabled {
   background-color: #ccc;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 #erroSenhaAcesso {
   font-size: 0.9rem;
   font-weight: bold;
+}
+
+/* Área do jogo */
+.jogo {
+  padding: 0px 90px 30px 90px;
+  flex: 1;
+  width: 100%;
+  height: 100vh;
+}
+
+.jogo-box {
+  background: #dcdcdc;
+  color: #6a40d6;
+  border-radius: 18px;
+  padding: 0;
+  text-align: center;
+  box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 80vh;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.jogo-box:hover {
+  box-shadow: 2px 2px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Container do jogo integrado */
+#game-container {
+  width: 100%;
+  height: 100%;
+  border: none;
+  overflow: hidden;
+}
+
+/* Loading para elementos */
+.card.loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
 }
 
 /* ========================= */
@@ -733,18 +954,19 @@ footer {
 
   .jogo {
     padding: 20px 15px 30px 15px;
+    height: auto;
+    min-height: 100vh;
   }
 
   .jogo-box {
-    padding: 40px 20px;
+    height: 70vh;
+    padding: 0;
+    margin: 0;
   }
 
-  .game-icon {
-    width: 80px;
-  }
-
-  .jogo-box p {
-    font-size: 16px;
+  .jogo h2 {
+    font-size: 20px;
+    margin: 10px 0;
   }
 
   /* Esconde ajuda e contato na navbar de jogos */
@@ -773,15 +995,15 @@ footer {
     width: 100%;
     height: auto;
     right: 0;
-    top: -100vh; /* Escondido acima da tela */
+    top: -100vh;
     left: 0;
-    transition: top 0.3s ease-in-out; /* Transição pelo topo */
+    transition: top 0.3s ease-in-out;
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
     border-radius: 0 0 20px 20px;
   }
 
   .profile-sidebar.active {
-    top: 0; /* Aparece vindo de cima */
+    top: 0;
   }
 
   .sidebar-content {
@@ -880,13 +1102,14 @@ footer {
   
   .jogo {
     padding: 15px 10px 20px 10px;
-    padding-bottom: 60px; /* Adiciona espaço para o footer fixo */
+    padding-bottom: 60px;
   }
   
   .jogo-box {
-    padding: 30px 15px;
+    height: 65vh;
+    min-height: 400px;
+    padding: 0;
     margin: 0 5px 15px 5px;
-    min-height: 200px;
   }
 
   .game-icon {
@@ -962,6 +1185,7 @@ footer {
 #jogos-section.active ~ .sidebar-overlay.active {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
 }
 
 /* Overlay padrão (escondido) */
@@ -976,7 +1200,7 @@ footer {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease-in-out;
-    pointer-events: auto; /* Permite interação */
+    pointer-events: auto;
 }
 
 /* Overlay ativo - SÓ na seção de jogos */
@@ -1004,83 +1228,6 @@ footer {
     }
 }
 
-/* Área do jogo */
-.jogo {
-  padding: 0px 90px 30px 90px;
-  flex: 1;
-  width: 100%;
-  height: 100vh;
-}
-
-.jogo-box {
-  background: #dcdcdc;
-  color: #6a40d6;
-  border-radius: 18px;
-  padding: 0;
-  text-align: center;
-  box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.5);
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 80vh;
-  overflow: hidden;
-  position: relative;
-}
-
-/* Container do jogo integrado */
-#game-container {
-  width: 100%;
-  height: 100%;
-  border: none;
-  overflow: hidden;
-}
-
-/* ========================= */
-/* RESPONSIVIDADE - CORREÇÕES APLICADAS */
-/* ========================= */
-@media (max-width: 768px) {
-  .jogo {
-    padding: 20px 15px 30px 15px;
-    height: auto;
-    min-height: 100vh;
-  }
-
-  .jogo-box {
-    height: 70vh;
-    padding: 0;
-    margin: 0;
-  }
-
-  .jogo h2 {
-    font-size: 20px;
-    margin: 10px 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .jogo {
-    padding: 15px 10px 20px 10px;
-    padding-bottom: 60px;
-  }
-
-  .jogo-box {
-    height: 65vh;
-    min-height: 400px;
-  }
-
-  .jogo h2 {
-    font-size: 18px;
-  }
-
-  footer {
-    font-size: 12px;
-    padding: 10px;
-  }
-}
-
 .profile-sidebar:not(.active) {
     right: -400px;
 }
@@ -1098,11 +1245,11 @@ footer {
 
 /* Z-index corrigido */
 .profile-sidebar {
-    z-index: 2000; /* Sidebar acima do overlay */
+    z-index: 2000;
 }
 
 .sidebar-overlay {
-    z-index: 1999; /* Overlay abaixo do sidebar mas acima do conteúdo */
+    z-index: 1999;
 }
 
 /* Garante que o conteúdo da seção jogos fique abaixo */
@@ -1114,6 +1261,8 @@ footer {
 /* ===== ESTILOS PARA OS CAMPOS DO CONTROLE DE PAIS ===== */
 #controlePaisModal .input-group {
   margin-top: 5px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 #controlePaisModal .input-group-text {
@@ -1122,7 +1271,8 @@ footer {
   border-left: none;
   color: #6a40d6;
   font-weight: bold;
-  border-radius: 0 8px 8px 0; /* Corrige a borda quebrada */
+  border-radius: 0 8px 8px 0;
+  transition: all 0.3s ease;
 }
 
 #controlePaisModal .form-control:disabled {
@@ -1143,22 +1293,26 @@ footer {
   border: 2px solid #6a40d6;
   border-right: none;
   border-radius: 8px 0 0 8px;
+  transition: all 0.3s ease;
 }
 
 #horarioMaximo:focus {
   border-color: #6a40d6;
   box-shadow: 0 0 0 0.2rem rgba(106, 64, 214, 0.25);
+  transform: scale(1.02);
 }
 
 /* Estilo para o campo de tempo */
 #limiteTempo {
   border: 2px solid #6a40d6;
   border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 #limiteTempo:focus {
   border-color: #6a40d6;
   box-shadow: 0 0 0 0.2rem rgba(106, 64, 214, 0.25);
+  transform: scale(1.02);
 }
 
 /* Estilo para labels */
@@ -1172,6 +1326,7 @@ footer {
 #controlePaisModal .mb-3 {
   margin-bottom: 1.5rem !important;
 }
+
 
 /* Garante que o input-group tenha borda contínua */
 #controlePaisModal .input-group {
