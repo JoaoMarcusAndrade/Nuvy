@@ -654,27 +654,48 @@ if (document.getElementById("formLoginResp")) {
 }
 
 /* ---------- SIDEBAR DO PERFIL ---------- */
-function openProfileSidebar() {
-    const profileSidebar = document.getElementById('profileSidebar');
+function initializeProfileSidebar() {
+    const profilePic = document.querySelector('.profile-pic-btn');
+    const closeSidebar = document.getElementById('closeSidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
-    
-    if (!profileSidebar) return;
-    
-    // Carregar dados antes de mostrar
-    loadUserData().then(() => {
-        profileSidebar.classList.add('active');
-        
-        if (sidebarOverlay && window.innerWidth > 768) {
-            sidebarOverlay.classList.add('active');
+    const sidebarLogout = document.getElementById('logoutBtnSidebar');
+
+    if (profilePic) {
+        profilePic.addEventListener('click', openProfileSidebar);
+    }
+
+    if (closeSidebar) {
+        closeSidebar.addEventListener('click', closeProfileSidebar);
+    }
+
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeProfileSidebar);
+    }
+
+    if (sidebarLogout) {
+        sidebarLogout.addEventListener('click', function (e) {
+            e.preventDefault();
+            closeProfileSidebar();
+            setTimeout(logoutUser, 300);
+        });
+    }
+
+    // Fechar sidebar com ESC
+    document.addEventListener('keydown', function (e) {
+        const profileSidebar = document.getElementById('profileSidebar');
+        if (e.key === 'Escape' && profileSidebar && profileSidebar.classList.contains('active')) {
+            closeProfileSidebar();
         }
-        
-        document.body.classList.add('sidebar-open');
-    }).catch(error => {
-        console.error('Erro ao carregar dados:', error);
-        // Mostrar mesmo com erro, mas com valores padrão
-        profileSidebar.classList.add('active');
-        document.body.classList.add('sidebar-open');
     });
+
+    // Inicializar link do controle de pais no sidebar
+    const controlePaisLink = document.querySelector('.sidebar-menu a[href="#controle-pais"]');
+    if (controlePaisLink) {
+        controlePaisLink.addEventListener("click", function (e) {
+            e.preventDefault();
+            openControlePaisModal();
+        });
+    }
 }
 
 function openProfileSidebar() {
