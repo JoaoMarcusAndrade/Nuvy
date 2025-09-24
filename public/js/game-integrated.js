@@ -85,11 +85,13 @@ const levelConfigs = {
 };
 
 // Modifique a função loadSounds para usar MP3
+// CORREÇÃO - Atualize a função loadSounds():
 function loadSounds() {
-  pickupSound = new Audio('fx/som1.wav');
-  dropSound = new Audio('fx/som2.wav');
-  backgroundMusic = new Audio('fx/som3.wav');
-  infoSound = new Audio('fx/som4.mp3');
+
+  pickupSound = new Audio('./fx/som1.wav');
+  dropSound = new Audio('./fx/som2.wav');
+  backgroundMusic = new Audio('./fx/som3.wav');
+  infoSound = new Audio('./fx/som4.mp3');
   
   // Configurar volumes
   pickupSound.volume = 0.7;
@@ -115,14 +117,29 @@ function loadSounds() {
 
 // Nova função para carregar sons de nível
 function loadLevelSounds() {
-  levelUpSound = new Audio(`fx/som${4 + currentLevel}.mp3`);
+  levelUpSound = new Audio(`./fx/som${4 + currentLevel}.mp3`);
   levelUpSound.volume = 0.7;
   levelUpSound.load();
 }
 
-// Nova função para carregar som de jogo completo
+// Adicione esta função após a função loadSounds()
+function handleAutoplayPolicy() {
+  // Tentar reproduzir um som simples para desbloquear o autoplay
+  const unlockSound = new Audio('./fx/som1.wav');
+  unlockSound.volume = 0.01; // Quase mudo
+  
+  document.addEventListener('click', function unlockAudio() {
+    unlockSound.play().then(() => {
+      console.log("Áudio desbloqueado!");
+      document.removeEventListener('click', unlockAudio);
+    }).catch(error => {
+      console.log("Aguardando interação do usuário para desbloquear áudio...");
+    });
+  }, { once: true });
+}
+
 function loadGameCompleteSound() {
-  gameCompleteSound = new Audio('fx/som8.mp3');
+  gameCompleteSound = new Audio('./fx/som8.mp3');
   gameCompleteSound.volume = 0.7;
   gameCompleteSound.load();
 }
@@ -196,9 +213,11 @@ function stopBackgroundMusic() {
 
 // Modifique a função initGame para adicionar o event listener do botão de música
 function initGame() {
-  loadSounds(); // Carregar os sons
-  loadLevelSounds(); // Carregar sons de nível
-  loadGameCompleteSound(); // Carregar som de jogo completo
+  loadSounds();
+  loadLevelSounds();
+  loadGameCompleteSound();
+  handleAutoplayPolicy(); // ADICIONE ESTA LINHA
+  
   loadLevel(currentLevel);
   
   // Configurar botões
@@ -536,6 +555,7 @@ function getItemIcon(type) {
 }
 
 // Funções de arrastar e soltar - CORREÇÃO COMPLETA
+// Exemplo de correção na função handleDragStart():
 function handleDragStart(e) {
   if (gameFinished) {
     e.preventDefault();
@@ -545,14 +565,15 @@ function handleDragStart(e) {
   e.dataTransfer.setData('text/plain', e.target.dataset.type);
   e.target.classList.add('dragging');
   
-  // Tocar som de pegar o elemento
+  // Tocar som de pegar o elemento - COM MELHOR TRATAMENTO DE ERRO
   if (pickupSound) {
     pickupSound.currentTime = 0;
-    pickupSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
+    pickupSound.play().catch(error => {
+      console.log("Não foi possível tocar o som. Tentando desbloquear áudio...");
+      // Tentar desbloquear o áudio com uma interação
+      handleAutoplayPolicy();
+    });
   }
-  
-  // REMOVIDO COMPLETAMENTE: qualquer código relacionado a opacidade
-  // Isso estava causando o problema de desaparecimento no mobile
 }
 
 function handleDragEnd(e) {
