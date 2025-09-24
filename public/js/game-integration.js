@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const gameIframe = document.createElement('iframe');
     gameIframe.src = 'NuvyGame.html'; // NOME CORRIGIDO
     gameIframe.style.width = '100%';
-    gameIframe.style.height = '400px'; // Altura fixa inicial
+    gameIframe.style.height = '525px'; // Altura fixa inicial
     gameIframe.style.border = 'none';
     gameIframe.style.borderRadius = '18px';
     gameIframe.allow = 'autoplay; microphone'; // PERMISSÕES DE ÁUDIO
