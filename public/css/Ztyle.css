@@ -30,7 +30,7 @@
 html, body {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    background: linear-gradient(135deg, #004dc1 0%, #0073d1 100%);
     overflow: hidden;
     font-family: 'Comic Neue', cursive;
     position: relative;
