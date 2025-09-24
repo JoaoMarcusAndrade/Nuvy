@@ -240,6 +240,14 @@ router.post('/add-xp', async (req, res) => {
   }
 });
 
+router.get('/api/usuario/me', checkAuthentication, async (req, res) => {
+  if (req.usuario) {
+    const { ID_usuarios, name_user, XP_user } = req.usuario;
+    return res.json({ id: ID_usuarios, nome: name_user, xp: XP_user });
+  }
+  res.status(401).json({ error: 'Não autenticado' });
+});
+
 // Ativar/Desativar controle dos pais
 router.post("/api/controle/limitar", async (req, res) => {
   try {

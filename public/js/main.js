@@ -770,8 +770,8 @@ async function loadUserData() {
         const userNameElement = document.getElementById('userName');
         const userXPElement = document.getElementById('userXP');
 
-        if (userNameElement) userNameElement.textContent = userData.nome || 'Usuário';
-        if (userXPElement) userXPElement.textContent = userData.xp || 0;
+        if (userNameElement) userNameElement.textContent = userData.name_user || 'Usuário';
+        if (userXPElement) userXPElement.textContent = userData.XP_user || 0;
 
     } catch (err) {
         console.error('Falha ao carregar dados do usuário:', err);
