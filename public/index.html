@@ -49,7 +49,8 @@
         <a href="#contato">Contato</a>
       </div>
       <div class="navbar-right">
-        <img src="img/Nuvy - Usuário.png" width="55vh" alt="Foto do Perfil" style="margin-right: 20px; cursor: pointer;" class="profile-pic-btn">
+        <img src="img/Nuvy - Usuário.png" width="55vh" alt="Foto do Perfil" style="margin-right: 20px; cursor: pointer;"
+          class="profile-pic-btn">
       </div>
     </nav>
 
@@ -82,7 +83,7 @@
       <div class="sidebar-header">
         <button id="closeSidebar" class="close-sidebar">&times;</button>
       </div>
-      
+
       <!-- Perfil do Usuário -->
       <div class="user-profile">
         <img src="img/Nuvy - Usuário.png" alt="Foto do Perfil" class="profile-pic">
@@ -91,7 +92,7 @@
           <p class="user-xp">XP: <span id="userXP">0</span></p>
         </div>
       </div>
-      
+
       <!-- Menu de Opções -->
       <div class="sidebar-menu">
         <a href="#controle-pais" class="menu-item">
@@ -108,7 +109,7 @@
         </a>
       </div>
     </div>
-    
+
     <!-- Overlay para fechar o sidebar clicando fora -->
     <div id="sidebarOverlay" class="sidebar-overlay"></div>
   </div>
@@ -193,49 +194,50 @@
     </div>
   </div>
 
-<!-- Modal Controle de Pais -->
-<div class="modal fade" id="controlePaisModal" tabindex="-1" aria-labelledby="controlePaisLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content custom-modal">
-      <div class="modal-header custom-modal-header">
-        <h5 class="modal-title" id="controlePaisLabel">Controle de Pais</h5>
-        <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-      </div>
-      <div class="modal-body">
-        
-        <!-- Switch de Acesso Limitado -->
-        <div class="mb-3">
-          <label class="form-label d-block">Tempo de acesso limitado</label>
-          <div class="form-check form-switch">
-            <input class="form-check-input custom-switch" type="checkbox" id="acessoLimitado">
-            <label class="form-check-label" for="acessoLimitado">Ativar</label>
+  <!-- Modal Controle de Pais -->
+  <div class="modal fade" id="controlePaisModal" tabindex="-1" aria-labelledby="controlePaisLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content custom-modal">
+        <div class="modal-header custom-modal-header">
+          <h5 class="modal-title" id="controlePaisLabel">Controle de Pais</h5>
+          <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+
+          <!-- Switch de Acesso Limitado -->
+          <div class="mb-3">
+            <label class="form-label d-block">Tempo de acesso limitado</label>
+            <div class="form-check form-switch">
+              <input class="form-check-input custom-switch" type="checkbox" id="acessoLimitado">
+              <label class="form-check-label" for="acessoLimitado">Ativar</label>
+            </div>
           </div>
-        </div>
 
-        <!-- Campo de Limite de Tempo por Sessão -->
-        <div class="mb-3">
-          <label for="limiteTempo" class="form-label">Limite por sessão (horas:minutos)</label>
-          <input type="time" class="form-control" id="limiteTempo" disabled>
-        </div>
-
-        <!-- Campo de Horário Máximo Diário -->
-        <div class="mb-3">
-          <label for="horarioMaximo" class="form-label">Horário máximo diário</label>
-          <div class="input-group">
-             <input type="number" class="form-control" id="horarioMaximo" min="0" step="0.5" disabled>
+          <!-- Campo de Limite de Tempo por Sessão -->
+          <div class="mb-3">
+            <label for="limiteTempo" class="form-label">Limite por sessão (horas:minutos)</label>
+            <input type="time" class="form-control" id="limiteTempo" disabled>
           </div>
-          <small class="form-text text-muted">Defina o tempo máximo de uso por dia</small>
-        </div>
 
-        <!-- Botão Aplicar -->
-        <button id="aplicarControlePais" class="btn-login w-100">Aplicar</button>
+          <!-- Campo de Horário Máximo Diário -->
+          <div class="mb-3">
+            <label for="horarioMaximo" class="form-label">Horário máximo diário</label>
+            <div class="input-group">
+              <input type="number" class="form-control" id="horarioMaximo" min="0" step="0.5" disabled>
+            </div>
+            <small class="form-text text-muted">Defina o tempo máximo de uso por dia</small>
+          </div>
+
+          <!-- Botão Aplicar -->
+          <button id="aplicarControlePais" class="btn-login w-100">Aplicar</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
   <!-- Modal Acesso Bloqueado -->
-  <div class="modal fade" id="acessoBloqueadoModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="acessoBloqueadoLabel" aria-hidden="true">
+  <div class="modal fade" id="acessoBloqueadoModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="acessoBloqueadoLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content custom-modal">
         <div class="modal-header custom-modal-header">
@@ -243,7 +245,7 @@
           <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
         </div>
         <div class="modal-body text-center">
-          
+
           <!-- Ícone de cadeado -->
           <img src="img/cadeado.png" alt="Cadeado" style="width: 80px; margin-bottom: 15px;" />
 
@@ -270,62 +272,125 @@
 
   <!-- Scripts -->
   <!-- PopperJS para Bootstrap -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    crossorigin="anonymous"></script>
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <!-- API youtube -->
   <script>
-  const API_KEY = "AIzaSyBxtBtd9sz9cgafxGT1zkPMb4lHXmGxsLU"
+    const API_KEY = "AIzaSyBxtBtd9sz9cgafxGT1zkPMb4lHXmGxsLU";
 
-  async function carregarVideos(termo = "Videos educacionais Infantil sobre computação em nuvem") {
-    try {
-      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(termo)}&type=video&maxResults=1&key=${API_KEY}`;
+    async function carregarVideos(termo = "Informática para crianças") {
+      try {
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(termo)}&type=video&maxResults=1&key=${API_KEY}`;
 
-      const resposta = await fetch(url);
-      
-      if (!resposta.ok) {
-        throw new Error(`Erro HTTP: ${resposta.status}`);
+        console.log('Tentando carregar vídeos...');
+
+        const resposta = await fetch(url);
+
+        if (!resposta.ok) {
+          // Detalhamento do erro 403
+          if (resposta.status === 403) {
+            throw new Error('Acesso negado. Verifique a chave da API do YouTube.');
+          }
+          throw new Error(`Erro HTTP: ${resposta.status}`);
+        }
+
+        const dados = await resposta.json();
+        console.log('Dados recebidos:', dados);
+
+        const container = document.getElementById("youtube-cards");
+        if (!container) {
+          console.error('Container #youtube-cards não encontrado');
+          return;
+        }
+
+        container.innerHTML = "";
+
+        if (!dados.items || dados.items.length === 0) {
+          container.innerHTML = '<p class="text-center">Nenhum vídeo encontrado.</p>';
+          return;
+        }
+
+        dados.items.forEach(item => {
+          if (!item.id || !item.id.videoId) return;
+
+          const videoId = item.id.videoId;
+          const titulo = item.snippet.title;
+          const thumb = item.snippet.thumbnails.medium.url;
+
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+                <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener">
+                    <img src="${thumb}" alt="${titulo}" loading="lazy" />
+                    <p>${titulo}</p>
+                </a>
+            `;
+          container.appendChild(card);
+        });
+
+      } catch (error) {
+        console.error("Erro ao carregar vídeos:", error);
+        const container = document.getElementById("youtube-cards");
+        if (container) {
+          container.innerHTML = `
+                <div class="error-message">
+                    <p>⚠️ Não foi possível carregar os vídeos no momento.</p>
+                    <small>Erro: ${error.message}</small>
+                </div>
+            `;
+        }
       }
-      
-      const dados = await resposta.json();
-
-      const container = document.getElementById("youtube-cards");
-      container.innerHTML = "";
-
-      // Verifica se existem items antes de iterar
-      if (!dados.items || dados.items.length === 0) {
-        container.innerHTML = '<p class="text-center">Nenhum vídeo encontrado.</p>';
-        return;
-      }
-
-      dados.items.forEach(item => {
-        // Verifica se o item tem a estrutura esperada
-        if (!item.id || !item.id.videoId) return;
-        
-        const videoId = item.id.videoId;
-        const titulo = item.snippet.title;
-        const thumb = item.snippet.thumbnails.medium.url;
-
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">
-            <img src="${thumb}" alt="${titulo}" />
-            <p>${titulo}</p>
-          </a>
-        `;
-        container.appendChild(card);
-      });
-      
-    } catch (error) {
-      console.error("Erro ao carregar vídeos:", error);
-      const container = document.getElementById("youtube-cards");
-      container.innerHTML = `<p class="text-center">Erro ao carregar vídeos: ${error.message}</p>`;
     }
-  }
 
-  // Carregar vídeos ao abrir a página
-  carregarVideos();
+    // Versão alternativa com fallback
+    async function carregarVideosComFallback() {
+      try {
+        await carregarVideos();
+      } catch (error) {
+        // Fallback: conteúdo estático ou mensagem amigável
+        const container = document.getElementById("youtube-cards");
+        if (container) {
+          container.innerHTML = `
+                <div class="fallback-content">
+                    <h3>📺 Conteúdo Educativo</h3>
+                    <p>Explore nossos recursos de aprendizado:</p>
+                    <ul>
+                        <li>🎮 Jogos educativos</li>
+                        <li>📚 Materiais didáticos</li>
+                        <li>👩‍🏫 Aulas interativas</li>
+                    </ul>
+                </div>
+            `;
+        }
+      }
+    }
+
+    // Aguardar o DOM carregar
+    document.addEventListener('DOMContentLoaded', function () {
+      carregarVideosComFallback();
+    });
+
+    // Para debug - testar a API
+    async function testarYouTubeAPI() {
+      try {
+        const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=teste&maxResults=1&key=${API_KEY}`);
+        console.log('Status:', response.status);
+        console.log('Headers:', response.headers);
+
+        if (response.status === 403) {
+          console.warn('❌ Chave da API bloqueada ou sem permissões');
+        } else if (response.ok) {
+          console.log('✅ API funcionando corretamente');
+        }
+      } catch (error) {
+        console.error('Erro no teste:', error);
+      }
+    }
+
+    // Executar teste (opcional)
+    // testarYouTubeAPI();
   </script>
   <!-- ROTAS E ETC... -->
   <script src="js/main.js"></script>

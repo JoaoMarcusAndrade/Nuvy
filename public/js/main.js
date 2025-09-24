@@ -263,9 +263,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Inicializa eventos de logout
         initializeLogoutEvents();
 
-        // Inicializa eventos do modal de controle de pais
-        initializeControlePaisModal();
-
         // Inicializa eventos do modal de acesso bloqueado
         initializeAcessoBloqueadoModal();
 
