@@ -1,4 +1,4 @@
-// Script de integração do jogo - CORRIGIDO PARA ÁUDIO
+// Script de integração do jogo - CORRIGIDO
 document.addEventListener('DOMContentLoaded', function () {
     const gameContainer = document.getElementById('game-container');
 
@@ -8,61 +8,23 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // Criar iframe para carregar o jogo
+    // Criar iframe para carregar o jogo - CORREÇÃO DO NOME DO ARQUIVO
     const gameIframe = document.createElement('iframe');
-    gameIframe.src = 'NuvyGame.html';
+    gameIframe.src = 'NuvyGame.html'; // NOME CORRIGIDO
     gameIframe.style.width = '100%';
-    gameIframe.style.height = '525px';
+    gameIframe.style.height = '525px'; // Altura fixa inicial
     gameIframe.style.border = 'none';
     gameIframe.style.borderRadius = '18px';
-    gameIframe.allow = 'autoplay; microphone;';
+    gameIframe.allow = 'autoplay; microphone'; // PERMISSÕES DE ÁUDIO
     gameIframe.id = 'game-iframe';
-    gameIframe.allowFullscreen = true;
 
     // Adicionar iframe ao container
-    gameContainer.innerHTML = '';
+    gameContainer.innerHTML = ''; // Limpar conteúdo anterior
     gameContainer.appendChild(gameIframe);
 
-    // Função para liberar áudio no iframe após interação do usuário
-    function enableAudio() {
-        try {
-            const iframeWindow = gameIframe.contentWindow;
-            // Disparar um evento customizado no iframe para liberar áudio
-            iframeWindow.postMessage('enableAudio', '*');
-        } catch (e) {
-            console.log('Não foi possível liberar áudio:', e);
-        }
-    }
-
-    // Capturar interações do usuário na página principal
-    document.addEventListener('click', function() {
-        enableAudio();
-    }, { once: true });
-
-    // Capturar interações no iframe
-    gameIframe.addEventListener('load', function() {
-        // Adicionar event listener para mensagens do iframe
-        window.addEventListener('message', function(event) {
-            if (event.data === 'userInteracted') {
-                enableAudio();
-            }
-        });
-
-        // Adicionar evento de clique no iframe
-        try {
-            const iframeDoc = gameIframe.contentDocument || gameIframe.contentWindow.document;
-            iframeDoc.addEventListener('click', function() {
-                window.postMessage('userInteracted', '*');
-                enableAudio();
-            });
-        } catch (e) {
-            console.log('Não foi possível adicionar listener ao iframe:', e);
-        }
-    });
-
-    // Restante do código para ajustar altura...
+    // Ajustar altura do iframe para se adaptar ao conteúdo
     gameIframe.onload = function () {
-        // Código existente para ajustar altura
+        // Tentar ajustar altura baseado no conteúdo
         setTimeout(() => {
             try {
                 const iframeDoc = gameIframe.contentDocument || gameIframe.contentWindow.document;
@@ -82,11 +44,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } catch (e) {
                 console.log('Não foi possível ajustar a altura do iframe:', e);
+                // Manter altura padrão em caso de erro
                 gameIframe.style.height = '400px';
             }
         }, 1000);
     };
 
+    // Tratar erros de carregamento
     gameIframe.onerror = function () {
         console.error('Erro ao carregar o jogo');
         gameContainer.innerHTML = '<p style="color: white; text-align: center; padding: 20px;">Erro ao carregar o jogo. Verifique se o arquivo NuvyGame.html existe.</p>';
