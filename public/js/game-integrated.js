@@ -778,6 +778,8 @@ function addXP(amount) {
   }
   
   updateXP();
+
+  sendXPToBackend(amount).catch(e => console.log("Erro ao enviar XP para o backend: ", e));
 }
 
 // Nova função para mostrar mensagem de aumento de nível
@@ -893,4 +895,26 @@ if (window.matchMedia('(prefers-contrast: high)').matches) {
   document.documentElement.style.setProperty('--primary-color', '#4a36a1');
   document.documentElement.style.setProperty('--primary-light', '#5d46c2');
   document.documentElement.style.setProperty('--primary-dark', '#3c2b7d');
+}
+
+async function sendXPToBackend(xpToAdd) {
+  try {
+    const res = await fetch('/api/usuario/add-xp', {
+      method: 'POST',
+      credentials: 'include', // se você usa cookies/sessão
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ XP_to_add: xpToAdd })
+    });
+
+    if (!res.ok) throw new Error('Erro ao atualizar XP');
+
+    const data = await res.json();
+
+    // Atualiza o menu com o novo XP do banco
+    const xpMenuElement = document.getElementById('xp-menu'); // altere pro ID certo do menu
+    if (xpMenuElement) xpMenuElement.textContent = `XP: ${data.XP_user}`;
+
+  } catch (err) {
+    console.error('Falha ao enviar XP para o backend:', err);
+  }
 }

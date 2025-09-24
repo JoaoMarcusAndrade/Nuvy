@@ -216,6 +216,30 @@ router.post("/vincular", async (req, res) => {
   }
 });
 
+router.post('/add-xp', async (req, res) => {
+  try {
+    const userId = req.session.userId; // ou de onde você pega o usuário logado
+    const { XP_to_add } = req.body;
+
+    if (!userId || !XP_to_add) return res.status(400).json({ error: 'Dados inválidos' });
+
+    // Buscar usuário
+    const user = await Usuarios.findByPk(userId);
+    if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
+
+    // Atualizar XP
+    user.XP_user += XP_to_add;
+    await user.save();
+
+    // Retornar XP atualizado
+    res.json({ XP_user: user.XP_user });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erro no servidor' });
+  }
+});
+
 // Ativar/Desativar controle dos pais
 router.post("/api/controle/limitar", async (req, res) => {
   try {
