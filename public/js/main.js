@@ -776,7 +776,7 @@ async function loadUserData() {
         const userXPElement = document.getElementById('userXP');
 
         if (userNameElement) userNameElement.textContent = userData.nome || 'Usuário';
-        if (userXPElement) userXPElement.textContent = userData.xp || 0;
+        if (userXPElement) userXPElement.textContent = userData.xp || userData.XP_user || 0;
 
         // Controle de pais só se menor de 14 anos
         const controlePaisLink = document.querySelector('.sidebar-menu a[href="#controle-pais"]');
@@ -819,6 +819,11 @@ async function atualizarXP(novoXP) {
 
     } catch (err) {
         console.error('Falha ao atualizar XP:', err);
+        // Definir valores padrão em caso de erro
+        const userNameElement = document.getElementById('userName');
+        const userXPElement = document.getElementById('userXP');
+        if (userNameElement) userNameElement.textContent = 'Usuário';
+        if (userXPElement) userXPElement.textContent = '0';
     }
 }
 
@@ -834,3 +839,15 @@ window.addEventListener('resize', function () {
         }
     }
 });
+
+// ---------- DEBUG ---------- //
+async function debugUserData() {
+    try {
+        const res = await fetch('/api/usuario/me', { credentials: 'include' });
+        const data = await res.json();
+        console.log('Dados do usuário recebidos:', data);
+        return data;
+    } catch (error) {
+        console.error('Erro no debug:', error);
+    }
+}
