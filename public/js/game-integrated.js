@@ -46,9 +46,9 @@ const levelConfigs = {
     title: "Nuvens Coloridas",
     description: "Arraste os itens para as nuvens da mesma cor!",
     targets: [
-      { type: "fotos", color: "#ff6600ff", description: "Guarda nossas fotos e vídeos" },
+      { type: "fotos", color: "#FF9E00", description: "Guarda nossas fotos e vídeos" },
       { type: "musica", color: "#4CAF50", description: "Guarda nossas músicas" },
-      { type: "jogos", color: "#ff0055ff", description: "Guarda nossos joguinhos" },
+      { type: "jogos", color: "#f32167ff", description: "Guarda nossos joguinhos" },
       { type: "desenhos", color: "#cc27e9ff", description: "Guarda nossos desenhos" }
     ]
   },
@@ -194,40 +194,43 @@ function stopBackgroundMusic() {
   }
 }
 
+// Modifique a função initGame para adicionar o event listener do botão de música
 function initGame() {
-    loadSounds(); // Carregar os sons
-    loadLevelSounds(); // Carregar sons de nível
-    loadGameCompleteSound(); // Carregar som de jogo completo
-    loadLevel(currentLevel);
-    
-    // Configurar botões
-    restartButton.addEventListener('click', restartGame);
-    infoButton.addEventListener('click', () => {
-        modalInfo.style.display = 'flex';
-        // Tocar som de informação
-        if (infoSound) {
-            infoSound.currentTime = 0;
-            infoSound.play().catch(e => console.log("Não foi possível tocar o som de informação: ", e));
-        }
-    });
-    closeModalButton.addEventListener('click', () => {
-        modalInfo.style.display = 'none';
-    });
-    nextLevelButton.addEventListener('click', nextLevel);
-    
-    // Adicionar event listener para o botão de música
-    if (musicButton) {
-        musicButton.addEventListener('click', toggleMusic);
+  loadSounds(); // Carregar os sons
+  loadLevelSounds(); // Carregar sons de nível
+  loadGameCompleteSound(); // Carregar som de jogo completo
+  loadLevel(currentLevel);
+  
+  // Configurar botões
+  restartButton.addEventListener('click', restartGame);
+  infoButton.addEventListener('click', () => {
+    modalInfo.style.display = 'flex';
+    // Tocar som de informação
+    if (infoSound) {
+      infoSound.currentTime = 0;
+      infoSound.play().catch(e => console.log("Não foi possível tocar o som de informação: ", e));
     }
+  });
+  closeModalButton.addEventListener('click', () => {
+    modalInfo.style.display = 'none';
+  });
+  nextLevelButton.addEventListener('click', nextLevel);
+  
+  // Adicionar event listener para o botão de música
+  if (musicButton) {
+    musicButton.addEventListener('click', toggleMusic);
+  }
 
-    // Atualizar XP
-    updateXP();
-    
-    // Iniciar contagem de tempo
-    startTime = Date.now();
-    
-    // REMOVIDO: Início automático da música
-    // O áudio agora será iniciado apenas após interação do usuário
+  // Atualizar XP
+  updateXP();
+  
+  // Iniciar contagem de tempo
+  startTime = Date.now();
+  
+  // Iniciar música de fundo
+  setTimeout(() => {
+    startBackgroundMusic();
+  }, 1000);
 }
 
 // Carregar nível
@@ -891,29 +894,3 @@ if (window.matchMedia('(prefers-contrast: high)').matches) {
   document.documentElement.style.setProperty('--primary-light', '#5d46c2');
   document.documentElement.style.setProperty('--primary-dark', '#3c2b7d');
 }
-
-// CORREÇÃO DO ÁUDIO: Adicionar listener para mensagens do iframe pai
-window.addEventListener('message', function(event) {
-    if (event.data === 'startAudio') {
-        // Iniciar música de fundo quando receber a mensagem
-        setTimeout(() => {
-            if (backgroundMusic && !isMusicPlaying) {
-                const playPromise = backgroundMusic.play();
-                
-                if (playPromise !== undefined) {
-                    playPromise
-                        .then(() => {
-                            console.log("Música de fundo iniciada via interação do usuário");
-                            isMusicPlaying = true;
-                            updateMusicButtonIcon();
-                        })
-                        .catch(error => {
-                            console.log("Reprodução via interação falhou:", error);
-                            isMusicPlaying = false;
-                            updateMusicButtonIcon();
-                        });
-                }
-            }
-        }, 500);
-    }
-});

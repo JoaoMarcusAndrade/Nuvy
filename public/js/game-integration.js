@@ -1,4 +1,4 @@
-// Script de integração do jogo - CORRIGIDO (ÁUDIO FUNCIONANDO)
+// Script de integração do jogo - CORRIGIDO
 document.addEventListener('DOMContentLoaded', function () {
     const gameContainer = document.getElementById('game-container');
 
@@ -17,40 +17,10 @@ document.addEventListener('DOMContentLoaded', function () {
     gameIframe.style.borderRadius = '18px';
     gameIframe.allow = 'autoplay; microphone'; // PERMISSÕES DE ÁUDIO
     gameIframe.id = 'game-iframe';
-    
-    // ADIÇÃO CRÍTICA: Permitir políticas de áudio mais permissivas
-    gameIframe.allow = 'autoplay *; microphone *';
-    gameIframe.setAttribute('allowfullscreen', 'true');
-    gameIframe.setAttribute('webkitallowfullscreen', 'true');
-    gameIframe.setAttribute('mozallowfullscreen', 'true');
 
     // Adicionar iframe ao container
     gameContainer.innerHTML = ''; // Limpar conteúdo anterior
     gameContainer.appendChild(gameIframe);
-
-    // CORREÇÃO DO ÁUDIO: Iniciar áudio após interação do usuário
-    let audioStarted = false;
-    
-    // Função para iniciar áudio após primeira interação
-    function startAudioOnInteraction() {
-        if (!audioStarted && gameIframe.contentWindow) {
-            try {
-                // Enviar mensagem para o iframe iniciar o áudio
-                gameIframe.contentWindow.postMessage('startAudio', '*');
-                audioStarted = true;
-                
-                // Remover event listeners após primeira interação
-                document.removeEventListener('click', startAudioOnInteraction);
-                document.removeEventListener('touchstart', startAudioOnInteraction);
-            } catch (error) {
-                console.log('Erro ao iniciar áudio:', error);
-            }
-        }
-    }
-
-    // Adicionar event listeners para interação do usuário
-    document.addEventListener('click', startAudioOnInteraction, { once: true });
-    document.addEventListener('touchstart', startAudioOnInteraction, { once: true });
 
     // Ajustar altura do iframe para se adaptar ao conteúdo
     gameIframe.onload = function () {
