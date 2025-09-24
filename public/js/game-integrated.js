@@ -20,7 +20,6 @@ let pickupSound, dropSound, backgroundMusic, infoSound, levelUpSound, gameComple
 
 // Adicione esta variável global no início do arquivo
 let isMusicPlaying = false;
-let audioEnabled = false; // Nova variável para controlar se o áudio está liberado
 
 // Elementos DOM
 const timerElement = document.querySelector('.timer');
@@ -134,24 +133,15 @@ function toggleMusic() {
       backgroundMusic.pause();
       isMusicPlaying = false;
     } else {
-      // Garantir que seja uma ação direta do usuário
-      backgroundMusic.currentTime = 0;
-      
       const playPromise = backgroundMusic.play();
-      
       if (playPromise !== undefined) {
         playPromise
           .then(() => {
-            console.log("Música iniciada após interação do usuário");
             isMusicPlaying = true;
-            updateMusicButtonIcon();
           })
           .catch(error => {
-            console.log("Erro ao reproduzir música:", error);
-            // Solicitar interação do usuário
-            showFeedback('Clique no botão de música novamente para ativar', 'error', 3000);
+            console.log("Não foi possível iniciar a música:", error);
             isMusicPlaying = false;
-            updateMusicButtonIcon();
           });
       }
     }
@@ -173,56 +163,71 @@ function updateMusicButtonIcon() {
   }
 }
 
-// Nova função para tocar sons de forma segura
-function playSound(sound) {
-  if (sound && audioEnabled) {
-    sound.currentTime = 0;
-    sound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
+// Modifique a função startBackgroundMusic
+function startBackgroundMusic() {
+  if (backgroundMusic) {
+    const playPromise = backgroundMusic.play();
+    
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          console.log("Música de fundo iniciada com sucesso");
+          isMusicPlaying = true;
+          updateMusicButtonIcon();
+        })
+        .catch(error => {
+          console.log("Reprodução automática impedida:", error);
+          isMusicPlaying = false;
+          updateMusicButtonIcon();
+        });
+    }
   }
 }
 
-// Modifique a função initGame para adicionar o event listener do botão de música
-function initGame() {
-  loadSounds(); // Carregar os sons
-  loadLevelSounds(); // Carregar sons de nível
-  loadGameCompleteSound(); // Carregar som de jogo completo
-  loadLevel(currentLevel);
-  
-  // Configurar botões
-  restartButton.addEventListener('click', restartGame);
-  infoButton.addEventListener('click', () => {
-    modalInfo.style.display = 'flex';
-    // Tocar som de informação - AGORA COM INTERAÇÃO DO USUÁRIO
-    playSound(infoSound);
-  });
-  closeModalButton.addEventListener('click', () => {
-    modalInfo.style.display = 'none';
-  });
-  nextLevelButton.addEventListener('click', nextLevel);
-  
-  // Adicionar event listener para o botão de música
-  if (musicButton) {
-    musicButton.addEventListener('click', toggleMusic);
+// Parar música de fundo
+function stopBackgroundMusic() {
+  if (backgroundMusic) {
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0;
+    isMusicPlaying = false;
+    updateMusicButtonIcon();
   }
+}
 
-  // Atualizar XP
-  updateXP();
-  
-  // Iniciar contagem de tempo
-  startTime = Date.now();
-  
-  // REMOVER o autoplay automático - só tocar após interação do usuário
-  // Não iniciar música automaticamente no iframe
-  
-  // Adicionar um event listener global para capturar a primeira interação
-  document.addEventListener('click', function firstInteraction() {
-    // Remover este listener após a primeira interação
-    document.removeEventListener('click', firstInteraction);
+function initGame() {
+    loadSounds(); // Carregar os sons
+    loadLevelSounds(); // Carregar sons de nível
+    loadGameCompleteSound(); // Carregar som de jogo completo
+    loadLevel(currentLevel);
     
-    // Agora podemos tocar sons livremente
-    audioEnabled = true;
-    console.log("Interação do usuário detectada - áudio liberado");
-  }, { once: true });
+    // Configurar botões
+    restartButton.addEventListener('click', restartGame);
+    infoButton.addEventListener('click', () => {
+        modalInfo.style.display = 'flex';
+        // Tocar som de informação
+        if (infoSound) {
+            infoSound.currentTime = 0;
+            infoSound.play().catch(e => console.log("Não foi possível tocar o som de informação: ", e));
+        }
+    });
+    closeModalButton.addEventListener('click', () => {
+        modalInfo.style.display = 'none';
+    });
+    nextLevelButton.addEventListener('click', nextLevel);
+    
+    // Adicionar event listener para o botão de música
+    if (musicButton) {
+        musicButton.addEventListener('click', toggleMusic);
+    }
+
+    // Atualizar XP
+    updateXP();
+    
+    // Iniciar contagem de tempo
+    startTime = Date.now();
+    
+    // REMOVIDO: Início automático da música
+    // O áudio agora será iniciado apenas após interação do usuário
 }
 
 // Carregar nível
@@ -337,7 +342,10 @@ function handleTouchStart(e) {
   activeDraggable = draggable;
   
   // Tocar som de pegar o elemento
-  playSound(pickupSound);
+  if (pickupSound) {
+    pickupSound.currentTime = 0;
+    pickupSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
+  }
   
   // Obter a posição atual do elemento (incluindo qualquer transformação)
   const rect = draggable.getBoundingClientRect();
@@ -428,7 +436,7 @@ function handleTouchEnd(e) {
       if (pickupSound) {
         pickupSound.currentTime = 0;
         pickupSound.playbackRate = 0.7; // Tom mais grave para indicar erro
-        playSound(pickupSound);
+        pickupSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
         // Restaurar a velocidade normal após tocar
         setTimeout(() => { pickupSound.playbackRate = 1.0; }, 300);
       }
@@ -462,7 +470,10 @@ function resetDraggablePosition(draggable) {
 
 function handleCorrectDrop(draggable, target) {
   // Tocar som de soltar/encaixar
-  playSound(dropSound);
+  if (dropSound) {
+    dropSound.currentTime = 0;
+    dropSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
+  }
   
   // Adicionar classe de correto
   target.classList.add('correct');
@@ -531,8 +542,11 @@ function handleDragStart(e) {
   e.dataTransfer.setData('text/plain', e.target.dataset.type);
   e.target.classList.add('dragging');
   
-  // Tocar som de pegar o elemento - AGORA SEMPRE APÓS INTERAÇÃO
-  playSound(pickupSound);
+  // Tocar som de pegar o elemento
+  if (pickupSound) {
+    pickupSound.currentTime = 0;
+    pickupSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
+  }
   
   // REMOVIDO COMPLETAMENTE: qualquer código relacionado a opacidade
   // Isso estava causando o problema de desaparecimento no mobile
@@ -559,7 +573,10 @@ function handleDrop(e) {
   
   if (draggedType === targetType) {
     // Tocar som de soltar/encaixar
-    playSound(dropSound);
+    if (dropSound) {
+      dropSound.currentTime = 0;
+      dropSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
+    }
     
     // Acertou
     const draggedElement = document.querySelector(`.draggable[data-type="${draggedType}"]`);
@@ -605,7 +622,7 @@ function handleDrop(e) {
     if (pickupSound) {
       pickupSound.currentTime = 0;
       pickupSound.playbackRate = 0.7; // Tom mais grave para indicar erro
-      playSound(pickupSound);
+      pickupSound.play().catch(e => console.log("Não foi possível tocar o som: ", e));
       // Restaurar a velocidade normal após tocar
       setTimeout(() => { pickupSound.playbackRate = 1.0; }, 300);
     }
@@ -638,7 +655,10 @@ function finishLevel() {
   clearInterval(timer);
   
   // Tocar som de conclusão de nível
-  playSound(levelUpSound);
+  if (levelUpSound) {
+    levelUpSound.currentTime = 0;
+    levelUpSound.play().catch(e => console.log("Não foi possível tocar o som de nível: ", e));
+  }
   
   // Criar efeito de confete
   createConfetti();
@@ -673,7 +693,10 @@ function nextLevel() {
     restartButton.style.display = 'none';
   } else {
     // Tocar som de jogo completo
-    playSound(gameCompleteSound);
+    if (gameCompleteSound) {
+      gameCompleteSound.currentTime = 0;
+      gameCompleteSound.play().catch(e => console.log("Não foi possível tocar o som de jogo completo: ", e));
+    }
     
     // Jogo completo - usar o novo modal
     levelCompleteModal.style.display = 'none';
@@ -868,3 +891,29 @@ if (window.matchMedia('(prefers-contrast: high)').matches) {
   document.documentElement.style.setProperty('--primary-light', '#5d46c2');
   document.documentElement.style.setProperty('--primary-dark', '#3c2b7d');
 }
+
+// CORREÇÃO DO ÁUDIO: Adicionar listener para mensagens do iframe pai
+window.addEventListener('message', function(event) {
+    if (event.data === 'startAudio') {
+        // Iniciar música de fundo quando receber a mensagem
+        setTimeout(() => {
+            if (backgroundMusic && !isMusicPlaying) {
+                const playPromise = backgroundMusic.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            console.log("Música de fundo iniciada via interação do usuário");
+                            isMusicPlaying = true;
+                            updateMusicButtonIcon();
+                        })
+                        .catch(error => {
+                            console.log("Reprodução via interação falhou:", error);
+                            isMusicPlaying = false;
+                            updateMusicButtonIcon();
+                        });
+                }
+            }
+        }, 500);
+    }
+});
