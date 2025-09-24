@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import routes from './routes.js';
 import cookieParser from 'cookie-parser';
+import { fileURLToPath } from 'url';
 
 const app = express();
 
