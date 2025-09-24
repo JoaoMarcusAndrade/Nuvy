@@ -833,33 +833,3 @@ button:focus-visible,
     opacity: 0.8;
 }
 
-/* Botão de controle de música */
-.music-button {
-    bottom: 20px;
-    left: 80px; /* Posição à direita do botão de informação */
-    width: 45px;
-    height: 45px;
-    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
-    color: var(--text-light);
-    font-size: 1.2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 101; /* Maior z-index para ficar acima de outros elementos */
-}
-
-/* Estado quando a música está pausada */
-.music-button.muted {
-    background: linear-gradient(135deg, #666 0%, #999 100%);
-}
-
-/* Para dispositivos móveis */
-@media (max-width: 480px) {
-    .music-button {
-        bottom: 15px;
-        left: 65px; /* Ajuste para mobile */
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
-    }
-}

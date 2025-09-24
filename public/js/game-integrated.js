@@ -38,7 +38,7 @@ const targetsContainer = document.querySelector('.targets-container');
 const draggablesContainer = document.querySelector('.draggables-container');
 
 // Adicione esta linha para selecionar o botão de música (junto com os outros elementos DOM)
-const musicButton = document.getElementById('music-btn');
+
 
 // Configurações dos níveis
 const levelConfigs = {
@@ -49,7 +49,7 @@ const levelConfigs = {
       { type: "fotos", color: "#FF9E00", description: "Guarda nossas fotos e vídeos" },
       { type: "musica", color: "#4CAF50", description: "Guarda nossas músicas" },
       { type: "jogos", color: "#ff00bfff", description: "Guarda nossos joguinhos" },
-      { type: "desenhos", color: "#d900ffff", description: "Guarda nossos desenhos" }
+      { type: "desenhos", color: "#cc27e9ff", description: "Guarda nossos desenhos" }
     ]
   },
   2: {
@@ -86,10 +86,10 @@ const levelConfigs = {
 
 // Modifique a função loadSounds para usar MP3
 function loadSounds() {
-  pickupSound = new Audio('/fx/som1.wav');
-  dropSound = new Audio('/fx/som2.wav');
-  backgroundMusic = new Audio('/fx/som3.wav');
-  infoSound = new Audio('/fx/som4.mp3');
+  pickupSound = new Audio('fx/som1.wav');
+  dropSound = new Audio('fx/som2.wav');
+  backgroundMusic = new Audio('fx/som3.wav');
+  infoSound = new Audio('fx/som4.mp3');
   
   // Configurar volumes
   pickupSound.volume = 0.7;
@@ -152,11 +152,11 @@ function toggleMusic() {
 function updateMusicButtonIcon() {
   if (musicButton) {
     if (isMusicPlaying) {
-      musicButton.innerHTML = '🔊';
+      musicButton.innerHTML = '';
       musicButton.title = 'Desativar música';
       musicButton.classList.remove('muted');
     } else {
-      musicButton.innerHTML = '🔇';
+      musicButton.innerHTML = '';
       musicButton.title = 'Ativar música';
       musicButton.classList.add('muted');
     }
