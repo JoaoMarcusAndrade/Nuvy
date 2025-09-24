@@ -148,26 +148,29 @@ function closeModal() {
 }
 
 /* ---------- CONTROLE DE TEMPO ---------- */
-function iniciarControleTempo() {
-    // Para qualquer monitor anterior
-    pararControleTempo();
+async function iniciarControleTempo() {
+    let configControle;
 
-    // Recupera configurações do localStorage
-    const configControle = JSON.parse(localStorage.getItem('configControlePais') || '{}');
-
-    if (configControle.ativo && configControle.tempoLimite) {
-        tempoInicioSessao = Date.now();
-        tempoLimiteSessao = configControle.tempoLimite * 60 * 1000; // Converter para milissegundos
-
-        console.log(`Controle de tempo ativado: ${configControle.tempoLimite} minutos`);
-
-        // Inicia o monitor
-        monitorTempo = setInterval(verificarTempo, 60000); // Verifica a cada minuto
-
-        // Verifica imediatamente
-        setTimeout(verificarTempo, 1000);
+    try {
+        const res = await fetch('/api/usuario/controle', { credentials: 'include' });
+        configControle = await res.json();
+    } catch (err) {
+        console.warn('Erro ao buscar do backend, usando localStorage', err);
+        configControle = JSON.parse(localStorage.getItem('configControlePais') || '{}');
     }
+
+    if (!configControle.ativo && !configControle.tempoLimite) return;
+
+    tempoInicioSessao = Date.now();
+    tempoLimiteSessao = configControle.tempoLimite ? configControle.tempoLimite * 60 * 1000 : null;
+
+    // Para monitor antigo, caso exista
+    if (monitorTempo) clearInterval(monitorTempo);
+
+    monitorTempo = setInterval(() => verificarTempo(configControle), 60000);
+    setTimeout(() => verificarTempo(configControle), 1000);
 }
+
 
 function pararControleTempo() {
     if (monitorTempo) {
@@ -336,30 +339,16 @@ function initializeLogoutEvents() {
     }
 }
 
-async function iniciarControleTempo() {
-    try {
-        const res = await fetch('/api/usuario/controle', { credentials: 'include' });
-        const configControle = await res.json();
-
-        if (!configControle.limitado) return; // sem controle, nada a fazer
-
-        tempoInicioSessao = Date.now();
-        tempoLimiteSessao = configControle.tempoTela ? configControle.tempoTela * 60000 : null;
-
-        monitorTempo = setInterval(async () => {
-            verificarTempo(configControle);
-        }, 60000);
-
-        setTimeout(() => verificarTempo(configControle), 1000);
-
-    } catch (err) {
-        console.error('Erro ao carregar controle do usuário:', err);
-    }
-}
-
 function verificarTempo(configControle) {
+    if (!tempoInicioSessao) return;
+
+    configControle = configControle || JSON.parse(localStorage.getItem('configControlePais') || '{}');
+
     const tempoDecorrido = Date.now() - tempoInicioSessao;
     const tempoRestante = tempoLimiteSessao ? tempoLimiteSessao - tempoDecorrido : null;
+
+    // Atualiza tempo total usado hoje
+    tempoTotalHoje = (tempoTotalHoje || 0) + 60000; // 1 minuto
 
     // Limite de sessão
     if (tempoLimiteSessao && tempoRestante <= 0) {
@@ -368,51 +357,21 @@ function verificarTempo(configControle) {
     }
 
     // Limite diário
-    const agora = new Date();
-    const horaLimite = configControle.horaLimite ? new Date(agora.toDateString() + ' ' + configControle.horaLimite) : null;
-
-    if (horaLimite && agora >= horaLimite) {
-        bloquearAcesso();
-        return;
-    }
-
-    // Avisos
-    if (tempoRestante && tempoRestante <= 300000) mostrarAvisoTempo(tempoRestante);
-}
-
-function verificarTempo() {
-    if (!tempoInicioSessao) return;
-
-    const configControle = JSON.parse(localStorage.getItem('configControlePais') || '{}');
-
-    // Tempo decorrido desde o início da sessão
-    const tempoDecorrido = Date.now() - tempoInicioSessao;
-    const tempoRestante = tempoLimiteSessao ? tempoLimiteSessao - tempoDecorrido : null;
-
-    // Atualiza o tempo total usado hoje
-    tempoTotalHoje += 60000; // Adiciona 1 minuto (intervalo de verificação)
-
-    // Verifica limite diário
     if (configControle.horarioMaximoDiario && tempoTotalHoje >= configControle.horarioMaximoDiario * 3600000) {
         alert(`Você atingiu o limite diário de ${configControle.horarioMaximoDiario} horas!`);
         bloquearAcesso();
         return;
     }
 
-    // Verifica limite da sessão
-    if (tempoLimiteSessao && tempoRestante <= 0) {
-        bloquearAcesso();
-        return;
-    } else if (tempoRestante && tempoRestante <= 300000) { // 5 minutos restantes
-        mostrarAvisoTempo(tempoRestante);
-    }
+    // Avisos
+    if (tempoRestante && tempoRestante <= 300000) mostrarAvisoTempo(tempoRestante);
 
-    // Aviso quando estiver perto do limite diário (1 hora restante)
+    // Aviso quando próximo do limite diário (ex: 1 hora restante)
     if (configControle.horarioMaximoDiario) {
         const tempoRestanteDiario = (configControle.horarioMaximoDiario * 3600000) - tempoTotalHoje;
         if (tempoRestanteDiario <= 3600000 && tempoRestanteDiario > 0) {
             const minutosRestantes = Math.ceil(tempoRestanteDiario / 60000);
-            if (minutosRestantes % 30 === 0) { // Aviso a cada 30 minutos
+            if (minutosRestantes % 30 === 0) {
                 alert(`Atenção! Você tem apenas ${Math.ceil(minutosRestantes / 60)} hora(s) restante(s) de uso diário.`);
             }
         }
@@ -421,6 +380,7 @@ function verificarTempo() {
     console.log(`Tempo restante na sessão: ${tempoRestante ? Math.round(tempoRestante / 60000) : '∞'} minutos`);
     console.log(`Tempo total usado hoje: ${(tempoTotalHoje / 3600000).toFixed(2)} horas`);
 }
+
 
 // Configura eventos do modal de acesso bloqueado
 function initializeAcessoBloqueadoModal() {
@@ -748,20 +708,22 @@ function openProfileSidebar() {
 
     if (profileSidebar) {
         loadUserData();
+
         profileSidebar.classList.add('active');
 
-        // Só mostra overlay se estiver na seção de jogos (DESKTOP)
+        // Overlay desktop
         if (sidebarOverlay && window.innerWidth > 768 && jogosSection && jogosSection.classList.contains('active')) {
             sidebarOverlay.classList.add('active');
             document.body.classList.add('sidebar-open');
         }
 
-        // Para mobile
+        // Mobile
         if (window.innerWidth <= 768) {
             document.body.classList.add('sidebar-open');
         }
     }
 }
+
 
 function closeProfileSidebar() {
     const profileSidebar = document.getElementById('profileSidebar');
@@ -847,7 +809,6 @@ async function atualizarXP(novoXP) {
         console.error('Falha ao atualizar XP:', err);
     }
 }
-
 
 // Redimensionamento da janela
 window.addEventListener('resize', function () {

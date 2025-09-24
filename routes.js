@@ -257,20 +257,49 @@ router.post("/api/controle/limitar", async (req, res) => {
   }
 });
 
+router.post("/api/controle/atualizar", async (req, res) => {
+  try {
+    const { idUsuario, tempoGasto } = req.body; // tempoGasto em minutos
+    const controle = await Controle.findOne({ where: { ID_usuarios: idUsuario } });
+    if (!controle) return res.status(404).json({ msg: "Controle não encontrado" });
+
+    controle.tempoTela += tempoGasto;
+
+    // Atualiza limite
+    const [h, m, s] = controle.horaLimite.split(':').map(Number);
+    const limiteMinutos = h*60 + m + s/60;
+    if (controle.tempoTela >= limiteMinutos) controle.limitado = true;
+
+    await controle.save();
+
+    res.json({ tempoTela: controle.tempoTela, limitado: controle.limitado });
+  } catch (err) {
+    res.status(500).json({ msg: "Erro ao atualizar tempo de tela", erro: err.message });
+  }
+});
+
 // Verificar se usuário está bloqueado
 router.get("/api/controle/status/:idUsuario", async (req, res) => {
   try {
     const controle = await Controle.findOne({ where: { ID_usuarios: req.params.idUsuario } });
-    if (!controle) return res.json({ limitado: false });
+    if (!controle) return res.json({ limitado: false, restante: 0 });
+
+    // Converte horaLimite TIME (hh:mm:ss) em minutos
+    const [h, m, s] = controle.horaLimite.split(':').map(Number);
+    const limiteMinutos = h*60 + m + s/60;
+
+    const restante = Math.max(0, limiteMinutos - controle.tempoTela);
 
     res.json({
-      limitado: controle.limitado,
-      tempoTela: controle.tempoTela
+      limitado: controle.limitado || restante <= 0,
+      tempoTela: controle.tempoTela,
+      restante
     });
   } catch (err) {
     res.status(500).json({ msg: "Erro ao checar status", erro: err.message });
   }
 });
+
 
 // Desbloquear por senha do responsável (30 min)
 router.post("/api/controle/desbloquear", async (req, res) => {
